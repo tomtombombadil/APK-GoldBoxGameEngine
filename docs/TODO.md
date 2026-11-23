@@ -7,8 +7,9 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
       the PC over USB, the scan, then play by touch alone; then with a Bluetooth controller (the on-screen
       buttons go away; a touch brings them back).
 - [ ] Choose Folder… with a folder of your own (and an SD card, if the phone has one).
-- [ ] Release signing key: make it once and add the four GOLDBOX_* secrets (docs/FDROID.md, step 1) - before
-      the first release players install, so updates install over it.
+- [ ] Release signing key: made by Claude 2026-11-23 (SHA-256 4D:B3:EE:83:...:41:00:B6; Tom has the .jks and
+      "GoldBox signing secrets.txt"). Tom: add the four GOLDBOX_* secrets on GitHub from that file (Claude's
+      session may not write secrets), keep both files backed up; then Claude deletes its copy and tags v0.1.0.
 - [ ] F-Droid: the submission (docs/FDROID.md) - needs your GitLab account.
 
 ## Claude
