@@ -1,0 +1,7 @@
+[submodule "SDL"]
+	path = SDL
+	url = https://github.com/libsdl-org/SDL
+	branch = SDL2
+[submodule "pm"]
+	path = pm
+	url = https://github.com/tomtombombadil/PM-GoldBoxGameEngine.git

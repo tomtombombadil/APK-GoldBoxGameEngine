@@ -1,0 +1,85 @@
+// Gold Box Game Engine for Android: the PortMaster port's SDL2 front end
+// (../pm/src) and the CYD engine (../pm/cyd/src) built by the NDK, in SDL2's
+// own Android activity (../SDL). pm and SDL are submodules.
+plugins {
+    id 'com.android.application'
+}
+
+// The app's version: ../version.properties (versionName, versionCode - F-Droid
+// reads the same file)
+def appProps = new Properties()
+file('../version.properties').withInputStream { appProps.load(it) }
+def appVersion = appProps.getProperty('versionName').trim()
+def appCode = appProps.getProperty('versionCode').trim().toInteger()
+
+android {
+    namespace 'io.github.tomtombombadil.goldbox'
+    compileSdk 35
+    ndkVersion '27.3.13750724'
+
+    defaultConfig {
+        applicationId 'io.github.tomtombombadil.goldbox'
+        minSdk 21
+        targetSdk 35
+        versionCode appCode
+        versionName appVersion
+        externalNativeBuild {
+            cmake {
+                arguments '-DANDROID_STL=c++_shared', '-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON', '-DSDL_STATIC=OFF', '-DSDL_SHARED=ON'
+            }
+        }
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
+        }
+    }
+
+    // Release signing from the environment (CI's secrets); without them
+    // the release APK is left unsigned (F-Droid signs its own builds)
+    signingConfigs {
+        release {
+            if (System.getenv('GOLDBOX_KEYSTORE')) {
+                storeFile file(System.getenv('GOLDBOX_KEYSTORE'))
+                storePassword System.getenv('GOLDBOX_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('GOLDBOX_KEY_ALIAS')
+                keyPassword System.getenv('GOLDBOX_KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            if (System.getenv('GOLDBOX_KEYSTORE')) signingConfig signingConfigs.release
+        }
+    }
+
+    sourceSets {
+        main {
+            // SDL's activity and its helpers, used as SDL ships them
+            java.srcDirs += '../SDL/android-project/app/src/main/java'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path 'jni/CMakeLists.txt'
+            version '3.22.1'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    // The APK's name (Tom): GoldBoxGameEngine-<version>.apk (-debug for a debug build)
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "GoldBoxGameEngine-${variant.versionName}${variant.buildType.name == 'release' ? '' : '-' + variant.buildType.name}.apk"
+        }
+    }
+    lint {
+        abortOnError false
+    }
+    dependenciesInfo {
+        // (F-Droid: no Google-only blob in the APK)
+        includeInApk false
+        includeInBundle false
+    }
+}

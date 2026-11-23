@@ -1,0 +1,1 @@
+First version: the engine and the handheld port's front end on Android. The folder screen (Internal storage › GoldBox › games, or a folder of your own). Controls any mix: a controller, on-screen buttons, touch on every screen (tap to pick, tap again to choose, swipe to scroll, two fingers = the menu).

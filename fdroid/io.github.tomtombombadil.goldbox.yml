@@ -1,0 +1,30 @@
+Categories:
+  - Games
+License: MIT
+AuthorName: tomtombombadil
+SourceCode: https://github.com/tomtombombadil/APK-GoldBoxGameEngine
+IssueTracker: https://github.com/tomtombombadil/APK-GoldBoxGameEngine/issues
+Changelog: https://github.com/tomtombombadil/APK-GoldBoxGameEngine/blob/HEAD/CHANGELOG.md
+
+AutoName: Gold Box Game Engine
+
+RepoType: git
+Repo: https://github.com/tomtombombadil/APK-GoldBoxGameEngine.git
+
+Builds:
+  - versionName: 0.1.0
+    versionCode: 1000
+    commit: v0.1.0
+    subdir: app
+    submodules: true
+    gradle:
+      - yes
+    scandelete:
+      - SDL/Xcode
+    ndk: 27.3.13750724
+
+AutoUpdateMode: Version
+UpdateCheckMode: Tags
+UpdateCheckData: version.properties|versionCode=(\d+)|.|versionName=(.+)
+CurrentVersion: 0.1.0
+CurrentVersionCode: 1000
