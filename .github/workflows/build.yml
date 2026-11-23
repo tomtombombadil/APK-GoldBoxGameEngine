@@ -37,9 +37,13 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
-      - uses: android-actions/setup-android@v3
       - name: SDK parts
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0" "ndk;27.3.13750724" "cmake;3.22.1"
+        # (the runner's own Android SDK; android-actions/setup-android broke on a retired package, 2026-11-23)
+        run: |
+          SDKM=$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin | sort -V | tail -1)/sdkmanager
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" "platforms;android-35" "build-tools;35.0.0" "ndk;27.3.13750724" "cmake;3.22.1" > /dev/null
+          echo "sdk.dir=$ANDROID_HOME" > local.properties
       - name: Release key
         env:
           KEYSTORE_B64: ${{ secrets.GOLDBOX_KEYSTORE_B64 }}
