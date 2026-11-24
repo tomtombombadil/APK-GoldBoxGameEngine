@@ -2,7 +2,8 @@ name: Build
 
 # Every push: the APK built (the run's Artifacts: GoldBoxGameEngine-<version>-debug.apk,
 # and the release APK - signed when the repository has the GOLDBOX_* secrets).
-# A tag v<version> (= version.properties' versionName): a GitHub release with
+# A tag v<version> (= version.properties' versionName - or a release published on
+# GitHub's site, which makes the tag): a GitHub release with
 # GoldBoxGameEngine-<version>.apk, signed with the release key - the secrets are
 # required for that (docs/FDROID.md, "The release key").
 
@@ -77,5 +78,11 @@ jobs:
           V=${GITHUB_REF_NAME#v}
           CODE=$(sed -n 's/^versionCode=//p' version.properties)
           NOTES=fastlane/metadata/android/en-US/changelogs/$CODE.txt
-          gh release create "$GITHUB_REF_NAME" "dist/GoldBoxGameEngine-$V.apk" \
-            --title "Gold Box Game Engine $V" --notes-file "$NOTES"
+          # (a release Tom made on GitHub's site - it made the tag - gets the APK and the notes; else made here)
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "dist/GoldBoxGameEngine-$V.apk" --clobber
+            gh release edit "$GITHUB_REF_NAME" --title "Gold Box Game Engine $V" --notes-file "$NOTES"
+          else
+            gh release create "$GITHUB_REF_NAME" "dist/GoldBoxGameEngine-$V.apk" \
+              --title "Gold Box Game Engine $V" --notes-file "$NOTES"
+          fi

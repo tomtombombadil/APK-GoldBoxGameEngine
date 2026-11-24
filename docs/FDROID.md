@@ -52,8 +52,10 @@ secret**:
 
 ## 2. A release
 
-A release is the tag `v<version>` (Claude does this when you say "release
-it"): CI builds `GoldBoxGameEngine-<version>.apk`, signs it with the key
+A release is the tag `v<version>`. Claude's session can't push tags, so on
+GitHub: the repo › **Releases** › **Draft a new release** › **Choose a tag**:
+type `v0.1.0` (the version in `version.properties`) › **Create new tag on
+publish**, target `main` › title anything › **Publish release**. CI builds `GoldBoxGameEngine-<version>.apk`, signs it with the key
 above, and publishes it on the Releases page with that version's changelog.
 Without the secrets, the release run stops and says so.
 
