@@ -9,8 +9,9 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [ ] Choose Folder… with a folder of your own (and an SD card, if the phone has one).
 - [x] Release signing key: made 2026-11-23 (SHA-256 4D:B3:EE:83:...:41:00:B6); Tom has the .jks and the secrets
       file and added the four GOLDBOX_* secrets; Claude's copy deleted.
-- [ ] Publish v0.1.0 on GitHub's site (Releases > Draft a new release > tag v0.1.0 on main > Publish) - this
-      session can't push tags; CI then attaches the signed GoldBoxGameEngine-0.1.0.apk.
+- [x] v0.1.0 published (Tom, 2026-11-23) and installed; his findings fixed in 0.1.1.
+- [ ] Publish v0.1.1 on GitHub's site (Releases > Draft a new release > tag v0.1.1 on main > Publish) - this
+      session can't push tags; CI then attaches the signed GoldBoxGameEngine-0.1.1.apk.
 - [ ] F-Droid: the submission (docs/FDROID.md) - needs your GitLab account.
 
 ## Claude

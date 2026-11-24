@@ -29,6 +29,10 @@ The player brings their own game files.
   file manager and a Windows PC show it - "Internal storage › GoldBox ›
   games", never /storage/emulated/0 (`SetupActivity.shown`, the front end's
   `shown_path`).
+- **A camera cutout / notch is kept clear** (Tom, 2026-11-23, Pixel 10a): `GoldBoxActivity.cutoutInsets()`
+  gives the safe margins; the front end lays out inside them. Emulator check: `cmd overlay enable
+  com.android.internal.display.cutout.emulation.hole`.
+- **Display › Screen Rotation: Auto / Landscape / Portrait** (Tom, 2026-11-23); the front end's.
 - **The player can point the app at their own folder** ("a goldbox folder of
   their own creation"): Choose Folder… on the folder screen; Start › System ›
   Games Folder in the game brings that screen back.

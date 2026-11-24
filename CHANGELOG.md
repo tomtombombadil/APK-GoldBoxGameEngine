@@ -3,6 +3,22 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.1.1] - 2026-11-23
+
+Built on PM-GoldBoxGameEngine 0.12.15 and the CYD engine 0.215.1. Tom's first tries on his phone:
+
+- **One tap chooses** in the menus (was: the first tap picked a line, the second chose it).
+- **A tap in the game moves the highlight to what it picks** before acting (the party menu: tapping Modify
+  Character left the highlight on Drop Character while it asked for a character; the menu line's words too).
+- **The screen turns with the device** (it stayed the way it was held at the start), and **Display › Screen
+  Rotation: Auto / Landscape / Portrait** holds it one way.
+- **The camera cutout / notch is kept clear** (Tom's Pixel 10a: it sat in the top centre of the game in
+  portrait): the game, the on-screen buttons and the Companion stay out of it, in either orientation.
+- From the engine: AD&D 1E Rules › Level Drain & Restoration.
+
+Checked on an Android 11 emulator: turning to landscape and back (Auto), and a punch-hole camera (Android's
+cutout simulation) in portrait and landscape. The tap highlight not tried in a game here (no game files).
+
 ## [0.1.0] - 2026-11-23
 
 The first version. Built on PM-GoldBoxGameEngine 0.12.13 (the front end) and
