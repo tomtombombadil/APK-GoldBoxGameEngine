@@ -3,6 +3,12 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.1.5] - 2026-11-24
+
+Built on PM-GoldBoxGameEngine 0.13.1 and the CYD engine 0.216.0.
+
+- Clean Up Game Files' report names each folder it removed (the engine's newest).
+
 ## [0.1.4] - 2026-11-24
 
 Built on PM-GoldBoxGameEngine 0.13.0 and the CYD engine 0.216.0.

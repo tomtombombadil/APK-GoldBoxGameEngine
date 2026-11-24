@@ -11,7 +11,8 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
       file and added the four GOLDBOX_* secrets; Claude's copy deleted.
 - [x] v0.1.0 published (Tom, 2026-11-23) and installed; his findings fixed in 0.1.1.
 - [x] v0.1.1 published (Tom, 2026-11-23).
-- [ ] Publish v0.1.3 on GitHub's site (Releases > Draft a new release > tag v0.1.3 on main > Publish) - v0.1.2 too,
+- [x] v0.1.3 published (Tom, 2026-11-23). v0.1.4 by the APK chat session (2026-11-24).
+- [ ] Publish v0.1.5 on GitHub's site (Releases > Draft a new release > tag v0.1.5 on main > Publish).
       if it wasn't (0.1.3 has everything of 0.1.2).
 - [ ] F-Droid: the submission (docs/FDROID.md) - needs your GitLab account.
 
