@@ -3,6 +3,17 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.1.2] - 2026-11-23
+
+Built on PM-GoldBoxGameEngine 0.12.16 and the CYD engine 0.215.2. Tom's tries on his phone:
+
+- **Diagonals in a fight**: while a fighter moves or aims, the on-screen D-Pad's corners are the four diagonals
+  (two directions at once); a thumb can slide round all eight.
+- **The 3D view comes back right after a fight** (the monsters' picture - Curse's Fire Knives - stayed until a
+  step redrew it). Fixed in the engine, every game.
+- The on-screen **Start reads MENU, Select MOUSE** (Pointer Mode: in a game, an arrow the D-Pad moves; A taps
+  where it points).
+
 ## [0.1.1] - 2026-11-23
 
 Built on PM-GoldBoxGameEngine 0.12.15 and the CYD engine 0.215.1. Tom's first tries on his phone:

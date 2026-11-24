@@ -1,0 +1,1 @@
+Combat: the on-screen D-Pad's corners are diagonals while a fighter moves or aims. After a fight the 3D view comes back at once (the monsters' picture stayed until a step). The on-screen Start and Select read MENU and MOUSE.
