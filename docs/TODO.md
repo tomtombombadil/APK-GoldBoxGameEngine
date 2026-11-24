@@ -12,8 +12,10 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [x] v0.1.0 published (Tom, 2026-11-23) and installed; his findings fixed in 0.1.1.
 - [x] v0.1.1 published (Tom, 2026-11-23).
 - [x] v0.1.3 published (Tom, 2026-11-23). v0.1.4 by the APK chat session (2026-11-24).
-- [ ] Publish v0.2.0 on GitHub's site (Releases > Draft a new release > tag v0.2.0 on main > Publish) - it has
-      everything of 0.1.5, so 0.1.5 needn't be published.
+- [ ] Publish v0.3.0 on GitHub's site (Releases > Draft a new release > tag v0.3.0 on main > Publish) - it has
+      everything of 0.1.5 and 0.2.0, so those needn't be published.
+- [ ] 0.3.0: the menu drawer (MENU handle, swipe in) - every page, a switch, a choice's < >, the volume (slider,
+      - / +, mute), Back / a tap beside it / a swipe left to close; with a controller: Start, the D-pad, A / B.
 - [ ] 0.2.0 on the Pixel and the Tab S2 (the redesign's first stage): sideways and upright - the pad (the corners
       light in a fight), the Companion's map / party tap, the three handles (tap and swipe in), both pins (pinned:
       out again after the app restarts; unpinned: swiped away, or a touch on the game puts it away), a controller
@@ -25,7 +27,7 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [ ] **Redesign** (Tom, 2026-11-24; CLAUDE.md "The redesign"), in stages:
   1. (0.2.0 - seen on the emulator: the layouts, the pad's OK; the rest is Tom's to try) The game screen: the app's pad (8-way + OK, Back, pin), the Companion column / stack, edge handles,
      layouts by device and orientation, controller hides the pad (front end: `src/shell.*`).
-  2. The menu drawer from the left, the app's own (the front end's menu through JNI); Audio sliders,
+  2. (0.3.0 - seen on the emulator: the top page, Audio, the volume) The menu drawer from the left, the app's own (the front end's menu through JNI); Audio sliders,
      - / +, mute; Display menu gone.
   3. The game chooser, the app's own: phone cards (art by orientation), tablet 3 x 3 grid, Continue, shortcuts.
   4. Edge-to-edge, predictive Back, splash screen, adaptive icon, backup of saves, the folder screen restyled.

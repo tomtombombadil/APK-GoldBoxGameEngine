@@ -55,6 +55,7 @@ final class Shell {
     private final PadView pad;
     private final CompView comp;
     private final Handle hMenu, hComp, hPad;
+    private final MenuDrawer drawer;
 
     private int state = PAGES;
     private boolean controller = false;
@@ -80,7 +81,13 @@ final class Shell {
         root.addView(hMenu, new FrameLayout.LayoutParams(0, 0));
         root.addView(hComp, new FrameLayout.LayoutParams(0, 0));
         root.addView(hPad, new FrameLayout.LayoutParams(0, 0));
+        drawer = new MenuDrawer(a);
+        root.addView(drawer, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
     }
+
+    /** The front end's menu, for the drawer. */
+    void menu(byte[] state) { drawer.update(state); }
 
     // ---- From the front end (the UI thread)
 
@@ -302,7 +309,7 @@ final class Shell {
 
         @Override
         public boolean dispatchTouchEvent(MotionEvent e) {
-            if (e.getActionMasked() == MotionEvent.ACTION_DOWN) {
+            if (e.getActionMasked() == MotionEvent.ACTION_DOWN && !drawer.isOpen()) {
                 controller(false);
                 // (a touch on the game puts away what isn't pinned)
                 final int x = (int) e.getX(), y = (int) e.getY();

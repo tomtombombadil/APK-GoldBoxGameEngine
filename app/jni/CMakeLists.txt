@@ -16,6 +16,8 @@ if(NOT EXISTS "${SDL_DIR}/CMakeLists.txt")
 endif()
 
 # (the version the game list shows: the app's)
+# (a new version: CMake runs again, else an old build keeps showing the old one)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${APP_ROOT}/version.properties")
 file(STRINGS "${APP_ROOT}/version.properties" PM_VERSION REGEX "^versionName=")
 string(REPLACE "versionName=" "" PM_VERSION "${PM_VERSION}")
 file(STRINGS "${PM_ROOT}/cyd/VERSION" CYD_VERSION LIMIT_COUNT 1)

@@ -3,6 +3,26 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.3.0] - 2026-11-24
+
+Built on PM-GoldBoxGameEngine 0.15.0 and the CYD engine 0.216.2. The redesign's second stage.
+
+- **The menu is a drawer from the left** (the MENU handle, or a controller's Start), in Android's letters and
+  look: a page a screen with a back arrow and a close button, switches drawn as switches, a choice with < and >
+  beside its value, the highlighted line's explanation under it. Tap beside it, swipe it to the left, or press
+  Back to put it away. A controller still moves through it, and the drawer follows.
+- **Audio - Volume**: a slider, - and + (5 % a press), and a mute button (unmuting brings the level back).
+- **Screen Rotation** is now on the menu's first page; the Display page is gone (it had nothing else left).
+- The Button Guide, Device Info, notices, the journal list and Quick Actions are still the game's own screens:
+  the drawer steps aside while they are up.
+- From PM 0.14.1 / engine 0.216.2: Treasures heals the party at the ending and after the demo's fight, as the
+  original does.
+
+Checked on the Android emulator by touch: upright - the top page, Audio opened, the volume muted and unmuted
+(the saved level stayed 70), closed by a tap beside it; sideways - the drawer over the dimmed game list, Game
+Play with its switch and pages, the back arrow. Not tried there: the deeper pages, a switch flipped, a
+controller in the drawer.
+
 ## [0.2.0] - 2026-11-24
 
 Built on PM-GoldBoxGameEngine 0.14.0 and the CYD engine 0.216.1. The first stage of the redesign (the mockups

@@ -29,6 +29,9 @@ public class GoldBoxActivity extends SDLActivity {
     /** Where the game goes and the Companion (w 0: none), in the surface's pixels; its view 0 both, 1 map, 2 party. */
     static native void nativeLayout(int gx, int gy, int gw, int gh, int cx, int cy, int cw, int ch, int view);
 
+    /** The menu drawer's taps (MenuDrawer: CLOSE, CHOOSE, CHANGE, BACK, SET). */
+    static native void nativeMenu(int op, int index, int value);
+
     private Shell shell;
 
     @Override
@@ -43,6 +46,11 @@ public class GoldBoxActivity extends SDLActivity {
     /** The front end: what it has on screen changed (its game thread). */
     public void onShellState(int state) {
         runOnUiThread(() -> { if (shell != null) shell.setState(state); });
+    }
+
+    /** The front end: what its menu shows (MenuDrawer.update's format; its game thread). */
+    public void onShellMenu(byte[] state) {
+        runOnUiThread(() -> { if (shell != null) shell.menu(state); });
     }
 
     /** The front end: Y on a controller - the Companion out / away (its game thread). */

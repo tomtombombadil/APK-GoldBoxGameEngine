@@ -1,0 +1,1 @@
+The menu is now a drawer from the left in Android's look: switches, choices with < and >, each line's explanation. Audio's volume has a slider, - and +, and mute. Screen Rotation is on the first page. A controller still drives the menu. Treasures heals the party at its ending, as the original.
