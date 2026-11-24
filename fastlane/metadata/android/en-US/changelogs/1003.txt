@@ -1,0 +1,1 @@
+The on-screen buttons lie over the game, see-through, so the game is as big as the screen allows (tablets especially). An arrow at the top left hides and shows them. Controls: Button Size and Button Opacity. Display › Picture: 4:3 + Companion Right (the new default) or Below; plain 4:3 slides the Companion out. The Companion is as large as its room allows.

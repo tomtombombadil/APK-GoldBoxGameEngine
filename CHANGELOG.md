@@ -3,6 +3,22 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.1.3] - 2026-11-23
+
+Built on PM-GoldBoxGameEngine 0.12.19 and the CYD engine 0.215.2. Tom's Galaxy Tab S2: the game was small in the
+middle, the button columns took the sides.
+
+- **The on-screen buttons are an overlay**: the game as large as the screen allows, the buttons over it,
+  see-through - in the empty band beside the game when there is one (a wide phone), else over its sides, above
+  the game's menu line. A touch on a button is the button's, anywhere else the game's.
+- **The arrow at the top left** hides the buttons and brings them back.
+- **Start › Controls › Button Size** (Small to Huge) and **Button Opacity** (20% to 100%).
+- **Display › Picture**: **4:3 + Companion Right** (the new default - the Companion beside the game, the D-Pad in
+  the band left of it on a wide phone), **4:3 + Companion Below** (for holding it upright), or plain **4:3** (the
+  Companion slides out on Y).
+- **The Companion as large as its room allows**: with Companion Below on a phone held upright, the map and the
+  party side by side under the game - each about four times the size of before.
+
 ## [0.1.2] - 2026-11-23
 
 Built on PM-GoldBoxGameEngine 0.12.16 and the CYD engine 0.215.2. Tom's tries on his phone:
