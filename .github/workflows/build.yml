@@ -38,6 +38,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '21'
+          cache: gradle
       - name: SDK parts
         # (the runner's own Android SDK; android-actions/setup-android broke on a retired package, 2026-11-23)
         run: |
@@ -62,7 +63,13 @@ jobs:
           GOLDBOX_KEY_PASSWORD: ${{ secrets.GOLDBOX_KEY_PASSWORD }}
         run: |
           chmod +x gradlew
-          ./gradlew --no-daemon assembleDebug assembleRelease
+          # (Maven Central answers 429 at busy times: a pause and again, up to four times)
+          for i in 1 2 3 4; do
+            ./gradlew --no-daemon assembleDebug assembleRelease 2>&1 | tee build.log && break
+            grep -q "429" build.log || exit 1
+            [ $i = 4 ] && exit 1
+            echo "::warning::Maven Central said 429 - again in $((i * 60)) s"; sleep $((i * 60))
+          done
           mkdir -p dist
           cp app/build/outputs/apk/debug/*.apk app/build/outputs/apk/release/*.apk dist/
           ls -la dist
