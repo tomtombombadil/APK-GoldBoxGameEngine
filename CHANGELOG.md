@@ -3,6 +3,16 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.1.4] - 2026-11-24
+
+Built on PM-GoldBoxGameEngine 0.13.0 and the CYD engine 0.216.0.
+
+- **Start - Clean Up Game Files** (beside Rescan Game Files): frees space on the phone. A whole GOG or Steam
+  install copied over brings DOSBox, the installer's and the Steam launcher's files and DOS sound drivers the
+  engine never reads; they go. Every game file the engine reads, every save, every PDF (manuals, cluebooks,
+  journals - to read on the phone) and any file it doesn't know stay. A report: GoldBox › games › _CYD ›
+  CLEANUP.TXT.
+
 ## [0.1.3] - 2026-11-23
 
 Built on PM-GoldBoxGameEngine 0.12.19 and the CYD engine 0.215.2. Tom's Galaxy Tab S2: the game was small in the

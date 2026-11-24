@@ -1,0 +1,1 @@
+New: Start - Clean Up Game Files frees space - DOSBox, installer and launcher files the engine never reads are removed from the games folder; game files, saves and every PDF stay.

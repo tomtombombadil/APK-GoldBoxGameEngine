@@ -37,7 +37,7 @@ add_subdirectory("${SDL_DIR}" SDL)
 file(GLOB ENGINE_SOURCES CONFIGURE_DEPENDS "${PM_ROOT}/cyd/src/engine/*.cpp")
 add_library(gbengine STATIC ${ENGINE_SOURCES}
     "${PM_ROOT}/cyd/src/game/play.cpp" "${PM_ROOT}/cyd/src/game/companion.cpp"
-    "${PM_ROOT}/cyd/src/game/music_make.cpp" "${PM_ROOT}/src/compat.cpp")
+    "${PM_ROOT}/cyd/src/game/music_make.cpp" "${PM_ROOT}/cyd/src/game/tidy.cpp" "${PM_ROOT}/src/compat.cpp")
 target_include_directories(gbengine PUBLIC "${PM_ROOT}/cyd/src")
 target_compile_options(gbengine PRIVATE -O2 -Wno-unknown-warning-option
     -include "${PM_ROOT}/src/compat.h")
