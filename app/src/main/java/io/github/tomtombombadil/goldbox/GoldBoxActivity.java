@@ -2,8 +2,13 @@ package io.github.tomtombombadil.goldbox;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.view.DisplayCutout;
+import android.view.InputDevice;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowInsets;
 
 import org.libsdl.app.SDLActivity;
@@ -16,6 +21,55 @@ import java.io.File;
  * folder screen (SetupActivity) settled the folder.
  */
 public class GoldBoxActivity extends SDLActivity {
+
+    // ---- The app's own controls round the game (Shell; the front end's src/shell.*)
+
+    /** A pad button down / up (the front end's Btn numbers). */
+    static native void nativeButton(int button, boolean down);
+    /** Where the game goes and the Companion (w 0: none), in the surface's pixels; its view 0 both, 1 map, 2 party. */
+    static native void nativeLayout(int gx, int gy, int gw, int gh, int cx, int cy, int cw, int ch, int view);
+
+    private Shell shell;
+
+    @Override
+    protected void onCreate(Bundle saved) {
+        super.onCreate(saved);
+        if (mBrokenLibraries || mLayout == null) return;
+        shell = new Shell(this);
+        mLayout.addView(shell.root, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    /** The front end: what it has on screen changed (its game thread). */
+    public void onShellState(int state) {
+        runOnUiThread(() -> { if (shell != null) shell.setState(state); });
+    }
+
+    /** The front end: Y on a controller - the Companion out / away (its game thread). */
+    public void onShellCompanion() {
+        runOnUiThread(() -> { if (shell != null) shell.toggleCompanion(); });
+    }
+
+    private static boolean fromController(InputDevice d, int source) {
+        final int s = d != null ? d.getSources() : source;
+        return (s & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD
+                || (s & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK
+                || (s & InputDevice.SOURCE_DPAD) == InputDevice.SOURCE_DPAD && d != null && !d.isVirtual();
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        // (a controller in use: no pad - a touch brings it back)
+        if (shell != null && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() != KeyEvent.KEYCODE_BACK
+                && fromController(event.getDevice(), event.getSource())) shell.controller(true);
+        return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public boolean dispatchGenericMotionEvent(MotionEvent event) {
+        if (shell != null && fromController(event.getDevice(), event.getSource())) shell.controller(true);
+        return super.dispatchGenericMotionEvent(event);
+    }
 
     @Override
     protected String[] getLibraries() {
