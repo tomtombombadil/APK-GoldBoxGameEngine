@@ -37,6 +37,31 @@ The player brings their own game files.
   their own creation"): Choose Folder… on the folder screen; Start › System ›
   Games Folder in the game brings that screen back.
 
+## The redesign (Tom, 2026-11-24: "It needs a serious glow up ... not like a native Android app")
+Mockups (approved, "I like your mockups and suggestions"; button layouts to be cleaned up later):
+https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion made with them.
+- **Android's own UI for everything but the game**: the app's views (Roboto, Material 3 look: navy #0B1024,
+  surfaces #141B36, gold #E8B840, cream #F0E6C8) round SDL's picture; SDL draws the game and the Companion's
+  pictures only. Built in stages (`docs/TODO.md` "Redesign").
+- **Swipe-outs** - left: the menu drawer; right: the Companion; bottom: the controls (8-way pad - diagonals -
+  with OK in its centre, Back; no menu button: the menu is the left swipe). The right and bottom ones have a
+  **pin**: pinned they stay out (and are remembered); unpinned they can be swiped back (and close when the game
+  is touched). Each opens from a **handle** on its edge (system Back / Home gestures own the edges:
+  `setSystemGestureExclusionRects`, ~200dp an edge). Opening one makes the game smaller to make room.
+- **Default layouts by aspect ratio and orientation** - phone (16:9 or wider) landscape: the game at the left,
+  beside it a column: **the Companion's map at the top - a tap flips it to the party and back - and the
+  controls under it** (Tom, 2026-11-24, taking the trade-off: the controls in place of the Companion's party
+  rather than a tray that shrinks the game). Phone portrait: the game, the Companion under it, the controls at
+  the bottom. Tablet (near 4:3) landscape: the game maximised, everything swiped out on demand. Tablet
+  portrait: as the phone's.
+- **Audio**: each volume a slider, - and + buttons and a mute button. The Display menu goes away in favour of
+  the app's own controls.
+- **Game chooser**: art shaped for the device (upright box art on a phone held upright, wide art sideways); a
+  tablet shows all nine games at once.
+- Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
+  first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
+  and adaptive icon, Android backup of saves, a controller hides the pad.
+
 ## The repos
 - `pm/` - **PM-GoldBoxGameEngine**, a submodule pinned to a commit; its
   `cyd/` is the engine (CYD-GoldBoxGameEngine). **Never edit files under

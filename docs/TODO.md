@@ -17,6 +17,13 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [ ] F-Droid: the submission (docs/FDROID.md) - needs your GitLab account.
 
 ## Claude
+- [ ] **Redesign** (Tom, 2026-11-24; CLAUDE.md "The redesign"), in stages:
+  1. The game screen: the app's pad (8-way + OK, Back, pin), the Companion column / stack, edge handles,
+     layouts by device and orientation, controller hides the pad (front end: `src/shell.*`).
+  2. The menu drawer from the left, the app's own (the front end's menu through JNI); Audio sliders,
+     - / +, mute; Display menu gone.
+  3. The game chooser, the app's own: phone cards (art by orientation), tablet 3 x 3 grid, Continue, shortcuts.
+  4. Edge-to-edge, predictive Back, splash screen, adaptive icon, backup of saves, the folder screen restyled.
 - [ ] No game played on Android yet (no game files in this session): the scan and a game on the emulator when
       Tom's files are here, GOG and Steam.
 - [ ] Choose Folder… tried only in code review: the picker on the emulator, a folder made by hand.
