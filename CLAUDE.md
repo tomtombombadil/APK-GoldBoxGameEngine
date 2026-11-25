@@ -93,8 +93,9 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
     button in its strip (under the swap arrow; on a phone sideways, where the turned "tap for the party" words
     would then not fit along the strip, the menu button goes to the bottom of the pad's column instead). The drawer slides in from that side. All of it swaps sides with
     the swap arrow.
-  - **The Companion is smart**: sideways in the column the map as wide as the column at the top, the party under
-    it when there's room (four fifths of the map's size or more: the front end's view 3) - no tap then; only when
+  - **The Companion is smart**: sideways in the column the map as wide as the column at the top, the party right under
+    it, as wide as the map, its members' rows only (the empty rows cut, never shrunk and centred) when there's
+    room (three quarters of the map's height: the front end's view 3) - no tap then; only when
     both don't fit, one with the tap. **Never shrink the map to fit the party.** **The column's width is the same
     with the controls away** ("Making the map smaller isn't a good look").
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)

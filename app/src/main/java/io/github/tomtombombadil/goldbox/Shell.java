@@ -323,8 +323,8 @@ final class Shell {
         if (cr.height() < 64 * dp || cr.width() < 64 * dp) cr.setEmpty();
 
         // The Companion (Tom, 2026-11-25: "smart"). Sideways, in the column: the map as wide as the column, at its
-        // top; the party under it when there is room for it (four fifths of the map's size or more) - else one
-        // of them, a tap flipping them. The map is never made smaller for the party. Upright: both, the front
+        // top; the party under it, as wide as the map, when its members' rows fit (six take about four fifths of
+        // its picture; the front end cuts the empty rows below them) - else one of them, a tap flipping them. The map is never made smaller for the party. Upright: both, the front
         // end setting them side by side or stacked, whichever shows them larger.
         int view = 0;
         final Rect pic = new Rect(cr);
@@ -334,7 +334,7 @@ final class Shell {
             if (land) {
                 final int mh = picH(pic.width()), g = mh / 40;
                 final int ph = Math.min(mh, pic.height() - mh - g);
-                if (mh <= pic.height() && ph >= mh * 4 / 5) {
+                if (mh <= pic.height() && ph >= mh * 3 / 4) {
                     view = 3;
                     pic.bottom = pic.top + mh + g + ph;
                 } else {

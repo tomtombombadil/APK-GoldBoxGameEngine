@@ -5,7 +5,7 @@ part of this file.
 
 ## [0.7.0] - 2026-11-25
 
-Built on PM-GoldBoxGameEngine 0.18.0 and the CYD engine 0.217.0. Tom's notes from his Galaxy Tab S8+.
+Built on PM-GoldBoxGameEngine 0.18.1 and the CYD engine 0.217.0. Tom's notes from his Galaxy Tab S8+.
 
 - **Tablets are told by Android's own measure** (the screen's smaller side 600dp or more), not by their shape: a
   16:10 tablet (the Tab S8+, 2800 x 1752) is a tablet now. Sideways a 16:10 tablet has the Companion and the
@@ -20,8 +20,8 @@ Built on PM-GoldBoxGameEngine 0.18.0 and the CYD engine 0.217.0. Tom's notes fro
 - **The menu's tab** is at the hand's side with the Companion's, in the app's navy with a gold edge (it had blended
   into the game's frame); with the Companion out, its strip has a menu button. The menu slides in from that side,
   and all of it changes sides with the swap arrow.
-- **The Companion beside the game**: the map as wide as the column at the top, the party under it when there is
-  room for it - no tap to switch then. Only when both don't fit does the tap switch them, and the map is never made
+- **The Companion beside the game**: the map as wide as the column at the top, the party right under it and as wide
+  (its members' rows; the empty ones below cut off) when there is room for it - no tap to switch then. Only when both don't fit does the tap switch them, and the map is never made
   smaller to fit the party. The column stays the same width with the controls put away.
 
 ## [0.6.0] - 2026-11-24
