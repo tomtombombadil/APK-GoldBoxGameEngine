@@ -1,0 +1,1 @@
+Continue: a game with a saved game shows Continue on the chooser - one tap and you are back in your newest save, past the titles and the party menu. Start from the beginning plays the titles as before. Engine fixes: a flight's runners can fight again; Resist Fire / Cold halve their damage in five games.

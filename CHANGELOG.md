@@ -3,6 +3,23 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.5.0] - 2026-11-24
+
+Built on PM-GoldBoxGameEngine 0.17.0 and the CYD engine 0.217.0.
+
+- **Continue** (Tom, 2026-11-24): a game with a saved game shows **Continue** on the chooser - one tap and you are
+  back in your newest save, past the title screens and the party menu. **Start from the beginning** under it
+  plays the titles as before. On a tablet, a gold Continue on the game's tile; a tap elsewhere on the tile
+  starts from the beginning. The chooser learns that a game has a save once the game has been opened (the copies'
+  sample parties count) - the save itself is looked for at the tap, the newest by its file's date.
+
+Checked: through the PC build, Continue with the nine GOG copies (eight into their newest save; Gateway's copy
+has none and says so); on the Android emulator, upright, PoolRad's Continue from the chooser - straight into the
+game at its save with the Companion and the pad. Not tried there: the tablet tile's Continue, Start from the
+beginning.
+- From the engine 0.216.3 / .4: a flight's runners can fight again; Resist Fire / Resist Cold halve their damage
+  in Secret, Champions, Darkness, Treasures and Death Knights.
+
 ## [0.4.0] - 2026-11-24
 
 Built on PM-GoldBoxGameEngine 0.16.0 and the CYD engine 0.216.2. The redesign's third stage, and what 0.3.0 missed.

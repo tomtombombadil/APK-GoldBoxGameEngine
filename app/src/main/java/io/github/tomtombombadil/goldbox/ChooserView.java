@@ -43,13 +43,13 @@ import java.util.concurrent.Executors;
  */
 final class ChooserView extends FrameLayout {
 
-    static final int OP_PLAY = 10, OP_LOOK_AGAIN = 11, OP_SELECT = 12;
+    static final int OP_PLAY = 10, OP_LOOK_AGAIN = 11, OP_SELECT = 12, OP_CONTINUE = 13;
     private static final int NAVY = Shell.NAVY, SURFACE = Shell.SURFACE, KEY = Shell.KEY, EDGE = Shell.EDGE,
             GOLD = Shell.GOLD, CREAM = Shell.CREAM, MUTED = Shell.MUTED;
 
     static final class Game {
         String name, shortName, art, release;
-        boolean playable;
+        boolean playable, cont;     // cont: it has a saved game - Continue (the engine's continue_game)
         int kind;           // 2 box art, 1 logo, 0 none
     }
 
@@ -67,7 +67,7 @@ final class ChooserView extends FrameLayout {
     // (the phone's views, kept to change the chosen game without building anew)
     private Card card, cardPrev, cardNext;
     private TextView nameView, releaseView;
-    private TextView playButton;
+    private TextView playButton, startButton;
     private LinearLayout dots;
     private final List<Card> grid = new ArrayList<>();
 
@@ -107,6 +107,7 @@ final class ChooserView extends FrameLayout {
                 g.art = f[3];
                 g.kind = parse(f[4]);
                 g.release = f[5];
+                g.cont = f.length > 6 && f[6].equals("1");
                 games.add(g);
             }
             if (sel < 0 || sel >= games.size()) sel = 0;
@@ -140,7 +141,7 @@ final class ChooserView extends FrameLayout {
         final boolean phone = (float) Math.max(W, H) / Math.min(W, H) >= 1.5f;
         final boolean land = W >= H;
         final StringBuilder key = new StringBuilder(mode).append(W).append('x').append(H).append(folder);
-        for (Game g : games) key.append('|').append(g.name).append(g.art).append(g.playable);
+        for (Game g : games) key.append('|').append(g.name).append(g.art).append(g.playable).append(g.cont);
         if (!force && key.toString().equals(built)) {
             showSel();
             return;
@@ -267,7 +268,10 @@ final class ChooserView extends FrameLayout {
                 g.addView(k, lp);
                 grid.add(k);
                 final int idx = i;
-                k.setOnClickListener(v -> play(idx));
+                k.setOnClickListener(v -> {
+                    if (k.onPill) cont(idx);
+                    else play(idx);
+                });
             }
             showSel();
         });
@@ -294,7 +298,7 @@ final class ChooserView extends FrameLayout {
             body.addView(cardNext, frame(x0 + cw + px(14), y0 + px(12), cw, peekH));
             body.addView(card, frame(x0, y0, cw, cardH));
             card.artH = artH;
-            card.setOnClickListener(v -> play(sel));
+            card.setOnClickListener(v -> primary(sel));
             final Swipe sw = new Swipe();
             body.setOnTouchListener(sw);
             card.setOnTouchListener(sw);
@@ -305,8 +309,12 @@ final class ChooserView extends FrameLayout {
             final LinearLayout acts = new LinearLayout(c);
             acts.setOrientation(LinearLayout.VERTICAL);
             acts.setGravity(Gravity.CENTER_HORIZONTAL);
-            playButton = Screens.button(c, "Play", true, v -> play(sel));
+            playButton = Screens.button(c, "Play", true, v -> primary(sel));
             acts.addView(playButton, new LinearLayout.LayoutParams(Math.min(bw - px(48), px(340)), px(56)));
+            startButton = Screens.button(c, "Start from the beginning", false, v -> play(sel));
+            final LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(Math.min(bw - px(48), px(340)), px(48));
+            sp.topMargin = px(10);
+            acts.addView(startButton, sp);
             final TextView hint = Screens.text(c, 12, MUTED, false);
             hint.setText("Swipe the card sideways for the other games");
             hint.setPadding(0, px(10), 0, 0);
@@ -325,7 +333,7 @@ final class ChooserView extends FrameLayout {
             final int panel = Math.max(px(280), bw * 36 / 100);
             card = new Card(c, null, -1, Card.WIDE);
             body.addView(card, frame(0, 0, bw - panel + px(60), bh));
-            card.setOnClickListener(v -> play(sel));
+            card.setOnClickListener(v -> primary(sel));
             final Swipe sw = new Swipe();
             card.setOnTouchListener(sw);
             final LinearLayout side = new LinearLayout(c);
@@ -339,8 +347,12 @@ final class ChooserView extends FrameLayout {
             releaseView.setPadding(0, px(6), 0, 0);
             side.addView(releaseView);
             side.addView(new View(c), new LinearLayout.LayoutParams(1, 0, 1));
-            playButton = Screens.button(c, "Play", true, v -> play(sel));
+            playButton = Screens.button(c, "Play", true, v -> primary(sel));
             side.addView(playButton, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, px(52)));
+            startButton = Screens.button(c, "Start from the beginning", false, v -> play(sel));
+            final LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, px(46));
+            sp.topMargin = px(8);
+            side.addView(startButton, sp);
             final LinearLayout nav = new LinearLayout(c);
             nav.setGravity(Gravity.CENTER_VERTICAL);
             nav.setPadding(0, px(12), 0, 0);
@@ -389,10 +401,11 @@ final class ChooserView extends FrameLayout {
         if (nameView != null) nameView.setText(g.name);
         if (releaseView != null) releaseView.setText(g.release.isEmpty() ? "" : g.release + (g.playable ? "" : " · not playable"));
         if (playButton != null) {
-            playButton.setText(g.playable ? "Play" : "Not playable");
+            playButton.setText(!g.playable ? "Not playable" : g.cont ? "Continue" : "Play");
             playButton.setEnabled(g.playable);
             playButton.setAlpha(g.playable ? 1f : 0.45f);
         }
+        if (startButton != null) startButton.setVisibility(g.playable && g.cont ? VISIBLE : GONE);
         if (dots != null) {
             dots.removeAllViews();
             for (int i = 0; i < n && n > 1; ++i) {
@@ -413,6 +426,19 @@ final class ChooserView extends FrameLayout {
         GoldBoxActivity.nativeMenu(OP_SELECT, sel, 0);
         performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
         showSel();
+    }
+
+    /** The main button: Continue when the game has a saved game, else Play (its titles). */
+    private void primary(int i) {
+        if (i < 0 || i >= games.size()) return;
+        if (games.get(i).cont) cont(i);
+        else play(i);
+    }
+
+    private void cont(int i) {
+        if (i < 0 || i >= games.size() || !games.get(i).playable) return;
+        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        GoldBoxActivity.nativeMenu(OP_CONTINUE, i, 0);
     }
 
     private void play(int i) {
@@ -494,8 +520,19 @@ final class ChooserView extends FrameLayout {
         Game game;
         Bitmap bmp;
         String bmpFor;
-        boolean chosen;
+        boolean chosen, onPill;
+        final RectF pill = new RectF();
         private final Paint p = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+
+        @Override
+        public boolean onTouchEvent(MotionEvent e) {
+            if (e.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                final RectF hit = new RectF(pill);
+                hit.inset(-8 * dp, -8 * dp);
+                onPill = style == TILE && !pill.isEmpty() && hit.contains(e.getX(), e.getY());
+            }
+            return super.onTouchEvent(e);
+        }
 
         Card(Context c, Game g, int index, int style) {
             super(c);
@@ -592,13 +629,28 @@ final class ChooserView extends FrameLayout {
                     t.setTypeface(android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL));
                     t.setTextSize((style == CARD ? 18 : 15) * dp);
                     final float x = 16 * dp;
-                    final String name = TextUtils.ellipsize(game.name, new android.text.TextPaint(t), w - 2 * x,
+                    final float room2 = w - 2 * x - (style == TILE && game.cont && game.playable ? 130 * dp : 0);
+                    final String name = TextUtils.ellipsize(game.name, new android.text.TextPaint(t), room2,
                             TextUtils.TruncateAt.END).toString();
                     c.drawText(name, x, ah + (style == CARD ? 32 : 24) * dp, t);
                     t.setColor(MUTED);
                     t.setTypeface(android.graphics.Typeface.DEFAULT);
                     t.setTextSize((style == CARD ? 13 : 12) * dp);
                     c.drawText(game.release + (game.playable ? "" : " · not playable"), x, ah + (style == CARD ? 56 : 43) * dp, t);
+                }
+                pill.setEmpty();
+                if (style == TILE && game.cont && game.playable) {
+                    // (a tablet's tile: a tap plays from the titles; its gold pill continues the saved game)
+                    final Paint t = new Paint(Paint.ANTI_ALIAS_FLAG);
+                    t.setTypeface(android.graphics.Typeface.create("sans-serif-medium", android.graphics.Typeface.NORMAL));
+                    t.setTextSize(14 * dp);
+                    final String word = "Continue";
+                    final float tw = t.measureText(word), ph = 34 * dp, pw = tw + 32 * dp;
+                    pill.set(w - pw - 12 * dp, ah + (nameH - ph) / 2, w - 12 * dp, ah + (nameH + ph) / 2);
+                    t.setColor(GOLD);
+                    c.drawRoundRect(pill, ph / 2, ph / 2, t);
+                    t.setColor(NAVY);
+                    c.drawText(word, pill.left + 16 * dp, pill.centerY() + 5 * dp, t);
                 }
             }
             c.restore();

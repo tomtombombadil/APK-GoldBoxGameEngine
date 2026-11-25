@@ -12,13 +12,15 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [x] v0.1.0 published (Tom, 2026-11-23) and installed; his findings fixed in 0.1.1.
 - [x] v0.1.1 published (Tom, 2026-11-23).
 - [x] v0.1.3 published (Tom, 2026-11-23). v0.1.4 by the APK chat session (2026-11-24).
-- [ ] Publish v0.4.0 on GitHub's site (Releases > Draft a new release > tag v0.4.0 on main > Publish) - it has
-      everything of 0.1.5 - 0.3.0, so those needn't be published.
+- [ ] Publish v0.5.0 on GitHub's site (Releases > Draft a new release > tag v0.5.0 on main > Publish) - it has
+      everything of 0.1.5 - 0.4.0, so those needn't be published.
 - [ ] 0.4.0: the chooser upright / sideways on the Pixel and as the grid on the Tab S2 (Steam box art and GOG
       logos), the scan's page, a Yes / No notice (Exit Game, Clean Up), Device Info, Quick Actions with a party,
       Controls - Button Size on the pad.
-- [ ] **Continue (the last save) on the chooser** (accepted with the mockups): needs the engine to open a game at a
-      save - a new `play::` call, not a bug fix, so Tom's OK for the CYD repo first (asked 2026-11-24).
+- [x] **Continue (the last save) on the chooser** (Tom's OK for the engine call, 2026-11-24): engine 0.217.0, PM
+      0.17.0, app 0.5.0.
+- [ ] 0.5.0 on the phone: Continue on a game opened before (a GOG sample save counts) - straight into the newest
+      save; Start from the beginning; on the Tab S2 the tile's gold Continue.
 - [ ] 0.3.0: the menu drawer (MENU handle, swipe in) - every page, a switch, a choice's < >, the volume (slider,
       - / +, mute), Back / a tap beside it / a swipe left to close; with a controller: Start, the D-pad, A / B.
 - [ ] 0.2.0 on the Pixel and the Tab S2 (the redesign's first stage): sideways and upright - the pad (the corners
