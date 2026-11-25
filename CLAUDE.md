@@ -128,6 +128,9 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   so edits made after it (Tom's to the descriptions, 0.7.0) are missed by an older hash. Check with
   `git rev-parse v<version>^{commit}` once the tag exists. The fdroiddata copy: LF line ends, a final newline.
   Only the latest version's build in it (fdroiddata's rule for a new app's merge request).
+  Category **Role-Playing Game** (fdroiddata's config/categories.yml; "Games" is no longer one - lint fails). Before
+  a merge request: `fdroid lint`, `fdroid rewritemeta` (no change) and `fdroid scanner` run here in a venv against
+  the fdroiddata fork's config (2026-11-25: all clean).
 - **F-Droid signs its own builds with its own key** (Tom, 2026-11-25): no `Binaries` / `AllowedAPKSigningKeys`
   in the recipe, so no reproducible-build upkeep. The GitHub releases (Tom's key) and F-Droid's are separate
   installs: moving from one to the other needs an uninstall (the GoldBox folder and its saves stay; the private
