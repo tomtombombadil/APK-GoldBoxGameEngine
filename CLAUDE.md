@@ -132,6 +132,9 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   lint fails; ScummVM is Emulator, EasyRPG Player Role-Playing Game). Before
   a merge request: `fdroid lint`, `fdroid rewritemeta` (no change) and `fdroid scanner` run here in a venv against
   the fdroiddata fork's config (2026-11-25: all clean).
+- **While F-Droid's merge request is open** (!59131): work on `main` freely; never rewrite history (no force
+  push) or move / delete a `v` tag - F-Droid builds the recipe's commit. A new release during the review: its full
+  hash replaces the old build in the merge request's recipe (only the latest build kept).
 - **F-Droid signs its own builds with its own key** (Tom, 2026-11-25): no `Binaries` / `AllowedAPKSigningKeys`
   in the recipe, so no reproducible-build upkeep. The GitHub releases (Tom's key) and F-Droid's are separate
   installs: moving from one to the other needs an uninstall (the GoldBox folder and its saves stay; the private
