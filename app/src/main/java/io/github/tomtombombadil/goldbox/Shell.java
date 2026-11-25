@@ -77,7 +77,7 @@ final class Shell {
         root = new Root(a);
         comp = new CompView(a);
         pad = new PadView(a);
-        hMenu = new Handle(a, Handle.LEFT_EDGE, "MENU");
+        hMenu = new Handle(a, Handle.RIGHT_EDGE, "MENU");
         hComp = new Handle(a, Handle.RIGHT_EDGE, "COMPANION");
         hPad = new Handle(a, Handle.BOTTOM_EDGE, "CONTROLS");
         root.addView(comp, new FrameLayout.LayoutParams(0, 0));
@@ -149,11 +149,9 @@ final class Shell {
 
     // ---- The layout
 
-    private boolean defaultOut(String k) { return !k.equals("tablet_land"); }
-
-    private void load(String k) {
+    /** This shape's and way of holding's pins and what is out; d: out by default. */
+    private void load(String k, boolean d) {
         key = k;
-        final boolean d = defaultOut(k);
         compPin = prefs.getBoolean("pin_comp_" + k, d);
         padPin = prefs.getBoolean("pin_pad_" + k, d);
         compOut = compPin && prefs.getBoolean("comp_" + k, d);
@@ -232,6 +230,15 @@ final class Shell {
         return Math.max(Math.round(6 * dp), Math.round(r * 0.45f));
     }
 
+    /**
+     * A tablet by Android's own measure - the screen's smaller side 600dp or more (Tom, 2026-11-25: a Galaxy Tab S8+,
+     * 2800 x 1752 - 16:10 - was taken for a phone by its shape); a phone else. In split screen: the window's.
+     */
+    static boolean tablet(Context c) { return c.getResources().getConfiguration().smallestScreenWidthDp >= 600; }
+
+    // The Companion's pictures: 208 x 200 at rows 1.2 tall (video.h kSideW, kSideH) - height / width
+    private static int picH(int w) { return w * 200 * 6 / (208 * 5); }
+
     /** Lays everything out for the screen as it is now; tells the front end. */
     void relayout(boolean force) {
         final int W = root.getWidth(), H = root.getHeight();
@@ -239,9 +246,12 @@ final class Shell {
         final int[] ins = act.cutoutInsets();
         final Rect area = new Rect(ins[0], ins[1], W - ins[2], H - ins[3]);
         final boolean land = W >= H;
-        final boolean phone = (float) Math.max(W, H) / Math.min(W, H) >= 1.5f;
+        final boolean phone = !tablet(act);
+        // (a tablet near 4:3 sideways: the game maximised, the rest on demand; a wider one - 16:10 - has room
+        // beside the game: the column out, as a phone's)
+        final boolean roomy = (float) Math.max(W, H) / Math.min(W, H) >= 1.5f;
         final String k = (phone ? "phone" : "tablet") + (land ? "_land" : "_port");
-        if (!k.equals(key)) load(k);
+        if (!k.equals(key)) load(k, phone || !land || roomy);
         final boolean left = leftHand();
 
         final boolean showComp = compOut && playing();
@@ -252,8 +262,8 @@ final class Shell {
         int btn = Math.round(Math.max(46 * dp, Math.min(68 * dp, Math.min(W, H) * 0.14f)) * padScale);
         final int gap = Math.round(6 * dp), sideW = Math.round(52 * dp), m = Math.round(8 * dp);
         int padW = 3 * btn + 2 * gap + sideW + 3 * m, padH = 3 * btn + 2 * gap + 2 * m;
-        // The Companion's own strip at its outer edge: its pin, the swap arrow (and on a phone held sideways the
-        // map / party words, turned)
+        // The Companion's own strip at its outer edge: its pin, the swap arrow, the menu (and on a phone held
+        // sideways the map / party words, turned)
         final int stripW = Math.round(36 * dp), band = Math.round(24 * dp);
 
         final Rect game = new Rect(area), cr = new Rect(), pr = new Rect();
@@ -262,7 +272,9 @@ final class Shell {
             // (the front end's own pages: the whole screen)
         } else if (land) {
             if (showComp || showPad) {
-                int colW = Math.max(area.width() - area.height() * 4 / 3, showPad ? padW : Math.round(180 * dp));
+                // (the column as wide with the pad put away as with it out - Tom, 2026-11-25: "Making the map
+                // smaller isn't a good look")
+                int colW = Math.max(area.width() - area.height() * 4 / 3, padW);
                 if (colW > area.width() / 2) colW = area.width() / 2;
                 // (the game opposite the hand; its column at the hand's side)
                 if (left) {
@@ -273,14 +285,12 @@ final class Shell {
                 }
                 final int c0 = left ? area.left : game.right, c1 = left ? game.left : area.right;
                 colW = c1 - c0;
-                if (showPad) {
-                    if (padW > colW) {      // (a narrow column: smaller keys)
-                        btn = Math.max(Math.round(36 * dp), (colW - 2 * gap - sideW - 3 * m) / 3);
-                        padW = 3 * btn + 2 * gap + sideW + 3 * m;
-                        padH = 3 * btn + 2 * gap + 2 * m;
-                    }
-                    pr.set(c0, area.bottom - padH, c1, area.bottom);
+                if (padW > colW) {      // (a narrow column: smaller keys)
+                    btn = Math.max(Math.round(36 * dp), (colW - 2 * gap - sideW - 3 * m) / 3);
+                    padW = 3 * btn + 2 * gap + sideW + 3 * m;
+                    padH = 3 * btn + 2 * gap + 2 * m;
                 }
+                if (showPad) pr.set(c0, area.bottom - padH, c1, area.bottom);
                 if (showComp) cr.set(c0, area.top, c1, showPad ? pr.top - m : area.bottom);
                 stripLeft = left;
             } else {
@@ -312,20 +322,46 @@ final class Shell {
         }
         if (cr.height() < 64 * dp || cr.width() < 64 * dp) cr.setEmpty();
 
-        // The Companion: one picture (the tap flips it) beside the pad when sideways, else both
-        final int view = !cr.isEmpty() && land && showPad ? compView : 0;
+        // The Companion (Tom, 2026-11-25: "smart"). Sideways, in the column: the map as wide as the column, at its
+        // top; the party under it when there is room for it (four fifths of the map's size or more) - else one
+        // of them, a tap flipping them. The map is never made smaller for the party. Upright: both, the front
+        // end setting them side by side or stacked, whichever shows them larger.
+        int view = 0;
         final Rect pic = new Rect(cr);
         if (!cr.isEmpty()) {
             if (stripLeft) pic.left += stripW;
             else pic.right -= stripW;
-            if (view != 0 && !phone) pic.top += band;       // (a tablet: the map / party words above the picture)
+            if (land) {
+                final int mh = picH(pic.width()), g = mh / 40;
+                final int ph = Math.min(mh, pic.height() - mh - g);
+                if (mh <= pic.height() && ph >= mh * 4 / 5) {
+                    view = 3;
+                    pic.bottom = pic.top + mh + g + ph;
+                } else {
+                    view = compView;
+                    if (!phone) pic.top += band;        // (a tablet: the map / party words above the picture)
+                    pic.bottom = Math.min(cr.bottom, pic.top + mh);
+                }
+            }
         }
-        comp.single = view != 0;
+        final boolean single = view == 1 || view == 2;
+        comp.single = single;
         comp.stripLeft = stripLeft;
         comp.stripW = stripW;
-        comp.band = view != 0 && !phone ? band : 0;
-        comp.turnedHint = view != 0 && phone;
+        comp.band = single && !phone ? band : 0;
+        comp.turnedHint = single && phone;
         comp.topPad = cr.top <= area.top + 1 ? cornerPad() : Math.round(6 * dp);
+        // (the menu's button in the strip, under the swap arrow - unless a phone's turned words then won't fit
+        // along it: then in the pad's column)
+        boolean menuInStrip = true;
+        if (comp.turnedHint && showPad) {
+            final Paint t = paint(MUTED);
+            t.setTextSize(11 * dp);
+            final float need = comp.topPad + 3 * (26 * dp + 12 * dp) + t.measureText("tap for the party") + 8 * dp;
+            menuInStrip = cr.height() >= need;
+        }
+        comp.menuHere = menuInStrip;
+        pad.menuHere = !cr.isEmpty() && !menuInStrip;
         pad.btn = btn;
         pad.tray = !land;
         // (its small buttons: sideways at the screen's edge, the keys toward the game; upright the keys at the
@@ -335,19 +371,28 @@ final class Shell {
         pad.swapHere = cr.isEmpty();
         place(comp, cr.left, cr.top, cr.width(), cr.height());
         place(pad, pr.left, pr.top, pr.width(), pr.height());
+        comp.invalidate();
+        pad.invalidate();
 
-        // The handles: where a swipe is ours
-        final int hw = Math.round(16 * dp), hl = Math.round(96 * dp);
-        if (page()) place(hMenu, 0, 0, 0, 0);       // (the chooser has its own menu button)
-        else {
-            // (beside the game, at its middle: upright the game's own height, not over the Companion; sideways with
-            // the column at the left, at the game's left edge - not over the column)
-            final boolean colLeft = land && left && (!cr.isEmpty() || !pr.isEmpty());
-            final int my = state == PAGES ? area.top + (area.height() - hl) / 2 : game.top + (game.height() - hl) / 2;
-            place(hMenu, colLeft ? game.left : area.left, my, hw, hl);
-        }
-        if (playing() && cr.isEmpty()) place(hComp, area.right - hw, area.top + (area.height() - hl) / 2, hw, hl);
+        // The handles: where a swipe is ours. The menu's and the Companion's at the hand's edge, together (Tom,
+        // 2026-11-25: the menu's had blended into the game's frame at the other side); with the Companion out
+        // the menu is its strip's button.
+        final int hw = Math.round(20 * dp), hl = Math.round(96 * dp), hg = Math.round(14 * dp);
+        final int edgeX = left ? area.left : area.right - hw;
+        hMenu.edge = hComp.edge = left ? Handle.LEFT_EDGE : Handle.RIGHT_EDGE;
+        final boolean menuH = !page() && cr.isEmpty(), compH = playing() && cr.isEmpty();
+        // (their middle: beside the game; sideways with only the pad in the column, the room above it)
+        final int cy;
+        if (state == PAGES) cy = area.centerY();
+        else if (land && !pr.isEmpty()) cy = (area.top + pr.top) / 2;
+        else cy = game.centerY();
+        final int n = (menuH ? 1 : 0) + (compH ? 1 : 0), y0 = cy - (n * hl + (n - 1) * hg) / 2;
+        if (menuH) place(hMenu, edgeX, y0, hw, hl);
+        else place(hMenu, 0, 0, 0, 0);
+        if (compH) place(hComp, edgeX, menuH ? y0 + hl + hg : y0, hw, hl);
         else place(hComp, 0, 0, 0, 0);
+        hMenu.invalidate();
+        hComp.invalidate();
         if (state != PAGES && pr.isEmpty() && !controller) {
             // (where the controls will come out: the hand's side - sideways under the Companion's column, upright
             // the hand's corner; Tom, 2026-11-24: "not centered")
@@ -416,10 +461,16 @@ final class Shell {
         if (!pinned) c.drawLine(cx - 7 * u, cy - 7 * u, cx + 7 * u, cy + 7 * u, ink);
     }
 
-    /** A small round button's glyph: the swap arrows, or down (put away). */
+    /** A small round button's glyph: the swap arrows (0), down - put away (1), the menu (2, gold). */
     private void drawRound(Canvas c, float cx, float cy, float r, int kind, boolean down) {
         c.drawCircle(cx, cy, r, paint(down ? 0xFF3A4680 : 0x33465C96));
-        final Paint ink = paint(CREAM);
+        if (kind == 2) {
+            final Paint rim = paint(GOLD);
+            rim.setStyle(Paint.Style.STROKE);
+            rim.setStrokeWidth(1.2f * dp);
+            c.drawCircle(cx, cy, r, rim);
+        }
+        final Paint ink = paint(kind == 2 ? GOLD : CREAM);
         ink.setStyle(Paint.Style.STROKE);
         ink.setStrokeWidth(1.8f * dp);
         ink.setStrokeCap(Paint.Cap.ROUND);
@@ -438,6 +489,12 @@ final class Shell {
             p.moveTo(cx - 3.5f * u, cy);
             p.lineTo(cx - 6 * u, cy + 2.5f * u);
             p.lineTo(cx - 3.5f * u, cy + 5 * u);
+        } else if (kind == 2) {
+            // (the menu: three lines)
+            for (int i = -1; i <= 1; ++i) {
+                p.moveTo(cx - 5.5f * u, cy + i * 3.5f * u);
+                p.lineTo(cx + 5.5f * u, cy + i * 3.5f * u);
+            }
         } else {
             // (put away: down)
             p.moveTo(cx - 5 * u, cy - 2 * u);
@@ -488,7 +545,7 @@ final class Shell {
     /** A handle on an edge: a tap or a swipe inwards brings its panel out. */
     final class Handle extends View {
         static final int LEFT_EDGE = 0, RIGHT_EDGE = 1, BOTTOM_EDGE = 2;
-        final int edge;
+        int edge;
         final String label;
         float downX, downY;
 
@@ -496,7 +553,7 @@ final class Shell {
             super(c);
             this.edge = edge;
             this.label = label;
-            setContentDescription(edge == LEFT_EDGE ? "Open the menu" : edge == RIGHT_EDGE ? "Open the Companion"
+            setContentDescription(label.equals("MENU") ? "Open the menu" : label.equals("COMPANION") ? "Open the Companion"
                     : "Open the controls");
         }
 
@@ -508,12 +565,18 @@ final class Shell {
 
         @Override
         protected void onDraw(Canvas c) {
-            final float w = getWidth(), h = getHeight(), r = Math.min(w, h) / 2;
-            final Paint bg = paint(0x99E8B840);      // (see-through: it lies over the game's edge)
-            final RectF box = edge == LEFT_EDGE ? new RectF(-r, 0, w, h) : edge == RIGHT_EDGE ? new RectF(0, 0, w + r, h)
-                    : new RectF(0, 0, w, h);
-            c.drawRoundRect(box, r, r, bg);
-            final Paint t = paint(NAVY);
+            // (the app's navy with a gold edge and gold words: plain against any of the games' frames - Tom,
+            // 2026-11-25: the see-through gold had blended into them)
+            final float w = getWidth(), h = getHeight(), r = Math.min(w, h) / 2, sw = 1.5f * dp;
+            final RectF box = edge == LEFT_EDGE ? new RectF(-r, sw / 2, w - sw / 2, h - sw / 2)
+                    : edge == RIGHT_EDGE ? new RectF(sw / 2, sw / 2, w + r, h - sw / 2)
+                    : new RectF(sw / 2, sw / 2, w - sw / 2, h + r);
+            c.drawRoundRect(box, r, r, paint(0xF20B1024));
+            final Paint rim = paint(GOLD);
+            rim.setStyle(Paint.Style.STROKE);
+            rim.setStrokeWidth(sw);
+            c.drawRoundRect(box, r, r, rim);
+            final Paint t = paint(GOLD);
             t.setTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD));
             t.setTextSize(9 * dp);
             t.setLetterSpacing(0.08f);
@@ -552,8 +615,8 @@ final class Shell {
 
         void open() {
             performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-            if (edge == LEFT_EDGE) buttonTap(START);
-            else if (edge == RIGHT_EDGE) setCompOut(true);
+            if (label.equals("MENU")) buttonTap(START);
+            else if (label.equals("COMPANION")) setCompOut(true);
             else setPadOut(true);
         }
     }
@@ -566,7 +629,7 @@ final class Shell {
      * the party (one shown); a sideways swipe puts it away (unpinned).
      */
     final class CompView extends View {
-        boolean single, stripLeft, turnedHint;
+        boolean single, stripLeft, turnedHint, menuHere = true;
         int stripW, band, topPad;
         float downX, downY;
         boolean moved;
@@ -580,11 +643,13 @@ final class Shell {
         private float sx() { return stripLeft ? stripW / 2f : getWidth() - stripW / 2f; }
         private float pinY() { return topPad + r(); }
         private float swapY() { return pinY() + 2 * r() + 12 * dp; }
+        private float menuY() { return swapY() + 2 * r() + 12 * dp; }
 
         @Override
         protected void onDraw(Canvas c) {
             drawPin(c, sx(), pinY(), r(), compPin);
             drawRound(c, sx(), swapY(), r(), 0, false);
+            if (menuHere) drawRound(c, sx(), menuY(), r(), 2, false);
             if (!single) return;
             final Paint t = paint(MUTED);
             t.setTextSize(11 * dp);
@@ -592,7 +657,7 @@ final class Shell {
             final String words = compView == 1 ? "tap for the party" : "tap for the map";
             if (turnedHint) {
                 // (turned along the strip, under the pin and the arrow)
-                final float y = swapY() + r() + 12 * dp + t.measureText(words) / 2;
+                final float y = (menuHere ? menuY() : swapY()) + r() + 12 * dp + t.measureText(words) / 2;
                 if (y + t.measureText(words) / 2 > getHeight()) return;
                 c.save();
                 c.translate(sx() + 4 * dp * (stripLeft ? -1 : 1), y);
@@ -628,6 +693,9 @@ final class Shell {
                     } else if (Math.hypot(x - sx(), y - swapY()) < hit) {
                         performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                         swapHands();
+                    } else if (menuHere && Math.hypot(x - sx(), y - menuY()) < hit) {
+                        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                        buttonTap(START);
                     } else if (single && (stripLeft ? x > stripW : x < getWidth() - stripW)) {
                         compView = compView == 1 ? 2 : 1;
                         performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
@@ -650,8 +718,9 @@ final class Shell {
     final class PadView extends View {
         int btn = 56;
         boolean tray;               // at the foot of an upright screen (rounded at the top only)
-        boolean sideLeft, keysLeft, swapHere;
-        // pointer id -> the key it holds (-1 none, 0..8 the grid, 9 Back, 10 the pin, 11 the surface, 12 away, 13 swap)
+        boolean sideLeft, keysLeft, swapHere, menuHere;
+        // pointer id -> the key it holds (-1 none, 0..8 the grid, 9 Back, 10 the pin, 11 the surface, 12 away, 13 swap,
+        // 14 the menu)
         private final SparseIntArray held = new SparseIntArray();
         float downX, downY;
         int downPointer = -1;
@@ -692,7 +761,7 @@ final class Shell {
         }
 
         // The side column's buttons, top to bottom: the pin, Back, put away (+ swap)
-        private int items() { return swapHere ? 4 : 3; }
+        private int items() { return 3 + (swapHere ? 1 : 0) + (menuHere ? 1 : 0); }
         private float itemY(int k) {
             final float h = getHeight(), top = m() + 4 * dp, span = h - 2 * top;
             return top + span * (k + 0.5f) / items();
@@ -716,6 +785,7 @@ final class Shell {
             if (b.contains(x, y)) return 9;
             if (Math.hypot(x - sideX(), y - itemY(2)) < hr) return 12;
             if (swapHere && Math.hypot(x - sideX(), y - itemY(3)) < hr) return 13;
+            if (menuHere && Math.hypot(x - sideX(), y - itemY(items() - 1)) < hr) return 14;
             return 11;
         }
 
@@ -774,6 +844,7 @@ final class Shell {
             c.drawText("Back", b.centerX(), b.centerY() + 4.5f * dp, t);
             drawRound(c, sideX(), itemY(2), smallR(), 1, isHeld(12));
             if (swapHere) drawRound(c, sideX(), itemY(3), smallR(), 0, isHeld(13));
+            if (menuHere) drawRound(c, sideX(), itemY(items() - 1), smallR(), 2, isHeld(14));
         }
 
         private boolean isHeld(int k) {
@@ -852,6 +923,10 @@ final class Shell {
                     if (k == 13) {
                         performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                         swapHands();
+                    }
+                    if (k == 14) {
+                        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                        buttonTap(START);
                     }
                     invalidate();
                     return true;

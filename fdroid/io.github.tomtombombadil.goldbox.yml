@@ -23,8 +23,19 @@ Builds:
       - SDL/Xcode
     ndk: 27.3.13750724
 
+  - versionName: 0.7.0
+    versionCode: 7000
+    commit: v0.7.0
+    subdir: app
+    submodules: true
+    gradle:
+      - yes
+    scandelete:
+      - SDL/Xcode
+    ndk: 27.3.13750724
+
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
 UpdateCheckData: version.properties|versionCode=(\d+)|.|versionName=(.+)
-CurrentVersion: 0.6.0
-CurrentVersionCode: 6000
+CurrentVersion: 0.7.0
+CurrentVersionCode: 7000

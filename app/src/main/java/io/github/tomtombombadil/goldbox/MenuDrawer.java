@@ -28,7 +28,7 @@ import java.util.List;
 
 /**
  * The menu drawer (Tom, 2026-11-24, the redesign's stage 2): the front end's menu
- * shown in Android's views, sliding in from the left. The front end's menu still
+ * shown in Android's views, sliding in from the hand's side. The front end's menu still
  * decides everything - its pages, its lines, and a controller's buttons moving
  * about it (the highlight shown here follows); this sends it the taps
  * (GoldBoxActivity.nativeMenu) and shows what it sends back (onShellMenu - the
@@ -55,6 +55,7 @@ final class MenuDrawer extends FrameLayout {
     private int sel = -1;
     private final List<Row> rows = new ArrayList<>();
     private boolean dragging = false;     // (the slider: no rebuild under the finger)
+    private final GradientDrawable panelBg;
 
     static final class Item {
         char kind;
@@ -85,11 +86,9 @@ final class MenuDrawer extends FrameLayout {
 
         panel = new SwipePanel(c);
         panel.setOrientation(LinearLayout.VERTICAL);
-        final GradientDrawable bg = new GradientDrawable();
-        bg.setColor(PANEL);
-        final float r = 24 * dp;
-        bg.setCornerRadii(new float[] {0, 0, r, r, r, r, 0, 0});
-        panel.setBackground(bg);
+        panelBg = new GradientDrawable();
+        panelBg.setColor(PANEL);
+        panel.setBackground(panelBg);
         panel.setClickable(true);
         panel.setPadding(px(10), px(10), px(10), px(10));
         addView(panel, new LayoutParams(px(340), ViewGroup.LayoutParams.MATCH_PARENT));
@@ -122,6 +121,15 @@ final class MenuDrawer extends FrameLayout {
 
     private int px(float d) { return Math.round(d * dp); }
 
+    /** The drawer comes from the hand's side (Tom, 2026-11-25: its tab with the Companion's, swapping with it). */
+    private boolean fromRight() { return !prefs.getBoolean("hand_left", false); }
+
+    /** Off the screen: its width toward its own side. */
+    private float awayX() {
+        final float w = panel.getWidth() > 0 ? panel.getWidth() : px(360);
+        return fromRight() ? w : -w;
+    }
+
     private TextView text(Context c, float sp, int colour, boolean medium) {
         final TextView t = new TextView(c);
         t.setTextSize(TypedValue.COMPLEX_UNIT_SP, sp);
@@ -144,11 +152,17 @@ final class MenuDrawer extends FrameLayout {
         // (a camera cutout / notch at the left or the top - a phone sideways, or upright: kept clear, the panel
         // reaching to the screen's edge behind it; Tom, 2026-11-24)
         final int[] ins = ((GoldBoxActivity) getContext()).cutoutInsets();
-        final int pw = Math.min(px(360), Math.round(w * 0.88f)) + ins[0];
-        panel.setPadding(px(10) + ins[0], px(10) + ins[1], px(10), px(10) + ins[3]);
+        final boolean right = fromRight();
+        final int side = right ? ins[2] : ins[0];
+        final int pw = Math.min(px(360), Math.round(w * 0.88f)) + side;
+        panel.setPadding(px(10) + (right ? 0 : ins[0]), px(10) + ins[1], px(10) + (right ? ins[2] : 0), px(10) + ins[3]);
+        final float r = 24 * dp;
+        panelBg.setCornerRadii(right ? new float[] {r, r, 0, 0, 0, 0, r, r} : new float[] {0, 0, r, r, r, r, 0, 0});
         final LayoutParams lp = (LayoutParams) panel.getLayoutParams();
-        if (lp.width != pw) {
+        final int g = right ? Gravity.END : Gravity.START;
+        if (lp.width != pw || lp.gravity != g) {
             lp.width = pw;
+            lp.gravity = g;
             post(() -> panel.setLayoutParams(lp));
         }
     }
@@ -179,7 +193,8 @@ final class MenuDrawer extends FrameLayout {
             items.add(it);
             sh.append('\n').append(it.kind).append(it.name);
         }
-        title.setText(pageTitle.equals("Menu") ? "Gold Box" : pageTitle);
+        // (the app's name in full on its top page, as the chooser's bar - Tom, 2026-11-25)
+        title.setText(pageTitle.equals("Menu") ? "Gold Box Game Engine" : pageTitle);
         back.setVisibility(above ? VISIBLE : INVISIBLE);
         final boolean rebuild = !sh.toString().equals(shape);
         shape = sh.toString();
@@ -205,12 +220,12 @@ final class MenuDrawer extends FrameLayout {
         if (in) {
             fit(getRootView() != null ? getRootView().getWidth() : getWidth());
             setVisibility(VISIBLE);
-            panel.setTranslationX(-panel.getWidth() > 0 ? -panel.getWidth() : -px(360));
+            panel.setTranslationX(awayX());
             scrim.setAlpha(0f);
             panel.animate().translationX(0).setDuration(200).start();
             scrim.animate().alpha(1f).setDuration(200).start();
         } else {
-            panel.animate().translationX(-panel.getWidth()).setDuration(160).withEndAction(() -> {
+            panel.animate().translationX(awayX()).setDuration(160).withEndAction(() -> {
                 if (!shown) setVisibility(GONE);
             }).start();
             scrim.animate().alpha(0f).setDuration(160).start();
@@ -434,7 +449,7 @@ final class MenuDrawer extends FrameLayout {
 
     // ---- Small views of its own
 
-    /** The panel: a swipe to the left puts the drawer away. */
+    /** The panel: a swipe toward its own edge puts the drawer away. */
     final class SwipePanel extends LinearLayout {
         float downX, downY;
         boolean away;
@@ -450,7 +465,8 @@ final class MenuDrawer extends FrameLayout {
                     away = false;
                     break;
                 case MotionEvent.ACTION_MOVE:
-                    if (!dragging && downX - e.getX() > 48 * dp && Math.abs(e.getY() - downY) < 40 * dp) {
+                    final float out = fromRight() ? e.getX() - downX : downX - e.getX();
+                    if (!dragging && out > 48 * dp && Math.abs(e.getY() - downY) < 40 * dp) {
                         away = true;
                         return true;
                     }

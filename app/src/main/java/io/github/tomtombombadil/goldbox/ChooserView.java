@@ -35,15 +35,17 @@ import java.util.concurrent.Executors;
 /**
  * The game chooser (Tom, 2026-11-24, the redesign's stage 3), in Android's views over
  * the front end's list (main.cpp android_chooser_text; its taps: GoldBoxActivity.
- * nativeMenu ops 10 play, 11 look again, 12 the chosen one). Shaped for the device:
+ * nativeMenu ops 10 play, 11 look again, 12 the chosen one, 13 continue, 14 tiles / cards). Shaped for the device:
  * a phone held upright - one game a card, its art upright, the next ones peeking,
  * swiped sideways; a phone held sideways - the art wide at the left, the game's name
- * and Play at the right; a tablet - every game at once, three across. The pictures
- * are the ones the scan made (APPART.IMG); this only reads them.
+ * and Play at the right; a tablet - every game at once, three across (tiles). The
+ * bar's toggle and Display › Game Chooser (op 14; Tom, 2026-11-25) choose tiles or
+ * cards on any device. The pictures are the ones the scan made (APPART.IMG); this
+ * only reads them.
  */
 final class ChooserView extends FrameLayout {
 
-    static final int OP_PLAY = 10, OP_LOOK_AGAIN = 11, OP_SELECT = 12, OP_CONTINUE = 13;
+    static final int OP_PLAY = 10, OP_LOOK_AGAIN = 11, OP_SELECT = 12, OP_CONTINUE = 13, OP_MODE = 14;
     private static final int NAVY = Shell.NAVY, SURFACE = Shell.SURFACE, KEY = Shell.KEY, EDGE = Shell.EDGE,
             GOLD = Shell.GOLD, CREAM = Shell.CREAM, MUTED = Shell.MUTED;
 
@@ -57,6 +59,9 @@ final class ChooserView extends FrameLayout {
     private final List<Game> games = new ArrayList<>();
     private String mode = "off", folder = "";
     private int sel = 0;
+    // (Display › Game Chooser, the front end's setting: 0 Auto - tiles on a tablet, 1 Tiles, 2 Cards; the bar's
+    // toggle sets it too - Tom, 2026-11-25)
+    private int chooserMode = 0;
     private String built = "";
     private boolean up = false;
 
@@ -97,6 +102,7 @@ final class ChooserView extends FrameLayout {
         games.clear();
         if (mode.equals("games")) {
             sel = head.length > 1 ? parse(head[1]) : 0;
+            chooserMode = head.length > 2 ? parse(head[2]) : 0;
             for (int i = 1; i < lines.length; ++i) {
                 final String[] f = lines[i].split("\t", -1);
                 if (f.length < 6) continue;
@@ -139,9 +145,9 @@ final class ChooserView extends FrameLayout {
     private void rebuild(boolean force) {
         final int W = getWidth(), H = getHeight();
         if (W <= 0 || H <= 0 || !up) return;
-        final boolean phone = (float) Math.max(W, H) / Math.min(W, H) >= 1.5f;
         final boolean land = W >= H;
-        final StringBuilder key = new StringBuilder(mode).append(W).append('x').append(H).append(folder);
+        final boolean tiles = tiles();
+        final StringBuilder key = new StringBuilder(mode).append(tiles).append(W).append('x').append(H).append(folder);
         for (Game g : games) key.append('|').append(g.name).append(g.art).append(g.playable).append(g.cont);
         if (!force && key.toString().equals(built)) {
             showSel();
@@ -160,7 +166,7 @@ final class ChooserView extends FrameLayout {
         final FrameLayout body = new FrameLayout(getContext());
         page.addView(body, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1));
         if (!mode.equals("games")) buildEmpty(body);
-        else if (!phone) buildGrid(body, land);
+        else if (tiles) buildGrid(body, land);
         else if (land) buildWide(body);
         else buildCards(body);
         showSel();
@@ -177,10 +183,18 @@ final class ChooserView extends FrameLayout {
         final TextView v = Screens.text(c, 13, MUTED, false);
         v.setText("  v" + version());
         bar.addView(v, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        final Glyph folderB = new Glyph(c, Glyph.FOLDER);
-        folderB.setContentDescription("Games folder");
-        folderB.setOnClickListener(x -> chooseFolder());
-        bar.addView(folderB, new LinearLayout.LayoutParams(px(48), px(48)));
+        // (tiles <-> cards: the icon shows the other way - Tom, 2026-11-25; the games folder is the menu's,
+        // System › Games Folder)
+        final boolean tiles = tiles();
+        final Glyph modeB = new Glyph(c, tiles ? Glyph.CARDS : Glyph.TILES);
+        modeB.setContentDescription(tiles ? "Show the games one at a time" : "Show all the games at once");
+        modeB.setOnClickListener(x -> {
+            x.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+            chooserMode = tiles ? 2 : 1;
+            GoldBoxActivity.nativeMenu(OP_MODE, 0, chooserMode);
+            rebuild(true);
+        });
+        if (mode.equals("games")) bar.addView(modeB, new LinearLayout.LayoutParams(px(48), px(48)));
         final Glyph menuB = new Glyph(c, Glyph.SETTINGS);
         menuB.setContentDescription("Menu and settings");
         menuB.setOnClickListener(x -> {
@@ -190,6 +204,9 @@ final class ChooserView extends FrameLayout {
         bar.addView(menuB, new LinearLayout.LayoutParams(px(48), px(48)));
         return bar;
     }
+
+    /** All the games at once (tiles), or one at a time (cards / sideways wide). */
+    private boolean tiles() { return chooserMode == 1 || (chooserMode == 0 && Shell.tablet(getContext())); }
 
     private String version() {
         try {
@@ -746,7 +763,7 @@ final class ChooserView extends FrameLayout {
 
     /** The app bar's and the arrows' small drawn icons. */
     static final class Glyph extends View {
-        static final int FOLDER = 0, SETTINGS = 1, PREV = 2, NEXT = 3;
+        static final int TILES = 0, SETTINGS = 1, PREV = 2, NEXT = 3, CARDS = 4;
         final int kind;
 
         Glyph(Context c, int kind) {
@@ -770,14 +787,21 @@ final class ChooserView extends FrameLayout {
             p.setStrokeJoin(Paint.Join.ROUND);
             final Path path = new Path();
             switch (kind) {
-                case FOLDER:
-                    path.moveTo(cx - 9 * u, cy - 6 * u);
-                    path.lineTo(cx - 3 * u, cy - 6 * u);
-                    path.lineTo(cx - 1 * u, cy - 4 * u);
-                    path.lineTo(cx + 9 * u, cy - 4 * u);
-                    path.lineTo(cx + 9 * u, cy + 7 * u);
-                    path.lineTo(cx - 9 * u, cy + 7 * u);
-                    path.close();
+                case TILES:
+                    // (a grid of six: all the games at once)
+                    for (int k = 0; k < 6; ++k) {
+                        final float x = cx - 9 * u + (k % 3) * 6.5f * u, y = cy - 6.5f * u + (k / 3) * 7 * u;
+                        path.addRoundRect(new RectF(x, y, x + 5 * u, y + 6 * u), 1.2f * u, 1.2f * u, Path.Direction.CW);
+                    }
+                    break;
+                case CARDS:
+                    // (one card, its neighbours peeking: one game at a time)
+                    path.addRoundRect(new RectF(cx - 5 * u, cy - 8 * u, cx + 5 * u, cy + 8 * u), 2 * u, 2 * u,
+                            Path.Direction.CW);
+                    path.moveTo(cx - 9 * u, cy - 5 * u);
+                    path.lineTo(cx - 9 * u, cy + 5 * u);
+                    path.moveTo(cx + 9 * u, cy - 5 * u);
+                    path.lineTo(cx + 9 * u, cy + 5 * u);
                     break;
                 case SETTINGS:
                     c.drawCircle(cx, cy, 3.5f * u, p);

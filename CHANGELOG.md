@@ -3,6 +3,27 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.7.0] - 2026-11-25
+
+Built on PM-GoldBoxGameEngine 0.18.0 and the CYD engine 0.217.0. Tom's notes from his Galaxy Tab S8+.
+
+- **Tablets are told by Android's own measure** (the screen's smaller side 600dp or more), not by their shape: a
+  16:10 tablet (the Tab S8+, 2800 x 1752) is a tablet now. Sideways a 16:10 tablet has the Companion and the
+  controls out beside the game by default; a 4:3 one keeps the game maximised.
+- **The chooser's toggle** in its bar (where the folder icon was): all the games at once (tiles) or one at a time
+  (cards), on any device; also **Display › Game Chooser** (Auto / Tiles / Cards). The games folder: System › Games
+  Folder.
+- **The folder screen finds the Steam versions**: it looked for the games' files only one folder down; a Steam copy
+  has them two down (<game>/GAME/<SHORT>). It counts as the game's scan does now (the Krynn files too; not the
+  Launcher folder).
+- **The menu**: "Gold Box Game Engine" at its top; Rescan Game Files and Clean Up Game Files under System.
+- **The menu's tab** is at the hand's side with the Companion's, in the app's navy with a gold edge (it had blended
+  into the game's frame); with the Companion out, its strip has a menu button. The menu slides in from that side,
+  and all of it changes sides with the swap arrow.
+- **The Companion beside the game**: the map as wide as the column at the top, the party under it when there is
+  room for it - no tap to switch then. Only when both don't fit does the tap switch them, and the map is never made
+  smaller to fit the party. The column stays the same width with the controls put away.
+
 ## [0.6.0] - 2026-11-24
 
 Built on PM-GoldBoxGameEngine 0.17.1 and the CYD engine 0.217.0. Tom's review of 0.5.0.

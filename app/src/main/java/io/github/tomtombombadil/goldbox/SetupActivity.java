@@ -108,25 +108,39 @@ public class SetupActivity extends Activity {
         return sub;
     }
 
-    /** Folders with a game's files (*.DAX) in them or one folder down. */
+    /**
+     * The game folders in a games folder - as the front end's scan finds them (its library.cpp): the game's files
+     * (*.DAX) in the folder or up to two folders down (a GOG install: one; a Steam / SNEG one: <folder>/GAME/<SHORT>
+     * - Tom, 2026-11-25: all nine Steam games were "No games in it yet"), else a Krynn's *.TLB / *.GLB up to three
+     * down. Not the engine's own folders (_CYD ...), conf, nor the Steam collection's Launcher and GBC folders.
+     */
     static int countGames(File games) {
         final File[] dirs = games.listFiles(File::isDirectory);
         if (dirs == null) return 0;
         int n = 0;
         for (File d : dirs) {
-            if (d.getName().startsWith("_") || d.getName().equalsIgnoreCase("conf")) continue;
-            if (hasDax(d, 1)) ++n;
+            final String name = d.getName();
+            if (name.startsWith("_") || name.equalsIgnoreCase("conf") || name.equalsIgnoreCase("Launcher")
+                    || name.equalsIgnoreCase("GBC"))
+                continue;
+            if (has(d, 2, ".dax") || has(d, 3, ".tlb", ".glb")) ++n;
         }
         return n;
     }
 
-    private static boolean hasDax(File dir, int depth) {
+    /** A file ending so in dir or up to depth folders below it. */
+    private static boolean has(File dir, int depth, String... ends) {
         final File[] in = dir.listFiles();
         if (in == null) return false;
         for (File f : in) {
-            if (f.isFile() && f.getName().toLowerCase(Locale.ROOT).endsWith(".dax")) return true;
-            if (f.isDirectory() && depth > 0 && hasDax(f, depth - 1)) return true;
+            if (!f.isFile()) continue;
+            final String n = f.getName().toLowerCase(Locale.ROOT);
+            for (String e : ends)
+                if (n.endsWith(e)) return true;
         }
+        if (depth > 0)
+            for (File f : in)
+                if (f.isDirectory() && has(f, depth - 1, ends)) return true;
         return false;
     }
 

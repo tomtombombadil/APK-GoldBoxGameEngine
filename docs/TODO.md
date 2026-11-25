@@ -12,8 +12,13 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [x] v0.1.0 published (Tom, 2026-11-23) and installed; his findings fixed in 0.1.1.
 - [x] v0.1.1 published (Tom, 2026-11-23).
 - [x] v0.1.3 published (Tom, 2026-11-23). v0.1.4 by the APK chat session (2026-11-24).
-- [ ] Publish v0.6.0 on GitHub's site (Releases > Draft a new release > tag v0.6.0 on main > Publish) - it has
-      everything of 0.1.5 - 0.5.0, so those needn't be published.
+- [ ] Publish v0.7.0 on GitHub's site (Releases > Draft a new release > tag v0.7.0 on main > Publish) - it has
+      everything of 0.1.5 - 0.6.0, so those needn't be published.
+- [ ] 0.7.0 on the Tab S8+: a tablet now - sideways the column out (map at the top, the party under it, the
+      controls), the column's width with the controls away; the chooser's toggle and Display › Game Chooser; the
+      folder screen counting the nine Steam games; the menu's tab at the hand's side (and after the swap arrow),
+      the strip's menu button, the drawer from that side, "Gold Box Game Engine", Rescan / Clean Up under System.
+- [ ] The folder screen's rework: Tom to pick from the suggestions (2026-11-25).
 - [ ] 0.6.0 (Tom's review of 0.5.0): the swap arrow sideways and upright, phone and S2; the put-away arrow and where
       the controls' handle then sits; the quieter pins; the phone's swipe through the games; Continue from Last
       Save / Play; Back at the chooser closes the app; the drawer beside the Pixel's cutout sideways.

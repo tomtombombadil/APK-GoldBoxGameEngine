@@ -43,8 +43,8 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
 - **Android's own UI for everything but the game**: the app's views (Roboto, Material 3 look: navy #0B1024,
   surfaces #141B36, gold #E8B840, cream #F0E6C8) round SDL's picture; SDL draws the game and the Companion's
   pictures only. Built in stages (`docs/TODO.md` "Redesign").
-- **Swipe-outs** - left: the menu drawer; right: the Companion; bottom: the controls (8-way pad - diagonals -
-  with OK in its centre, Back; no menu button: the menu is the left swipe). The right and bottom ones have a
+- **Swipe-outs** - the hand's side: the menu drawer and the Companion (2026-11-25; the menu had been at the left); bottom: the controls (8-way pad - diagonals -
+  with OK in its centre, Back; no menu button on the pad: the menu is its tab). The right and bottom ones have a
   **pin**: pinned they stay out (and are remembered); unpinned they can be swiped back (and close when the game
   is touched). Each opens from a **handle** on its edge (system Back / Home gestures own the edges:
   `setSystemGestureExclusionRects`, ~200dp an edge). Opening one makes the game smaller to make room.
@@ -52,7 +52,7 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   beside it a column: **the Companion's map at the top - a tap flips it to the party and back - and the
   controls under it** (Tom, 2026-11-24, taking the trade-off: the controls in place of the Companion's party
   rather than a tray that shrinks the game). Phone portrait: the game, the Companion under it, the controls at
-  the bottom. Tablet (near 4:3) landscape: the game maximised, everything swiped out on demand. Tablet
+  the bottom. Tablet (near 4:3) landscape: the game maximised, everything swiped out on demand (a 16:10 tablet: as the phone's). Tablet
   portrait: as the phone's.
 - **Audio**: each volume a slider, - and + buttons and a mute button. The Display menu goes away in favour of
   the app's own controls.
@@ -77,6 +77,26 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
     (Gateway, Treasures, then the Krynn three - a tablet's last row). Tom loves the tablet's tiles with the Steam
     art and the phone layouts. The menu drawer keeps clear of the cutout sideways. **Android's Back at the
     chooser closes the app** (nothing over it; elsewhere Back is the game's B).
+- **Tom's notes from his Galaxy Tab S8+ (2026-11-25)**:
+  - **A tablet is Android's own measure**: `smallestScreenWidthDp >= 600` (`Shell.tablet`), never the screen's
+    shape (the S8+ - 2800 x 1752, 16:10 - had been taken for a phone). Sideways a tablet of 16:10 or wider has the
+    column out by default (room beside the game); near 4:3, the game maximised.
+  - **The chooser's bar: a toggle tiles / cards** in place of the folder icon (any device); the same as
+    **Display › Game Chooser: Auto / Tiles / Cards** (the front end's `chooser`; op 14). Auto: tiles on a tablet.
+  - **The folder screen counts games as the scan does** (Steam: <game>/GAME/<SHORT>, two down; Krynn's TLB / GLB;
+    not Launcher / GBC) - it had said "No games in it yet" with nine Steam games. **Its rework**: suggestions
+    made, Tom to choose (docs/TODO.md).
+  - **The menu**: titled **"Gold Box Game Engine"** on its top page (as the chooser's bar - every place the app
+    names itself says it in full); Rescan / Clean Up under System (Android only; a handheld keeps them on top).
+  - **The menu's tab at the hand's side** with the Companion's - stacked, the menu's first - in navy with a gold
+    edge and gold words (not see-through: it had blended into the game's frame); with the Companion out, a menu
+    button in its strip (under the swap arrow; on a phone sideways, where the turned "tap for the party" words
+    would then not fit along the strip, the menu button goes to the bottom of the pad's column instead). The drawer slides in from that side. All of it swaps sides with
+    the swap arrow.
+  - **The Companion is smart**: sideways in the column the map as wide as the column at the top, the party under
+    it when there's room (four fifths of the map's size or more: the front end's view 3) - no tap then; only when
+    both don't fit, one with the tap. **Never shrink the map to fit the party.** **The column's width is the same
+    with the controls away** ("Making the map smaller isn't a good look").
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
