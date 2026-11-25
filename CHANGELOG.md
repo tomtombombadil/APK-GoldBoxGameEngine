@@ -3,6 +3,34 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.6.0] - 2026-11-24
+
+Built on PM-GoldBoxGameEngine 0.17.1 and the CYD engine 0.217.0. Tom's review of 0.5.0.
+
+- **Left or right handed** (as the CYD's): a swap arrow (in the Companion's strip, under its pin; on the controls
+  when no Companion is out) moves the controls to the other side. Sideways the Companion and the controls are a
+  column at that side, the game opposite. Upright the keys sit at that side; **a tablet upright has the controls
+  in that corner and the Companion beside them, the full height and larger**.
+- **The controls**: no drag bar - the keys are larger and sit toward the game; beside them the pin, Back under it,
+  and a down arrow under that which puts them away (a swipe still does). When put away, their handle sits where
+  they come out, not in the middle.
+- **Pins** are quieter: a faint ring, gold when pinned.
+- **The Companion**: its pin and the swap arrow in a narrow strip at its outer edge, clear of a phone's rounded
+  corners; "tap for the party / map" turned along that strip on a phone (the map larger for it), above the picture
+  on a tablet.
+- **The game chooser**: "Gold Box Game Engine" in its bar; "GOG Version" / "Steam Version"; the phone's cards follow
+  the finger and glide to the next game (a tap on a card no longer starts it); **Continue from Last Save** and
+  **Play** (the game's own start - its Load or a new party); the games by series, Krynn's three last (a tablet's
+  last row). Android's **Back at the chooser closes the app**.
+- The menu drawer keeps clear of a camera cutout when the phone is sideways (either way round).
+
+Checked on the Android emulator: the phone chooser upright (the swipe there and back, the labels), Continue into
+PoolRad; in the game upright (the keys at the right, the small buttons inside, the Companion's strip) and
+sideways (the column, the turned words, the pin clear of the corner), the swap arrow (all to the left); a tablet
+upright at the S2's size and density (the controls in the left corner, the Companion beside them, larger) and its
+grid with Continue. Not tried there: Back at the chooser, the drawer beside a cutout, the put-away button, the
+handle's place, a tablet sideways.
+
 ## [0.5.0] - 2026-11-24
 
 Built on PM-GoldBoxGameEngine 0.17.0 and the CYD engine 0.217.0.

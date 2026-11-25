@@ -112,6 +112,11 @@ public class GoldBoxActivity extends SDLActivity {
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
+        // (Back at the game chooser closes the app - Tom, 2026-11-24; elsewhere it is the game's B)
+        if (shell != null && event.getKeyCode() == KeyEvent.KEYCODE_BACK && shell.backLeaves()) {
+            if (event.getAction() == KeyEvent.ACTION_UP) finish();
+            return true;
+        }
         // (a controller in use: no pad - a touch brings it back)
         if (shell != null && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() != KeyEvent.KEYCODE_BACK
                 && fromController(event.getDevice(), event.getSource())) shell.controller(true);

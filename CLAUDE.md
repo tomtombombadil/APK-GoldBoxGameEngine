@@ -58,6 +58,25 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   the app's own controls.
 - **Game chooser**: art shaped for the device (upright box art on a phone held upright, wide art sideways); a
   tablet shows all nine games at once.
+- **Tom's review of 0.5.0 (2026-11-24)**:
+  - **Handedness** (as the CYD's): one setting, the swap arrow (the Companion's strip, under its pin; on the pad when
+    no Companion is out). Sideways: the Companion's column - the Companion over the pad - at the hand's side, the
+    game opposite. Upright: the pad's keys at the hand's side (a phone: the pad across the foot, its small buttons
+    mirrored); **a tablet upright: the pad in the hand's corner, the Companion opposite it, the room's full height
+    and larger**.
+  - **The pad**: no drag bar (a swipe still puts it away); keys larger, toward the game; beside them a column -
+    the pin, Back under it, a down arrow under that which puts the controls away. **Pins subdued** (a faint ring,
+    gold when pinned).
+  - **The Companion's strip** at its outer edge (pin, swap arrow) clear of the phone's rounded corners (the
+    pin had gone off the corner); "tap for the party / map": turned along the strip on a phone, above the picture
+    on a tablet - never where it seems the pad's.
+  - **The controls' handle** (put away) sits where they come out - the hand's side - not centred.
+  - **The chooser**: "Gold Box Game Engine" in its bar; "Steam Version" / "GOG Version"; the phone's carousel
+    follows the finger and glides (a tap on a card does nothing - Play is the button); **"Continue from Last
+    Save"** and **"Play"** (Play: the game's start as usual - its own Load or a new party); the order by series
+    (Gateway, Treasures, then the Krynn three - a tablet's last row). Tom loves the tablet's tiles with the Steam
+    art and the phone layouts. The menu drawer keeps clear of the cutout sideways. **Android's Back at the
+    chooser closes the app** (nothing over it; elsewhere Back is the game's B).
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.

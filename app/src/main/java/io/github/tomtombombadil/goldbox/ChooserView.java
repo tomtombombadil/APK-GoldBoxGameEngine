@@ -106,7 +106,8 @@ final class ChooserView extends FrameLayout {
                 g.playable = f[2].equals("1");
                 g.art = f[3];
                 g.kind = parse(f[4]);
-                g.release = f[5];
+                // ("Steam Version" / "GOG Version" - Tom: not to read as if the Steam or GOG clients ran it)
+                g.release = f[5].equals("Steam") || f[5].equals("GOG") ? f[5] + " Version" : f[5];
                 g.cont = f.length > 6 && f[6].equals("1");
                 games.add(g);
             }
@@ -171,7 +172,7 @@ final class ChooserView extends FrameLayout {
         bar.setGravity(Gravity.CENTER_VERTICAL);
         bar.setPadding(px(20), 0, px(8), 0);
         final TextView t = Screens.text(c, 22, CREAM, false);
-        t.setText("Gold Box");
+        t.setText("Gold Box Game Engine");
         bar.addView(t);
         final TextView v = Screens.text(c, 13, MUTED, false);
         v.setText("  v" + version());
@@ -290,18 +291,23 @@ final class ChooserView extends FrameLayout {
             cw = Math.min(cw, artH * 4 / 5);
             final int cardH = artH + px(76);
             final int x0 = (bw - cw) / 2, y0 = px(8);
-            cardPrev = new Card(c, null, -1, Card.PEEK);
-            cardNext = new Card(c, null, -1, Card.PEEK);
+            // (the neighbours whole cards, dimmed: in a swipe one glides into the middle as itself)
+            cardPrev = new Card(c, null, -1, Card.CARD);
+            cardNext = new Card(c, null, -1, Card.CARD);
             card = new Card(c, null, -1, Card.CARD);
-            final int peekH = cardH - px(24);
-            body.addView(cardPrev, frame(x0 - cw - px(14), y0 + px(12), cw, peekH));
-            body.addView(cardNext, frame(x0 + cw + px(14), y0 + px(12), cw, peekH));
+            cardPrev.setAlpha(0.5f);
+            cardNext.setAlpha(0.5f);
+            cardPrev.setClickable(false);
+            cardNext.setClickable(false);
+            body.addView(cardPrev, frame(x0 - cw - px(14), y0, cw, cardH));
+            body.addView(cardNext, frame(x0 + cw + px(14), y0, cw, cardH));
             body.addView(card, frame(x0, y0, cw, cardH));
             card.artH = artH;
-            card.setOnClickListener(v -> primary(sel));
-            final Swipe sw = new Swipe();
-            body.setOnTouchListener(sw);
-            card.setOnTouchListener(sw);
+            cardPrev.artH = cardNext.artH = artH;
+            card.setClickable(false);
+            step = cw + px(14);
+            final Carousel cs = new Carousel();
+            body.setOnTouchListener(cs);
 
             dots = new LinearLayout(c);
             dots.setGravity(Gravity.CENTER);
@@ -311,12 +317,12 @@ final class ChooserView extends FrameLayout {
             acts.setGravity(Gravity.CENTER_HORIZONTAL);
             playButton = Screens.button(c, "Play", true, v -> primary(sel));
             acts.addView(playButton, new LinearLayout.LayoutParams(Math.min(bw - px(48), px(340)), px(56)));
-            startButton = Screens.button(c, "Start from the beginning", false, v -> play(sel));
+            startButton = Screens.button(c, "Play", false, v -> play(sel));
             final LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(Math.min(bw - px(48), px(340)), px(48));
             sp.topMargin = px(10);
             acts.addView(startButton, sp);
             final TextView hint = Screens.text(c, 12, MUTED, false);
-            hint.setText("Swipe the card sideways for the other games");
+            hint.setText("Swipe sideways for the other games");
             hint.setPadding(0, px(10), 0, 0);
             hint.setGravity(Gravity.CENTER);
             acts.addView(hint, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -333,7 +339,7 @@ final class ChooserView extends FrameLayout {
             final int panel = Math.max(px(280), bw * 36 / 100);
             card = new Card(c, null, -1, Card.WIDE);
             body.addView(card, frame(0, 0, bw - panel + px(60), bh));
-            card.setOnClickListener(v -> primary(sel));
+            card.setClickable(false);
             final Swipe sw = new Swipe();
             card.setOnTouchListener(sw);
             final LinearLayout side = new LinearLayout(c);
@@ -349,7 +355,7 @@ final class ChooserView extends FrameLayout {
             side.addView(new View(c), new LinearLayout.LayoutParams(1, 0, 1));
             playButton = Screens.button(c, "Play", true, v -> primary(sel));
             side.addView(playButton, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, px(52)));
-            startButton = Screens.button(c, "Start from the beginning", false, v -> play(sel));
+            startButton = Screens.button(c, "Play", false, v -> play(sel));
             final LinearLayout.LayoutParams sp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, px(46));
             sp.topMargin = px(8);
             side.addView(startButton, sp);
@@ -401,7 +407,7 @@ final class ChooserView extends FrameLayout {
         if (nameView != null) nameView.setText(g.name);
         if (releaseView != null) releaseView.setText(g.release.isEmpty() ? "" : g.release + (g.playable ? "" : " · not playable"));
         if (playButton != null) {
-            playButton.setText(!g.playable ? "Not playable" : g.cont ? "Continue" : "Play");
+            playButton.setText(!g.playable ? "Not playable" : g.cont ? "Continue from Last Save" : "Play");
             playButton.setEnabled(g.playable);
             playButton.setAlpha(g.playable ? 1f : 0.45f);
         }
@@ -447,7 +453,81 @@ final class ChooserView extends FrameLayout {
         GoldBoxActivity.nativeMenu(OP_PLAY, i, 0);
     }
 
-    /** A sideways swipe steps through the games; a tap is the card's. */
+    private int step;       // (the carousel: one card's width and its gap)
+
+    /**
+     * The carousel (Tom, 2026-11-24: "respond to swipe gestures and scroll through the games easily and
+     * smoothly"): the cards follow the finger; let go past a quarter card (or flung), they glide on to the next
+     * game, else back. A tap does nothing - Play is the button's.
+     */
+    final class Carousel implements OnTouchListener {
+        float x0, last;
+        boolean dragging, busy;
+        android.view.VelocityTracker vt;
+
+        private void shift(float dx) {
+            for (View v : new View[] {cardPrev, card, cardNext}) if (v != null) v.setTranslationX(dx);
+        }
+
+        @Override
+        public boolean onTouch(View v, MotionEvent e) {
+            if (busy || games.size() < 2) return true;
+            switch (e.getActionMasked()) {
+                case MotionEvent.ACTION_DOWN:
+                    x0 = e.getRawX();
+                    dragging = false;
+                    vt = android.view.VelocityTracker.obtain();
+                    vt.addMovement(e);
+                    return true;
+                case MotionEvent.ACTION_MOVE: {
+                    if (vt != null) vt.addMovement(e);
+                    final float dx = e.getRawX() - x0;
+                    if (!dragging && Math.abs(dx) > px(6)) dragging = true;
+                    if (dragging) shift(Math.max(-step, Math.min(step, dx)));
+                    return true;
+                }
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL: {
+                    final float dx = e.getRawX() - x0;
+                    float vx = 0;
+                    if (vt != null) {
+                        vt.addMovement(e);
+                        vt.computeCurrentVelocity(1000);
+                        vx = vt.getXVelocity();
+                        vt.recycle();
+                        vt = null;
+                    }
+                    if (!dragging) return true;
+                    final int dir = dx < -step / 4f || vx < -px(600) ? 1 : dx > step / 4f || vx > px(600) ? -1 : 0;
+                    final float to = dir == 0 ? 0 : -dir * step;
+                    busy = true;
+                    final android.animation.ValueAnimator a = android.animation.ValueAnimator.ofFloat(card.getTranslationX(), to);
+                    a.setDuration(dir == 0 ? 160 : 220);
+                    a.setInterpolator(new android.view.animation.DecelerateInterpolator());
+                    a.addUpdateListener(an -> shift((float) an.getAnimatedValue()));
+                    a.addListener(new android.animation.AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(android.animation.Animator an) {
+                            busy = false;
+                            if (dir != 0) {
+                                final int n = games.size();
+                                sel = (sel + dir + n) % n;
+                                GoldBoxActivity.nativeMenu(OP_SELECT, sel, 0);
+                                showSel();
+                            }
+                            shift(0);
+                        }
+                    });
+                    a.start();
+                    return true;
+                }
+                default:
+                    return true;
+            }
+        }
+    }
+
+    /** A sideways swipe steps through the games (sideways layout); a tap does nothing. */
     final class Swipe implements OnTouchListener {
         float x0, y0;
         boolean moved;
@@ -459,7 +539,7 @@ final class ChooserView extends FrameLayout {
                     x0 = e.getRawX();
                     y0 = e.getRawY();
                     moved = false;
-                    return v == card ? false : true;
+                    return true;
                 case MotionEvent.ACTION_MOVE:
                     if (!moved && Math.abs(e.getRawX() - x0) > px(40) && Math.abs(e.getRawX() - x0) > Math.abs(e.getRawY() - y0)) {
                         moved = true;

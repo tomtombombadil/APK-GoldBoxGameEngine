@@ -135,7 +135,17 @@ final class MenuDrawer extends FrameLayout {
     @Override
     protected void onSizeChanged(int w, int h, int ow, int oh) {
         super.onSizeChanged(w, h, ow, oh);
-        final int pw = Math.min(px(360), Math.round(w * 0.88f));
+        fit(w);
+    }
+
+    /** The panel's width and padding for the screen as it is (the cutout's side changes with a half turn). */
+    private void fit(int w) {
+        if (w <= 0) return;
+        // (a camera cutout / notch at the left or the top - a phone sideways, or upright: kept clear, the panel
+        // reaching to the screen's edge behind it; Tom, 2026-11-24)
+        final int[] ins = ((GoldBoxActivity) getContext()).cutoutInsets();
+        final int pw = Math.min(px(360), Math.round(w * 0.88f)) + ins[0];
+        panel.setPadding(px(10) + ins[0], px(10) + ins[1], px(10), px(10) + ins[3]);
         final LayoutParams lp = (LayoutParams) panel.getLayoutParams();
         if (lp.width != pw) {
             lp.width = pw;
@@ -193,6 +203,7 @@ final class MenuDrawer extends FrameLayout {
         panel.animate().cancel();
         scrim.animate().cancel();
         if (in) {
+            fit(getRootView() != null ? getRootView().getWidth() : getWidth());
             setVisibility(VISIBLE);
             panel.setTranslationX(-panel.getWidth() > 0 ? -panel.getWidth() : -px(360));
             scrim.setAlpha(0f);

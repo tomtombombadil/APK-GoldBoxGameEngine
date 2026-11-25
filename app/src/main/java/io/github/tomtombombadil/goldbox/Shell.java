@@ -119,6 +119,9 @@ final class Shell {
         }
     }
 
+    /** Android's Back here leaves the app (Tom, 2026-11-24): the chooser up, nothing over it. */
+    boolean backLeaves() { return chooser.isUp() && !scan.isUp() && !drawer.isOpen() && !notice.isUp(); }
+
     /** The app's own page is up over the game (the chooser, the scan's page): no handles. */
     private boolean page() { return chooser.isUp() || scan.isUp(); }
 
@@ -201,6 +204,34 @@ final class Shell {
         }
     }
 
+    /**
+     * Which hand the controls are for (Tom, 2026-11-24 - "embrace handedness", as the CYD's): right - the pad
+     * and its column at the right, left - mirrored. One for every shape; the swap arrow turns it.
+     */
+    private boolean leftHand() { return prefs.getBoolean("hand_left", false); }
+
+    void swapHands() {
+        prefs.edit().putBoolean("hand_left", !leftHand()).apply();
+        relayout(false);
+        pad.invalidate();
+        comp.invalidate();
+    }
+
+    /** How far in from a screen corner a small button must sit (a phone's rounded corners). */
+    private int cornerPad() {
+        int r = 0;
+        if (Build.VERSION.SDK_INT >= 31 && root.getRootWindowInsets() != null) {
+            final android.view.WindowInsets wi = root.getRootWindowInsets();
+            for (int pos = 0; pos < 4; ++pos) {
+                final android.view.RoundedCorner rc = wi.getRoundedCorner(pos);
+                if (rc != null) r = Math.max(r, rc.getRadius());
+            }
+        } else {
+            r = Math.round(16 * dp);
+        }
+        return Math.max(Math.round(6 * dp), Math.round(r * 0.45f));
+    }
+
     /** Lays everything out for the screen as it is now; tells the front end. */
     void relayout(boolean force) {
         final int W = root.getWidth(), H = root.getHeight();
@@ -211,71 +242,127 @@ final class Shell {
         final boolean phone = (float) Math.max(W, H) / Math.min(W, H) >= 1.5f;
         final String k = (phone ? "phone" : "tablet") + (land ? "_land" : "_port");
         if (!k.equals(key)) load(k);
+        final boolean left = leftHand();
 
         final boolean showComp = compOut && playing();
         final boolean showPad = padOut && !controller && state != PAGES;
-        column = land;
 
-        // The pad's size: a thumb's, within the screen's means
-        int btn = Math.round(Math.max(44 * dp, Math.min(64 * dp, Math.min(W, H) * 0.13f)) * padScale);
-        final int gap = Math.round(6 * dp), side = Math.round(56 * dp), m = Math.round(8 * dp);
-        int padW = 3 * btn + 2 * gap + 2 * side, padH = 3 * btn + 2 * gap + 2 * m + Math.round(12 * dp);
+        // The pad: a thumb's keys within the screen's means; beside them a column of small buttons (the pin,
+        // Back, put away); no drag bar
+        int btn = Math.round(Math.max(46 * dp, Math.min(68 * dp, Math.min(W, H) * 0.14f)) * padScale);
+        final int gap = Math.round(6 * dp), sideW = Math.round(52 * dp), m = Math.round(8 * dp);
+        int padW = 3 * btn + 2 * gap + sideW + 3 * m, padH = 3 * btn + 2 * gap + 2 * m;
+        // The Companion's own strip at its outer edge: its pin, the swap arrow (and on a phone held sideways the
+        // map / party words, turned)
+        final int stripW = Math.round(36 * dp), band = Math.round(24 * dp);
 
         final Rect game = new Rect(area), cr = new Rect(), pr = new Rect();
+        boolean stripLeft = false;      // (the Companion's strip at its left edge)
         if (state == PAGES) {
             // (the front end's own pages: the whole screen)
         } else if (land) {
             if (showComp || showPad) {
                 int colW = Math.max(area.width() - area.height() * 4 / 3, showPad ? padW : Math.round(180 * dp));
                 if (colW > area.width() / 2) colW = area.width() / 2;
-                fit43(game, area.left, area.top, area.width() - colW, area.height(), false);
-                final int x0 = game.right;
-                colW = area.right - x0;
+                // (the game opposite the hand; its column at the hand's side)
+                if (left) {
+                    fit43(game, area.left + colW, area.top, area.width() - colW, area.height(), false);
+                    game.offsetTo(area.right - game.width(), game.top);
+                } else {
+                    fit43(game, area.left, area.top, area.width() - colW, area.height(), false);
+                }
+                final int c0 = left ? area.left : game.right, c1 = left ? game.left : area.right;
+                colW = c1 - c0;
                 if (showPad) {
                     if (padW > colW) {      // (a narrow column: smaller keys)
-                        btn = Math.max(Math.round(36 * dp), (colW - 2 * gap - 2 * side) / 3);
-                        padW = 3 * btn + 2 * gap + 2 * side;
-                        padH = 3 * btn + 2 * gap + 2 * m + Math.round(12 * dp);
+                        btn = Math.max(Math.round(36 * dp), (colW - 2 * gap - sideW - 3 * m) / 3);
+                        padW = 3 * btn + 2 * gap + sideW + 3 * m;
+                        padH = 3 * btn + 2 * gap + 2 * m;
                     }
-                    final int pw = Math.min(padW, colW);
-                    pr.set(x0 + (colW - pw) / 2, area.bottom - padH, x0 + (colW - pw) / 2 + pw, area.bottom);
+                    pr.set(c0, area.bottom - padH, c1, area.bottom);
                 }
-                if (showComp) cr.set(x0, area.top, area.right, showPad ? pr.top - m : area.bottom);
+                if (showComp) cr.set(c0, area.top, c1, showPad ? pr.top - m : area.bottom);
+                stripLeft = left;
             } else {
                 fit43(game, area.left, area.top, area.width(), area.height(), true);
             }
         } else {
             final int gh = Math.min(area.width() * 3 / 4, area.height());
             game.set(area.left, area.top, area.left + gh * 4 / 3, area.top + gh);
-            if (showPad) pr.set(area.left, area.bottom - padH, area.right, area.bottom);
-            if (showComp) cr.set(area.left, game.bottom + m, area.right, (showPad ? pr.top : area.bottom) - m);
+            if (phone) {
+                // (a phone upright: the pad across the foot, its keys at the hand's side; the Companion between)
+                if (showPad) pr.set(area.left, area.bottom - padH, area.right, area.bottom);
+                if (showComp) cr.set(area.left, game.bottom + m, area.right, (showPad ? pr.top : area.bottom) - m);
+            } else {
+                // (a tablet upright: the pad in the hand's corner, the Companion opposite it - the room's full
+                // height, larger)
+                if (showPad) {
+                    final int pw = Math.min(padW, area.width() / 2);
+                    if (left) pr.set(area.left, area.bottom - padH, area.left + pw, area.bottom);
+                    else pr.set(area.right - pw, area.bottom - padH, area.right, area.bottom);
+                }
+                if (showComp) {
+                    if (!showPad) cr.set(area.left, game.bottom + m, area.right, area.bottom - m);
+                    else if (left) cr.set(pr.right + m, game.bottom + m, area.right, area.bottom - m);
+                    else cr.set(area.left, game.bottom + m, pr.left - m, area.bottom - m);
+                }
+            }
+            stripLeft = !phone && showPad ? !left : left;
             if (!showComp && !showPad) fit43(game, area.left, area.top, area.width(), area.height(), true);
         }
-        if (cr.height() < 48 * dp || cr.width() < 48 * dp) cr.setEmpty();
+        if (cr.height() < 64 * dp || cr.width() < 64 * dp) cr.setEmpty();
 
-        // The Companion: one picture (the tap flips it) beside the pad, else both
+        // The Companion: one picture (the tap flips it) beside the pad when sideways, else both
         final int view = !cr.isEmpty() && land && showPad ? compView : 0;
+        final Rect pic = new Rect(cr);
+        if (!cr.isEmpty()) {
+            if (stripLeft) pic.left += stripW;
+            else pic.right -= stripW;
+            if (view != 0 && !phone) pic.top += band;       // (a tablet: the map / party words above the picture)
+        }
         comp.single = view != 0;
+        comp.stripLeft = stripLeft;
+        comp.stripW = stripW;
+        comp.band = view != 0 && !phone ? band : 0;
+        comp.turnedHint = view != 0 && phone;
+        comp.topPad = cr.top <= area.top + 1 ? cornerPad() : Math.round(6 * dp);
         pad.btn = btn;
         pad.tray = !land;
+        // (its small buttons: sideways at the screen's edge, the keys toward the game; upright the keys at the
+        // hand's side, the small buttons inside them)
+        pad.sideLeft = land ? left : !left;
+        pad.keysLeft = !pad.sideLeft;
+        pad.swapHere = cr.isEmpty();
         place(comp, cr.left, cr.top, cr.width(), cr.height());
         place(pad, pr.left, pr.top, pr.width(), pr.height());
 
         // The handles: where a swipe is ours
         final int hw = Math.round(16 * dp), hl = Math.round(96 * dp);
         if (page()) place(hMenu, 0, 0, 0, 0);       // (the chooser has its own menu button)
-        else place(hMenu, area.left, area.top + (area.height() - hl) / 2, hw, hl);
+        else {
+            // (beside the game, at its middle: upright the game's own height, not over the Companion; sideways with
+            // the column at the left, at the game's left edge - not over the column)
+            final boolean colLeft = land && left && (!cr.isEmpty() || !pr.isEmpty());
+            final int my = state == PAGES ? area.top + (area.height() - hl) / 2 : game.top + (game.height() - hl) / 2;
+            place(hMenu, colLeft ? game.left : area.left, my, hw, hl);
+        }
         if (playing() && cr.isEmpty()) place(hComp, area.right - hw, area.top + (area.height() - hl) / 2, hw, hl);
         else place(hComp, 0, 0, 0, 0);
         if (state != PAGES && pr.isEmpty() && !controller) {
-            final int bx = (land && !cr.isEmpty()) ? game.left + (game.width() - hl) / 2 : area.left + (area.width() - hl) / 2;
+            // (where the controls will come out: the hand's side - sideways under the Companion's column, upright
+            // the hand's corner; Tom, 2026-11-24: "not centered")
+            int bx;
+            if (land && !cr.isEmpty()) bx = cr.left + (cr.width() - hl) / 2;
+            else if (land) bx = left ? area.left + Math.round(24 * dp) : area.right - hl - Math.round(24 * dp);
+            else bx = left ? area.left + Math.round(40 * dp) : area.right - hl - Math.round(40 * dp);
             place(hPad, bx, area.bottom - hw - Math.round(4 * dp), hl, hw);
         } else {
             place(hPad, 0, 0, 0, 0);
         }
 
+        final boolean noComp = cr.isEmpty() || pic.width() <= 0 || pic.height() <= 0;
         final int[] v = {game.left, game.top, game.width(), game.height(),
-                cr.isEmpty() ? 0 : cr.left, cr.isEmpty() ? 0 : cr.top, cr.width(), cr.height(), view};
+                noComp ? 0 : pic.left, noComp ? 0 : pic.top, noComp ? 0 : pic.width(), noComp ? 0 : pic.height(), view};
         boolean same = sentAny;
         for (int i = 0; i < 9 && same; ++i) same = v[i] == sent[i];
         if (same && !force) return;
@@ -306,27 +393,58 @@ final class Shell {
         return p;
     }
 
-    /** A pin: filled gold when pinned, an outline when not. */
+    /** A pin, subdued: pinned - a gold pin in a faint ring; unpinned - a muted pin, struck through. */
     private void drawPin(Canvas c, float cx, float cy, float r, boolean pinned) {
-        final Paint bg = paint(pinned ? GOLD : KEY);
-        c.drawCircle(cx, cy, r, bg);
-        final Paint ink = paint(pinned ? NAVY : CREAM);
+        final Paint ring = paint(pinned ? 0x40E8B840 : 0x33465C96);
+        c.drawCircle(cx, cy, r, ring);
+        final Paint ink = paint(pinned ? GOLD : MUTED);
         ink.setStyle(Paint.Style.STROKE);
-        ink.setStrokeWidth(2 * dp);
+        ink.setStrokeWidth(1.6f * dp);
         ink.setStrokeCap(Paint.Cap.ROUND);
         ink.setStrokeJoin(Paint.Join.ROUND);
         final float u = r / 12f;
         final Path p = new Path();
-        p.moveTo(cx - 3 * u, cy - 8 * u);
-        p.lineTo(cx + 3 * u, cy - 8 * u);
-        p.lineTo(cx + 2 * u, cy - 2 * u);
-        p.lineTo(cx + 6 * u, cy + 2 * u);
-        p.lineTo(cx - 6 * u, cy + 2 * u);
-        p.lineTo(cx - 2 * u, cy - 2 * u);
+        p.moveTo(cx - 3 * u, cy - 7 * u);
+        p.lineTo(cx + 3 * u, cy - 7 * u);
+        p.lineTo(cx + 2 * u, cy - 1.5f * u);
+        p.lineTo(cx + 5.5f * u, cy + 2 * u);
+        p.lineTo(cx - 5.5f * u, cy + 2 * u);
+        p.lineTo(cx - 2 * u, cy - 1.5f * u);
         p.close();
         c.drawPath(p, ink);
-        c.drawLine(cx, cy + 2 * u, cx, cy + 9 * u, ink);
-        if (!pinned) c.drawLine(cx - 8 * u, cy - 8 * u, cx + 8 * u, cy + 8 * u, ink);
+        c.drawLine(cx, cy + 2 * u, cx, cy + 8 * u, ink);
+        if (!pinned) c.drawLine(cx - 7 * u, cy - 7 * u, cx + 7 * u, cy + 7 * u, ink);
+    }
+
+    /** A small round button's glyph: the swap arrows, or down (put away). */
+    private void drawRound(Canvas c, float cx, float cy, float r, int kind, boolean down) {
+        c.drawCircle(cx, cy, r, paint(down ? 0xFF3A4680 : 0x33465C96));
+        final Paint ink = paint(CREAM);
+        ink.setStyle(Paint.Style.STROKE);
+        ink.setStrokeWidth(1.8f * dp);
+        ink.setStrokeCap(Paint.Cap.ROUND);
+        ink.setStrokeJoin(Paint.Join.ROUND);
+        final float u = r / 10f;
+        final Path p = new Path();
+        if (kind == 0) {
+            // (swap sides: an arrow each way)
+            p.moveTo(cx - 6 * u, cy - 2.5f * u);
+            p.lineTo(cx + 6 * u, cy - 2.5f * u);
+            p.moveTo(cx + 3.5f * u, cy - 5 * u);
+            p.lineTo(cx + 6 * u, cy - 2.5f * u);
+            p.lineTo(cx + 3.5f * u, cy);
+            p.moveTo(cx + 6 * u, cy + 2.5f * u);
+            p.lineTo(cx - 6 * u, cy + 2.5f * u);
+            p.moveTo(cx - 3.5f * u, cy);
+            p.lineTo(cx - 6 * u, cy + 2.5f * u);
+            p.lineTo(cx - 3.5f * u, cy + 5 * u);
+        } else {
+            // (put away: down)
+            p.moveTo(cx - 5 * u, cy - 2 * u);
+            p.lineTo(cx, cy + 3 * u);
+            p.lineTo(cx + 5 * u, cy - 2 * u);
+        }
+        c.drawPath(p, ink);
     }
 
     // ---- The views
@@ -441,11 +559,15 @@ final class Shell {
     }
 
     /**
-     * Over the Companion's pictures (the front end draws them under this): its pin,
-     * a tap flips the map and the party (one shown), a swipe puts it away.
+     * Over the Companion's pictures (the front end draws them under this, in the room left of its strip). Its
+     * strip at the outer edge: the pin (subdued), the swap arrow (Tom: "a left/right arrow ... would swap the
+     * controls / companion area to the opposite side"), and on a phone held sideways the map / party words
+     * turned along it; on a tablet those words stand above the picture. A tap on the picture flips the map and
+     * the party (one shown); a sideways swipe puts it away (unpinned).
      */
     final class CompView extends View {
-        boolean single;
+        boolean single, stripLeft, turnedHint;
+        int stripW, band, topPad;
         float downX, downY;
         boolean moved;
 
@@ -454,17 +576,32 @@ final class Shell {
             setContentDescription("Companion: tap to switch between the map and the party");
         }
 
-        private float pinR() { return 16 * dp; }
+        private float r() { return 13 * dp; }
+        private float sx() { return stripLeft ? stripW / 2f : getWidth() - stripW / 2f; }
+        private float pinY() { return topPad + r(); }
+        private float swapY() { return pinY() + 2 * r() + 12 * dp; }
 
         @Override
         protected void onDraw(Canvas c) {
-            final float r = pinR();
-            drawPin(c, getWidth() - r - 4 * dp, r + 4 * dp, r, compPin);
-            if (single) {
-                final Paint t = paint(MUTED);
-                t.setTextSize(11 * dp);
-                t.setTextAlign(Paint.Align.CENTER);
-                c.drawText(compView == 1 ? "tap: the party" : "tap: the map", getWidth() / 2f, getHeight() - 4 * dp, t);
+            drawPin(c, sx(), pinY(), r(), compPin);
+            drawRound(c, sx(), swapY(), r(), 0, false);
+            if (!single) return;
+            final Paint t = paint(MUTED);
+            t.setTextSize(11 * dp);
+            t.setTextAlign(Paint.Align.CENTER);
+            final String words = compView == 1 ? "tap for the party" : "tap for the map";
+            if (turnedHint) {
+                // (turned along the strip, under the pin and the arrow)
+                final float y = swapY() + r() + 12 * dp + t.measureText(words) / 2;
+                if (y + t.measureText(words) / 2 > getHeight()) return;
+                c.save();
+                c.translate(sx() + 4 * dp * (stripLeft ? -1 : 1), y);
+                c.rotate(stripLeft ? -90 : 90);
+                c.drawText(words, 0, 0, t);
+                c.restore();
+            } else if (band > 0) {
+                final float x0 = stripLeft ? stripW : 0, w = getWidth() - stripW;
+                c.drawText(words, x0 + w / 2, band - 7 * dp, t);
             }
         }
 
@@ -483,29 +620,38 @@ final class Shell {
                         else setCompOut(false);
                     }
                     return true;
-                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_UP: {
                     if (moved) return true;
-                    final float r = pinR();
-                    if (Math.hypot(e.getX() - (getWidth() - r - 4 * dp), e.getY() - (r + 4 * dp)) < r + 8 * dp) {
+                    final float x = e.getX(), y = e.getY(), hit = r() + 8 * dp;
+                    if (Math.hypot(x - sx(), y - pinY()) < hit) {
                         togglePin(false);
-                    } else if (single) {
+                    } else if (Math.hypot(x - sx(), y - swapY()) < hit) {
+                        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                        swapHands();
+                    } else if (single && (stripLeft ? x > stripW : x < getWidth() - stripW)) {
                         compView = compView == 1 ? 2 : 1;
                         performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
                         invalidate();
                         relayout(false);
                     }
                     return true;
+                }
                 default:
                     return true;
             }
         }
     }
 
-    /** The pad: 8 ways (corners in a fight), OK in the middle, Back, a pin. */
+    /**
+     * The pad: 8 ways (corners in a fight), OK in the middle; beside the keys a column of small buttons - the
+     * pin, Back, put away (and the swap arrow when no Companion is out). No drag bar (Tom, 2026-11-24): the keys
+     * larger; a swipe still puts it away.
+     */
     final class PadView extends View {
         int btn = 56;
         boolean tray;               // at the foot of an upright screen (rounded at the top only)
-        // pointer id -> the key it holds (-1 none, else 0..8 the grid, 9 Back, 10 the pin, 11 the surface)
+        boolean sideLeft, keysLeft, swapHere;
+        // pointer id -> the key it holds (-1 none, 0..8 the grid, 9 Back, 10 the pin, 11 the surface, 12 away, 13 swap)
         private final SparseIntArray held = new SparseIntArray();
         float downX, downY;
         int downPointer = -1;
@@ -521,8 +667,22 @@ final class Shell {
 
         private int gap() { return Math.round(6 * dp); }
         private int gridW() { return 3 * btn + 2 * gap(); }
-        private float gx() { return (getWidth() - gridW()) / 2f; }
-        private float gy() { return 8 * dp + Math.round(12 * dp); }
+        private float sideW() { return 52 * dp; }
+        private float m() { return 8 * dp; }
+
+        /** The keys' left edge: toward the game (sideways) or the hand's side (upright), the side column beside. */
+        private float gx() {
+            final float w = getWidth(), sw = sideW(), gw = gridW();
+            if (!tray) return sideLeft ? w - m() - gw : m();
+            // (upright: keys at the hand's side, the side column next to them, inside)
+            return keysLeft ? m() : w - m() - gw;
+        }
+        private float gy() { return (getHeight() - gridW()) / 2f; }
+        private float sideX() {
+            final float gw = gridW();
+            if (!tray) return sideLeft ? m() + sideW() / 2 : getWidth() - m() - sideW() / 2;
+            return keysLeft ? gx() + gw + m() + sideW() / 2 : gx() - m() - sideW() / 2;
+        }
 
         private boolean diagonals() { return state == FIGHT; }
 
@@ -531,14 +691,17 @@ final class Shell {
             return new RectF(x, y, x + btn, y + btn);
         }
 
-        private RectF backRect() {
-            final float w = Math.min(52 * dp, gx() - 8 * dp), h = 40 * dp;
-            final float cx = gx() / 2;
-            return new RectF(cx - w / 2, gy(), cx + w / 2, gy() + h);
+        // The side column's buttons, top to bottom: the pin, Back, put away (+ swap)
+        private int items() { return swapHere ? 4 : 3; }
+        private float itemY(int k) {
+            final float h = getHeight(), top = m() + 4 * dp, span = h - 2 * top;
+            return top + span * (k + 0.5f) / items();
         }
-
-        private float pinX() { return gx() + gridW() + (getWidth() - gx() - gridW()) / 2f; }
-        private float pinY() { return gy() + 20 * dp; }
+        private float smallR() { return Math.min(16 * dp, (getHeight() - 2 * m()) / items() / 2 - 3 * dp); }
+        private RectF backRect() {
+            final float w = Math.min(48 * dp, sideW() - 4 * dp), h = Math.min(34 * dp, smallR() * 2 + 4 * dp);
+            return new RectF(sideX() - w / 2, itemY(1) - h / 2, sideX() + w / 2, itemY(1) + h / 2);
+        }
 
         private int hit(float x, float y) {
             for (int i = 0; i < 9; ++i) {
@@ -546,10 +709,13 @@ final class Shell {
                 r.inset(-gap() / 2f, -gap() / 2f);
                 if (r.contains(x, y)) return (i % 2 == 0 && i != 4 && !diagonals()) ? 11 : i;
             }
+            final float hr = smallR() + 8 * dp;
+            if (Math.hypot(x - sideX(), y - itemY(0)) < hr) return 10;
             final RectF b = backRect();
             b.inset(-6 * dp, -6 * dp);
             if (b.contains(x, y)) return 9;
-            if (Math.hypot(x - pinX(), y - pinY()) < 26 * dp) return 10;
+            if (Math.hypot(x - sideX(), y - itemY(2)) < hr) return 12;
+            if (swapHere && Math.hypot(x - sideX(), y - itemY(3)) < hr) return 13;
             return 11;
         }
 
@@ -557,14 +723,8 @@ final class Shell {
         protected void onDraw(Canvas c) {
             final float w = getWidth(), h = getHeight(), rad = 24 * dp;
             final Paint surface = paint(SURFACE);
-            if (tray) {
-                c.drawRoundRect(new RectF(0, 0, w, h + rad), rad, rad, surface);
-            } else {
-                c.drawRoundRect(new RectF(0, 0, w, h), rad, rad, surface);
-            }
-            // (the drag handle: swipe it away)
-            final Paint grip = paint(EDGE);
-            c.drawRoundRect(new RectF(w / 2 - 18 * dp, 8 * dp, w / 2 + 18 * dp, 12 * dp), 2 * dp, 2 * dp, grip);
+            if (tray) c.drawRoundRect(new RectF(0, 0, w, h + rad), rad, rad, surface);
+            else c.drawRoundRect(new RectF(0, 0, w, h), rad, rad, surface);
 
             final Paint keyBg = paint(KEY), okBg = paint(GOLD), lit = paint(0xFF3A4680);
             final Paint ink = paint(CREAM);
@@ -581,9 +741,9 @@ final class Shell {
                     c.drawRoundRect(r, kr, kr, down ? paint(0xFFF5D27A) : okBg);
                     final Paint t = paint(NAVY);
                     t.setTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD));
-                    t.setTextSize(15 * dp);
+                    t.setTextSize(16 * dp);
                     t.setTextAlign(Paint.Align.CENTER);
-                    c.drawText("OK", r.centerX(), r.centerY() + 5 * dp, t);
+                    c.drawText("OK", r.centerX(), r.centerY() + 5.5f * dp, t);
                     continue;
                 }
                 keyBg.setAlpha(off ? 90 : 255);
@@ -600,7 +760,8 @@ final class Shell {
                 c.drawPath(p, ink);
                 c.restore();
             }
-            // Back
+            // The side column: the pin, Back, put away (+ swap)
+            drawPin(c, sideX(), itemY(0), smallR(), padPin);
             final RectF b = backRect();
             final Paint outline = paint(isHeld(9) ? KEY : EDGE);
             outline.setStyle(isHeld(9) ? Paint.Style.FILL : Paint.Style.STROKE);
@@ -611,7 +772,8 @@ final class Shell {
             t.setTextAlign(Paint.Align.CENTER);
             t.setTypeface(Typeface.create("sans-serif", Typeface.NORMAL));
             c.drawText("Back", b.centerX(), b.centerY() + 4.5f * dp, t);
-            drawPin(c, pinX(), pinY(), 20 * dp, padPin);
+            drawRound(c, sideX(), itemY(2), smallR(), 1, isHeld(12));
+            if (swapHere) drawRound(c, sideX(), itemY(3), smallR(), 0, isHeld(13));
         }
 
         private boolean isHeld(int k) {
@@ -654,7 +816,7 @@ final class Shell {
                         final int was = held.get(id, -1);
                         if (id == downPointer) {
                             final float dx = e.getX(i) - downX, dy = e.getY(i) - downY;
-                            final boolean away = tray ? dy > 48 * dp : dx > 48 * dp || dy > 48 * dp;
+                            final boolean away = tray ? dy > 48 * dp : Math.abs(dx) > 48 * dp || dy > 48 * dp;
                             if (away) {
                                 downPointer = -1;
                                 if (padPin) Toast.makeText(act, "The controls are pinned - tap the pin first", Toast.LENGTH_SHORT).show();
@@ -662,7 +824,7 @@ final class Shell {
                             }
                             continue;
                         }
-                        if (was < 0 || was > 8) continue;       // (Back and the pin don't slide)
+                        if (was < 0 || was > 8) continue;       // (the small buttons don't slide)
                         final int now = hit(e.getX(i), e.getY(i));
                         if (now != was && now <= 8) {
                             press(was, false);
@@ -680,6 +842,17 @@ final class Shell {
                     if (id == downPointer) downPointer = -1;
                     press(k, false);
                     if (k == 10) togglePin(true);
+                    if (k == 12) {
+                        // (put away, pinned or not: the button says so - the pin keeps its state)
+                        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                        padOut = false;
+                        prefs.edit().putBoolean("pad_" + key, false).apply();
+                        relayout(false);
+                    }
+                    if (k == 13) {
+                        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+                        swapHands();
+                    }
                     invalidate();
                     return true;
                 }
