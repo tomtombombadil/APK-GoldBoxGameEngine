@@ -15,8 +15,7 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [x] v0.7.0 published (Tom, 2026-11-25): the tag is on a7e7dc3 (his README and store description edits after
       the screenshots), so F-Droid's yml names that commit - its store page is read from the build's commit.
 - [x] Signing on F-Droid: F-Droid's own key (Tom, 2026-11-25) - the recipe as it is.
-- [ ] README: a line that the GitHub APK and F-Droid's are signed differently (switch = uninstall first;
-      saves in Internal storage › GoldBox stay).
+- [x] README: GitHub APK vs F-Droid's, signed differently (2026-11-25).
 - [ ] **F-Droid merge request open** (Tom, 2026-11-25): https://gitlab.com/fdroid/fdroiddata/-/merge_requests/59131
       (fork tomtombombadil/tomtombombadil-fdroid, branch io.github.tomtombombadil.goldbox; the fork's CI not
       verified - F-Droid runs it). Watch for reviewers' questions and the Reports tab; the 3-month rule may come up.

@@ -62,6 +62,11 @@ The game's own picture is shown as "Game Displayed Here", and the Companion's ma
    allow it for this once.
 3. Open **Gold Box Game Engine**.
 
+**GitHub or F-Droid - pick one.** The APK on the Releases page is signed with the developer's key, F-Droid's
+with F-Droid's, so one can't update the other. To switch, uninstall first, then install the other. Your games,
+saved games and settings in **Internal storage › GoldBox** stay (only the App's Private Folder is removed with
+the app).
+
 ## Where the games go
 
 The first start shows the **folder screen**:
