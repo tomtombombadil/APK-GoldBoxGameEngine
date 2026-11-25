@@ -1,21 +1,54 @@
 # Gold Box Game Engine for Android
 
-Play SSI's Gold Box AD&D games - Pool of Radiance, Curse of the Azure Bonds,
-Secret of the Silver Blades, Pools of Darkness, the Savage Frontier and
-Dragonlance games, the Dark Queen of Krynn and the rest - on an Android phone,
-tablet or Android handheld, from **your own copies** (GOG or Steam).
+Play SSI's Gold Box AD&D games on an Android phone, tablet or Android handheld, using **your own copies** (GOG or Steam).
+
+- Pool of Radiance
+- Curse of the Azure Bonds
+- Secret of the Silver Blades
+- Pools of Darkness
+- Gateway to the Savage Frontier
+- Treasures of the Savage Frontier
+- Champions of Krynn
+- Death Knights of Krynn
+- The Dark Queen of Krynn
 
 It is the [CYD Gold Box Game Engine](https://github.com/tomtombombadil/CYD-GoldBoxGameEngine)
 with the front end of its [PortMaster port](https://github.com/tomtombombadil/PM-GoldBoxGameEngine):
-the same engine, the same menus, the journals, the Companion, Quick Actions,
-the Game Fixes and the rest.
+tweaked for Android and a clean touch interface. It's got the same engine, the same menus, the journals, the Companion, Quick Actions,
+Game Fixes, Cheats, and all the rest.
 
 **Bring your own game.** Nothing from the games comes with the app; it reads
 the game files you copy onto the device.
 
-Not on the Google Play Store. Get it from the
+Not on the Google Play Store! Get it from the
 [Releases](https://github.com/tomtombombadil/APK-GoldBoxGameEngine/releases)
-page (`GoldBoxGameEngine-<version>.apk`) - or from F-Droid once it is there.
+page (`GoldBoxGameEngine-<version>.apk`) - or from F-Droid once it is there. (soon!)
+
+## Screenshots
+
+The game's own picture is shown as "Game Displayed Here", and the Companion's map, party and icons are made up for these screenshots: nothing from the games is shown or included. This is so that the original rights and ownership of the games is respected. Sorry, but you'll have to envision Pool of Radiance or your favorite Gold Box game in the 'Game Displayed Here' area.
+
+### Phone
+
+<p>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" width="640" alt="Playing, phone held sideways: the game, the Companion's map and the controls">
+</p>
+<p>
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="200" alt="Playing, phone held upright: the game, the Companion's map and party, the controls">
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width="200" alt="The game chooser on a phone: one game at a time, Continue from Last Save and Play">
+  <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width="200" alt="The folder screen: where to copy your games">
+</p>
+
+### Tablet
+
+<p>
+  <img src="fastlane/metadata/android/en-US/images/tenInchScreenshots/1.png" width="640" alt="Playing on a tablet held sideways: the game, the Companion's map and party, the controls">
+</p>
+<p>
+  <img src="fastlane/metadata/android/en-US/images/tenInchScreenshots/2.png" width="200" alt="The game chooser on a tablet: all nine games at once">
+  <img src="fastlane/metadata/android/en-US/images/tenInchScreenshots/3.png" width="200" alt="The menu, sliding in from the side">
+  <img src="fastlane/metadata/android/en-US/images/tenInchScreenshots/4.png" width="200" alt="The Audio page: a slider, minus and plus, and mute for the volume">
+</p>
 
 ## Installing
 
