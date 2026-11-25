@@ -98,6 +98,20 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
     room (three quarters of the map's height: the front end's view 3) - no tap then; only when
     both don't fit, one with the tap. **Never shrink the map to fit the party.** **The column's width is the same
     with the controls away** ("Making the map smaller isn't a good look").
+- **Tom's notes, 2026-11-25 afternoon** (screenshots from the S8+, Pixel 10a, Tab S2):
+  - **The journal on Android, Android's own** (part of the glow-up): no "X Width  B Back" line, no entry number
+    / % line drawn by the game; X and B as round buttons, and only with a controller (or the pad in controller
+    use). **A picture entry**: an Android image viewer - pinch to zoom, drag to pan, double-tap to zoom in / back
+    to fit; it opens fitted whole (no zoom to width on a tablet). **A text entry**: Android's type in a
+    scrolling pop-up, not the game's pixel font (that stays for PortMaster); a setting for the journal's font,
+    with an open-source font like the printed journal's.
+  - **The Companion fills its room, intelligently, on every device**: the map and the party as large as they
+    fit without taking from the game or the pad; the strip's buttons (pin, swap, menu) down the side or across
+    the top / bottom - whichever leaves more room; the party may go above the controls, beside them, or in two
+    columns (the S2 upright) - try layouts and pick per room. **Upright on every device: map and party side by
+    side, the controls at the foot**; when they don't fit, the tap toggle. **Keep the phone-sideways tap toggle.**
+    Tom: "It needs to be just right or the app will look really bad."
+  - **About** in the menu: the engine's information, Tom's GitHub repo address (the rest of his list was cut off).
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.

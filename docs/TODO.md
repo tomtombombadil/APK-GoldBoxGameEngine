@@ -24,6 +24,11 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
       folder screen counting the nine Steam games; the menu's tab at the hand's side (and after the swap arrow),
       the strip's menu button, the drawer from that side, "Gold Box Game Engine", Rescan / Clean Up under System.
 - [ ] The folder screen's rework: Tom to pick from the suggestions (2026-11-25).
+- [ ] The journal, Android's own (CLAUDE.md "Tom's notes, 2026-11-25 afternoon"): image viewer, text pop-up,
+      font setting, X / B buttons only with a controller.
+- [ ] The Companion's layout, smart on every device and way of holding (same section) - tested on phone, 16:10
+      and 4:3 tablet sizes, both ways round.
+- [ ] Menu › About: the engine's information, the GitHub repo (Tom's full list pending).
 - [x] Store screenshots (2026-11-25, Tom approved): 4 phone, 4 tablet, with stand-ins for the game. Retake
       phoneScreenshots/4.png (the folder screen) after its rework.
 - [ ] The scan's chooser pictures: on the emulator 2 of 9 stand-in covers came out empty (APPART.IMG 0 bytes;
