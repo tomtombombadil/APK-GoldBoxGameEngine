@@ -17,8 +17,9 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [x] Signing on F-Droid: F-Droid's own key (Tom, 2026-11-25) - the recipe as it is.
 - [ ] README: a line that the GitHub APK and F-Droid's are signed differently (switch = uninstall first;
       saves in Internal storage › GoldBox stay).
-- [ ] The fdroiddata merge request (fork tomtombombadil/tomtombombadil-fdroid, branch
-      io.github.tomtombombadil.goldbox): the yml as fdroid/ here, LF line ends and a newline at the end.
+- [ ] **F-Droid merge request open** (Tom, 2026-11-25): https://gitlab.com/fdroid/fdroiddata/-/merge_requests/59131
+      (fork tomtombombadil/tomtombombadil-fdroid, branch io.github.tomtombombadil.goldbox; the fork's CI not
+      verified - F-Droid runs it). Watch for reviewers' questions and the Reports tab; the 3-month rule may come up.
 - [ ] 0.7.0 on the Tab S8+: a tablet now - sideways the column out (map at the top, the party under it, the
       controls), the column's width with the controls away; the chooser's toggle and Display › Game Chooser; the
       folder screen counting the nine Steam games; the menu's tab at the hand's side (and after the swap arrow),
