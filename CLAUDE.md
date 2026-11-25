@@ -121,6 +121,8 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` (F-Droid
   shows it; 500 characters at most), then tag `v<versionName>` - CI builds
   and publishes the release.
+- F-Droid's yml (`fdroid/`): a build's `commit:` is the release commit's **full hash**, not the tag (Tom,
+  2026-11-25, F-Droid's instructions) - so the release commit first, then a commit that writes its hash there.
 - Release signing: the four `GOLDBOX_*` repository secrets (docs/FDROID.md
   step 1). The same key forever - a new key means players must uninstall.
 
