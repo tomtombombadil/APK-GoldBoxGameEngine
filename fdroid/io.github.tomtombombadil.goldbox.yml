@@ -25,7 +25,7 @@ Builds:
 
   - versionName: 0.7.0
     versionCode: 7000
-    commit: 96c8105668b511c6159d842d2cdc590fd75b037d
+    commit: b0f69dba53e4992035c5bcf08a0e0eab7f1b212a
     subdir: app
     submodules: true
     gradle:
