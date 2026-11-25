@@ -26,7 +26,7 @@ page (`GoldBoxGameEngine-<version>.apk`) - or from F-Droid once it is there. (so
 
 ## Screenshots
 
-The game's own picture is shown as "Game Displayed Here", and the Companion's map, party and icons are made up for these screenshots: nothing from the games is shown or included. This is so that the original rights and ownership of the games is respected. Sorry, but you'll have to envision Pool of Radiance or your favorite Gold Box game in the 'Game Displayed Here' area.
+The game's own picture is shown as "Game Displayed Here", and the Companion's map, party and icons are made up for these screenshots: nothing from the games is shown or included. This is so that the original rights and ownership of the games is respected. Sorry, but you'll have to envision Pool of Radiance or your favorite Gold Box game in the 'Game Displayed Here' area. Also, the game art from the original games is not shown here, but will appear once you've added your game files from the original games. The box art and logos make the app look really great.
 
 ### Phone
 
