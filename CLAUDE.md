@@ -127,6 +127,7 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   It must be the commit the `v` tag is on: F-Droid reads the store page (descriptions, screenshots) at that commit,
   so edits made after it (Tom's to the descriptions, 0.7.0) are missed by an older hash. Check with
   `git rev-parse v<version>^{commit}` once the tag exists. The fdroiddata copy: LF line ends, a final newline.
+  Only the latest version's build in it (fdroiddata's rule for a new app's merge request).
 - **F-Droid signs its own builds with its own key** (Tom, 2026-11-25): no `Binaries` / `AllowedAPKSigningKeys`
   in the recipe, so no reproducible-build upkeep. The GitHub releases (Tom's key) and F-Droid's are separate
   installs: moving from one to the other needs an uninstall (the GoldBox folder and its saves stay; the private

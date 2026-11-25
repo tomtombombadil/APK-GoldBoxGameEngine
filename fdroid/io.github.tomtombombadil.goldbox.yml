@@ -12,17 +12,6 @@ RepoType: git
 Repo: https://github.com/tomtombombadil/APK-GoldBoxGameEngine.git
 
 Builds:
-  - versionName: 0.6.0
-    versionCode: 6000
-    commit: 92307a5a27c91fba25af74ecd0f378033d610190
-    subdir: app
-    submodules: true
-    gradle:
-      - yes
-    scandelete:
-      - SDL/Xcode
-    ndk: 27.3.13750724
-
   - versionName: 0.7.0
     versionCode: 7000
     commit: a7e7dc387208e3a42871893b4ebb14ac5ad627a1
