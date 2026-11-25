@@ -1,15 +1,26 @@
-<p>Play SSI's Gold Box <i>Advanced Dungeons &amp; Dragons</i> games - Pool of Radiance, Curse of the Azure Bonds, Secret of the Silver Blades, Pools of Darkness, Gateway to the Savage Frontier, Treasures of the Savage Frontier, Champions of Krynn, Death Knights of Krynn and The Dark Queen of Krynn - on your phone, tablet or Android handheld.</p>
-
-<p><b>Bring your own game.</b> Nothing from the games comes with the app: it plays the game files of your own copies (the GOG or Steam releases), copied onto the device.</p>
-
-<p>It is the open-source CYD Gold Box Game Engine with the front end of its PortMaster port for retro handhelds:</p>
+<p>Play SSI's Gold Box <i>Advanced Dungeons &amp; Dragons</i> games on your phone, tablet or Android handheld.</p>
 <ul>
-<li>every game's journal, made from your copy's own journal (PDF) and shown when the game mentions an entry</li>
-<li>the Companion: the area map and the party at a glance beside the game</li>
-<li>Quick Actions, the AD&amp;D 1E rules switches, Game Fixes, optional cheats, the original music</li>
-<li>controls any way you like: a Bluetooth or USB controller, on-screen buttons, or touch on every screen</li>
+<li>Pool of Radiance</li>
+<li>Curse of the Azure Bonds</li>
+<li>Secret of the Silver Blades</li>
+<li>Pools of Darkness</li>
+<li>Gateway to the Savage Frontier</li>
+<li>Treasures of the Savage Frontier</li>
+<li>Champions of Krynn</li>
+<li>Death Knights of Krynn</li>
+<li>The Dark Queen of Krynn</li>
 </ul>
 
-<p><b>Where the games go:</b> the first start shows the folder: Internal storage › GoldBox › games (or a folder of your own). Copy each game's whole folder in - from a Windows PC over USB, File Transfer. The app asks for All Files Access to read that folder; it reads and writes only there. Or use the app's private folder, with no permission.</p>
+<p><b>Bring your own game.</b> Nothing from the games comes with the app: works from the original game files that you supply from your own copies of the games (GOG or Steam releases), copied onto the device.</p>
 
-<p>Not affiliated with SSI, Wizards of the Coast, GOG or Steam.</p>
+<p>This app uses the open-source CYD-Gold-Box-Game-Engine and parts of the PortMaster port for retro handhelds (all by the same author) to build a wonderful Android experience for these classic games.</p>
+<ul>
+<li>Every game's journal, made from your copy's own journal (PDF) and shown when the game mentions an entry</li>
+<li>the Companion: the area map and the party at a glance beside the game</li>
+<li>Quick Actions, the AD&amp;D 1E rules switches, Game Fixes, optional cheats, the original music</li>
+<li>Controls any way you like: a Bluetooth or USB controller, on-screen buttons, or touch on every screen</li>
+</ul>
+
+<p><b>Copy your Steam/GOG game files from your PC into a folder of your choise on your device. (Recommend: GoldBox\games) Then point the app to that folder. The app asks for All Files Access to read that folder; it reads and writes only there. Or use the app's private folder (Internal storage › Android\data\io.github.tomtombombadil.goldbox\files\games), and you don't need to give the app any special permissions.</p>
+
+<p>Not affiliated with SSI, TSR, Wizards of the Coast, GOG, or Steam.</p>
