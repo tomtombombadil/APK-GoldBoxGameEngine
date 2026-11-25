@@ -14,6 +14,9 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [x] v0.1.3 published (Tom, 2026-11-23). v0.1.4 by the APK chat session (2026-11-24).
 - [x] v0.7.0 published (Tom, 2026-11-25): the tag is on a7e7dc3 (his README and store description edits after
       the screenshots), so F-Droid's yml names that commit - its store page is read from the build's commit.
+- [x] Signing on F-Droid: F-Droid's own key (Tom, 2026-11-25) - the recipe as it is.
+- [ ] README: a line that the GitHub APK and F-Droid's are signed differently (switch = uninstall first;
+      saves in Internal storage › GoldBox stay).
 - [ ] The fdroiddata merge request (fork tomtombombadil/tomtombombadil-fdroid, branch
       io.github.tomtombombadil.goldbox): the yml as fdroid/ here, LF line ends and a newline at the end.
 - [ ] 0.7.0 on the Tab S8+: a tablet now - sideways the column out (map at the top, the party under it, the
