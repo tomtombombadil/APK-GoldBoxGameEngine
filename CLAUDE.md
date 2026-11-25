@@ -111,6 +111,18 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
     columns (the S2 upright) - try layouts and pick per room. **Upright on every device: map and party side by
     side, the controls at the foot**; when they don't fit, the tap toggle. **Keep the phone-sideways tap toggle.**
     Tom: "It needs to be just right or the app will look really bad."
+  - **The Companion's layout, by rule, never by device** (Tom, 2026-11-25 evening: "I can't test this on every
+    device ... the layout needs to be smart about it by design/logic"): from the room it has (the screen less the game
+    and the pad), candidates - the strip down the outer side or across the edge away from the game; map and party
+    stacked, side by side, the party in two columns, or each in a room of its own (different sizes); one picture with
+    the tap when both don't fit legibly (and, phone sideways, when one picture is much larger) - the largest
+    pictures win. **The pictures nearest the game** (upright: right under it, the strip below them; sideways: against
+    the game's side, the strip at the screen's edge); **the strip never between the pictures**, at the hand's side.
+    **A fourth strip button swaps the map's and the party's places** (when both are shown). Simulated per device
+    before building (Pixel 10a, S8+, S2, both ways round).
+  - **Journal fonts** (Display › Journal Font): Journal - Fondamento Italic (default, the printed journal's
+    chancery hand), Book - Alegreya Italic, Serif - Tinos (Times New Roman's shape), Plain - Roboto. Bundled under
+    their free licences (OFL / Apache 2.0), credited in About.
   - **About** in the menu: the engine's information, Tom's GitHub repo address (the rest of his list was cut off).
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
