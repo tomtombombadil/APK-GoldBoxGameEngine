@@ -231,7 +231,27 @@ final class MenuDrawer extends FrameLayout {
             line.setGravity(Gravity.CENTER_VERTICAL);
             final TextView name = text(c, 15, CREAM, false);
             name.setText(it.name);
-            line.addView(name, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+            if (it.kind == 'T') {
+                // (a line of text: the name - a button, a device's detail - and its words beside it)
+                name.setTextColor(GOLD);
+                name.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                line.addView(name, new LinearLayout.LayoutParams(px(118), ViewGroup.LayoutParams.WRAP_CONTENT));
+                r.value = text(c, 14, CREAM, false);
+                r.value.setText(it.value);
+                line.addView(r.value, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+                line.setGravity(Gravity.TOP);
+                r.box.setMinimumHeight(px(36));
+                r.box.setPadding(px(14), px(6), px(10), px(6));
+            } else if (it.kind == 'H') {
+                name.setTextColor(MUTED);
+                name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 13);
+                name.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                line.addView(name);
+                r.box.setMinimumHeight(px(36));
+                r.box.setPadding(px(14), px(14), px(10), px(2));
+            } else {
+                line.addView(name, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+            }
             final int idx = i;
             switch (it.kind) {
                 case 'P': {
@@ -332,7 +352,7 @@ final class MenuDrawer extends FrameLayout {
             r.box.addView(r.help);
 
             if (it.kind == 'C') r.box.setOnClickListener(v -> tap(v, CHANGE, idx, 1));
-            else if (it.kind != 'L') r.box.setOnClickListener(v -> tap(v, CHOOSE, idx, 0));
+            else if (it.kind != 'L' && it.kind != 'T' && it.kind != 'H') r.box.setOnClickListener(v -> tap(v, CHOOSE, idx, 0));
             r.box.setContentDescription(it.name + (it.value.isEmpty() ? "" : ": " + it.value));
             list.addView(r.box, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             rows.add(r);

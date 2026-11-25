@@ -1,6 +1,8 @@
 package io.github.tomtombombadil.goldbox;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.DisplayCutout;
@@ -48,9 +50,52 @@ public class GoldBoxActivity extends SDLActivity {
         runOnUiThread(() -> { if (shell != null) shell.setState(state); });
     }
 
-    /** The front end: what its menu shows (MenuDrawer.update's format; its game thread). */
-    public void onShellMenu(byte[] state) {
-        runOnUiThread(() -> { if (shell != null) shell.menu(state); });
+    /** The front end: what one of its own screens shows (Shell.text's channels; its game thread). */
+    public void onShellText(int channel, byte[] text) {
+        runOnUiThread(() -> { if (shell != null) shell.text(channel, text); });
+    }
+
+    /**
+     * The scan's step for the game chooser (its game thread, while the scan's page is up): the
+     * game's box art (the launcher's JPEG, decoded whole here) or its logo (rgba, w x h, from the
+     * engine's icon reader) saved as out - the chooser only reads it later.
+     */
+    public static boolean saveArt(String jpeg, byte[] rgba, int w, int h, String out) {
+        try {
+            Bitmap b = null;
+            boolean photo = false;
+            if (jpeg != null && !jpeg.isEmpty()) {
+                final BitmapFactory.Options o = new BitmapFactory.Options();
+                o.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(jpeg, o);
+                int sample = 1;
+                while (Math.max(o.outWidth, o.outHeight) / (sample * 2) >= 1200) sample *= 2;
+                final BitmapFactory.Options d = new BitmapFactory.Options();
+                d.inSampleSize = sample;
+                b = BitmapFactory.decodeFile(jpeg, d);
+                photo = b != null;
+            }
+            if (b == null && rgba != null && w > 0 && h > 0 && rgba.length >= w * h * 4) {
+                b = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+                b.copyPixelsFromBuffer(java.nio.ByteBuffer.wrap(rgba));       // (R G B A bytes, as ARGB_8888 keeps them)
+            }
+            if (b == null) return false;
+            final File f = new File(out);
+            final File dir = f.getParentFile();
+            if (dir != null) dir.mkdirs();
+            try (java.io.FileOutputStream os = new java.io.FileOutputStream(f)) {
+                b.compress(photo ? Bitmap.CompressFormat.JPEG : Bitmap.CompressFormat.PNG, 90, os);
+            }
+            b.recycle();
+            return true;
+        } catch (Exception | OutOfMemoryError e) {
+            return false;
+        }
+    }
+
+    /** The front end: Controls - Button Size / Opacity for the pad (its game thread). */
+    public void onShellPad(int size, int alpha) {
+        runOnUiThread(() -> { if (shell != null) shell.padStyle(size, alpha); });
     }
 
     /** The front end: Y on a controller - the Companion out / away (its game thread). */

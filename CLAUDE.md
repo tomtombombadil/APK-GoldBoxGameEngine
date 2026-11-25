@@ -92,6 +92,13 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   picker's tree URI turned into a path - All Files Access reads it), private
   (the app's own). A chosen folder with no `games` folder but game folders in
   it is the games folder itself.
+- The redesign's views over SDL's surface (`Shell` lays them out): `Shell` (the pad, the Companion's room, the
+  edge handles), `MenuDrawer` (the menu and its pages, Device Info, the Button Guide, the journal list, Quick
+  Actions), `Screens` (notices / messages, the scan's page), `ChooserView` (the game chooser). Their words come
+  from the front end as text (`onShellText`, channels 0 - 3; formats in the PM repo's main.cpp `android_*_text`),
+  their taps go back as its buttons (`nativeButton`) or ops (`nativeMenu`). **A screen of the port's own is
+  never drawn by SDL here** - a new one the front end adds needs its view here in the same version.
+  `saveArt` is the scan's step for the chooser's pictures (APPART.IMG).
 - `GoldBoxActivity` - SDL's activity; passes `--games --conf --log`; ends
   its process when it closes (the front end keeps state in statics);
   `chooseFolder()` is called by the front end (JNI).

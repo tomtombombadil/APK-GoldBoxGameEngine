@@ -12,9 +12,9 @@ RepoType: git
 Repo: https://github.com/tomtombombadil/APK-GoldBoxGameEngine.git
 
 Builds:
-  - versionName: 0.3.0
-    versionCode: 3000
-    commit: v0.3.0
+  - versionName: 0.4.0
+    versionCode: 4000
+    commit: v0.4.0
     subdir: app
     submodules: true
     gradle:
@@ -26,5 +26,5 @@ Builds:
 AutoUpdateMode: Version
 UpdateCheckMode: Tags
 UpdateCheckData: version.properties|versionCode=(\d+)|.|versionName=(.+)
-CurrentVersion: 0.3.0
-CurrentVersionCode: 3000
+CurrentVersion: 0.4.0
+CurrentVersionCode: 4000

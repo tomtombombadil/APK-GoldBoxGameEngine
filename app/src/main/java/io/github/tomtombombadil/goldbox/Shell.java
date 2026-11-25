@@ -56,11 +56,15 @@ final class Shell {
     private final CompView comp;
     private final Handle hMenu, hComp, hPad;
     private final MenuDrawer drawer;
+    private final ChooserView chooser;
+    private final Screens.ScanView scan;
+    private final Screens.NoticeView notice;
 
     private int state = PAGES;
     private boolean controller = false;
     private String key = "";
     private boolean compOut, padOut, compPin, padPin;
+    private float padScale = 1f;            // Controls - Button Size (the front end's setting)
     private int compView = 1;               // 1: the map (a fight: the battlefield), 2: the party
     private final int[] sent = new int[9];
     private boolean sentAny = false;
@@ -81,13 +85,42 @@ final class Shell {
         root.addView(hMenu, new FrameLayout.LayoutParams(0, 0));
         root.addView(hComp, new FrameLayout.LayoutParams(0, 0));
         root.addView(hPad, new FrameLayout.LayoutParams(0, 0));
+        chooser = new ChooserView(a);
+        root.addView(chooser, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
+        scan = new Screens.ScanView(a);
+        root.addView(scan, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
         drawer = new MenuDrawer(a);
         root.addView(drawer, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
+        notice = new Screens.NoticeView(a);
+        root.addView(notice, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
     }
 
-    /** The front end's menu, for the drawer. */
-    void menu(byte[] state) { drawer.update(state); }
+    /** Controls - Button Size (0 Small - 3 Huge) and Button Opacity (20 - 100 %), the front end's settings. */
+    void padStyle(int size, int alpha) {
+        final float[] k = {0.8f, 1f, 1.2f, 1.4f};
+        padScale = k[Math.max(0, Math.min(3, size))];
+        pad.setAlpha(Math.max(0.2f, Math.min(1f, alpha / 100f)));
+        relayout(false);
+        pad.invalidate();
+    }
+
+    /** One of the front end's own screens (its channels: 0 drawer, 1 notice, 2 chooser, 3 scan). */
+    void text(int channel, byte[] t) {
+        switch (channel) {
+            case 0: drawer.update(t); break;
+            case 1: notice.update(t); break;
+            case 2: chooser.update(t); relayout(false); break;
+            case 3: scan.update(t); relayout(false); break;
+            default: break;
+        }
+    }
+
+    /** The app's own page is up over the game (the chooser, the scan's page): no handles. */
+    private boolean page() { return chooser.isUp() || scan.isUp(); }
 
     // ---- From the front end (the UI thread)
 
@@ -184,7 +217,7 @@ final class Shell {
         column = land;
 
         // The pad's size: a thumb's, within the screen's means
-        int btn = Math.round(Math.max(44 * dp, Math.min(64 * dp, Math.min(W, H) * 0.13f)));
+        int btn = Math.round(Math.max(44 * dp, Math.min(64 * dp, Math.min(W, H) * 0.13f)) * padScale);
         final int gap = Math.round(6 * dp), side = Math.round(56 * dp), m = Math.round(8 * dp);
         int padW = 3 * btn + 2 * gap + 2 * side, padH = 3 * btn + 2 * gap + 2 * m + Math.round(12 * dp);
 
@@ -230,7 +263,8 @@ final class Shell {
 
         // The handles: where a swipe is ours
         final int hw = Math.round(16 * dp), hl = Math.round(96 * dp);
-        place(hMenu, area.left, area.top + (area.height() - hl) / 2, hw, hl);
+        if (page()) place(hMenu, 0, 0, 0, 0);       // (the chooser has its own menu button)
+        else place(hMenu, area.left, area.top + (area.height() - hl) / 2, hw, hl);
         if (playing() && cr.isEmpty()) place(hComp, area.right - hw, area.top + (area.height() - hl) / 2, hw, hl);
         else place(hComp, 0, 0, 0, 0);
         if (state != PAGES && pr.isEmpty() && !controller) {
@@ -309,7 +343,7 @@ final class Shell {
 
         @Override
         public boolean dispatchTouchEvent(MotionEvent e) {
-            if (e.getActionMasked() == MotionEvent.ACTION_DOWN && !drawer.isOpen()) {
+            if (e.getActionMasked() == MotionEvent.ACTION_DOWN && !drawer.isOpen() && !page() && !notice.isUp()) {
                 controller(false);
                 // (a touch on the game puts away what isn't pinned)
                 final int x = (int) e.getX(), y = (int) e.getY();

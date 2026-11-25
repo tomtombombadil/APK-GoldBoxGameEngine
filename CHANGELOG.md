@@ -3,6 +3,32 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.4.0] - 2026-11-24
+
+Built on PM-GoldBoxGameEngine 0.16.0 and the CYD engine 0.216.2. The redesign's third stage, and what 0.3.0 missed.
+
+- **The game chooser is the app's own**, shaped for the device: a phone held upright shows one game a card (its
+  picture upright, the neighbours peeking - swipe sideways), with a big Play button; held sideways, the picture
+  wide at the left and the name, Play and < > at the right; a tablet shows every game at once (three across; two
+  when there are four or fewer) - tap one to play. The top bar has the games folder and the menu.
+  No games: where to copy them, Look Again and Choose Folder.
+- **The pictures are made once, when a game is found**: the Steam box art decoded at full quality, or the game's
+  own logo. Games found before get theirs at the next start ("Preparing the picture for ..."); turning the
+  device no longer makes pictures again.
+- **The scan's page** (finding games, Clean Up Game Files) and **every notice and message** (Yes / No questions,
+  results, Please wait) are in Android's look now.
+- **In the menu drawer**: Device Info, the Button Guide, the journal list and Quick Actions are drawer pages now
+  (they were the old screens).
+- **Put back** (Tom: "you missed some menus and menu items"): the Display page (Picture: 4:3, Square Pixels or
+  Stretch; Screen Rotation), Controls - Button Size (it sizes the pad), Back to Game. Button Opacity is not
+  offered: the pad has a room of its own and never covers the game.
+
+Checked on the Android emulator: the scan's page and its Continue; the chooser upright (a swipe to the next game),
+sideways, and as a tablet (2048 x 1536) with three GOG games and the Steam box art; the drawer's Display,
+Controls and Button Guide pages; Journal's notice and its Close; Quick Actions. Not tried there: Play from the
+chooser into a game (the tablet tap did start Champions), the empty chooser, Device Info's page, Button Size's
+effect, a Yes / No notice.
+
 ## [0.3.0] - 2026-11-24
 
 Built on PM-GoldBoxGameEngine 0.15.0 and the CYD engine 0.216.2. The redesign's second stage.
