@@ -35,7 +35,9 @@ The game's own picture is shown as "Game Displayed Here", and the Companion's ma
 </p>
 <p>
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" width="200" alt="Playing, phone held upright: the game, the Companion's map and party, the controls">
+  &nbsp;&nbsp;&nbsp;
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" width="200" alt="The game chooser on a phone: one game at a time, Continue from Last Save and Play">
+  &nbsp;&nbsp;&nbsp;
   <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" width="200" alt="The folder screen: where to copy your games">
 </p>
 
@@ -46,7 +48,9 @@ The game's own picture is shown as "Game Displayed Here", and the Companion's ma
 </p>
 <p>
   <img src="fastlane/metadata/android/en-US/images/tenInchScreenshots/2.png" width="200" alt="The game chooser on a tablet: all nine games at once">
+  &nbsp;&nbsp;&nbsp;
   <img src="fastlane/metadata/android/en-US/images/tenInchScreenshots/3.png" width="200" alt="The menu, sliding in from the side">
+  &nbsp;&nbsp;&nbsp;
   <img src="fastlane/metadata/android/en-US/images/tenInchScreenshots/4.png" width="200" alt="The Audio page: a slider, minus and plus, and mute for the volume">
 </p>
 
