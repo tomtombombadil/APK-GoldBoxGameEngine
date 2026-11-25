@@ -12,8 +12,10 @@ Everything here is done in a web browser or PowerShell on Windows.
   the build (`scandelete`). The gradle wrapper jars are removed by F-Droid
   itself, as always.
 - **The store page**: `fastlane/metadata/android/en-US/` - title, short and
-  full description, icon, screenshots (the app's own screens only - never
-  game graphics), and a changelog per version (`changelogs/<versionCode>.txt`).
+  full description, icon, screenshots (`images/phoneScreenshots/`,
+  `images/tenInchScreenshots/`: the app's own screens with stand-ins where a game
+  would show - never game graphics; CLAUDE.md "Store screenshots"), and a changelog
+  per version (`changelogs/<versionCode>.txt`).
 - **Nothing non-free**: no Google Play Services, Firebase, analytics or ads;
   MIT (the app, front end, engine), zlib (SDL); no prebuilt binaries.
 - **Versions F-Droid can follow**: `version.properties` (versionName,

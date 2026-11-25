@@ -158,3 +158,12 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
 - The front end's own checks (smoke test, touch steps) run in the PM repo.
 - Bring your own game: never commit game files or screenshots of game
   graphics (store screenshots show the app's own screens only).
+- **Store screenshots** (Tom, 2026-11-25; as ScummVM, RetroArch, Lemuroid and the rest - no commercial game's
+  pictures in their listings): `fastlane/metadata/android/en-US/images/phoneScreenshots/` and
+  `tenInchScreenshots/`, numbered in the listing's order (F-Droid reads them at the release's commit). Real
+  captures of the app with stand-ins wherever a game would show: the game's area a plain "Game Displayed Here"
+  panel, edge to edge (no frame or rounding - the game is maximised there); the Companion an invented map (an
+  ordinary building: walls joined, a door in every room) and an invented party - our own names and our own
+  24 x 24 EGA icons in the games' style (never SSI's, nor SSI's altered), statuses varied (one plain OK; no
+  party-wide ones like Blessed; not "Stoned"); the chooser stand-in covers (the game's name in plain type).
+  Drawn by the front end's own Companion code fed that data - a scratch tool, not in any repo.

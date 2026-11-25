@@ -19,6 +19,10 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
       folder screen counting the nine Steam games; the menu's tab at the hand's side (and after the swap arrow),
       the strip's menu button, the drawer from that side, "Gold Box Game Engine", Rescan / Clean Up under System.
 - [ ] The folder screen's rework: Tom to pick from the suggestions (2026-11-25).
+- [x] Store screenshots (2026-11-25, Tom approved): 4 phone, 4 tablet, with stand-ins for the game. Retake
+      phoneScreenshots/4.png (the folder screen) after its rework.
+- [ ] The scan's chooser pictures: on the emulator 2 of 9 stand-in covers came out empty (APPART.IMG 0 bytes;
+      saveArt false - maybe the emulator's memory). Check on a phone; Rescan makes them again.
 - [ ] 0.6.0 (Tom's review of 0.5.0): the swap arrow sideways and upright, phone and S2; the put-away arrow and where
       the controls' handle then sits; the quieter pins; the phone's swipe through the games; Continue from Last
       Save / Play; Back at the chooser closes the app; the drawer beside the Pixel's cutout sideways.
