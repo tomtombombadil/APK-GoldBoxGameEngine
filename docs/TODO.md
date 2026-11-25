@@ -12,7 +12,7 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [x] v0.1.0 published (Tom, 2026-11-23) and installed; his findings fixed in 0.1.1.
 - [x] v0.1.1 published (Tom, 2026-11-23).
 - [x] v0.1.3 published (Tom, 2026-11-23). v0.1.4 by the APK chat session (2026-11-24).
-- [ ] Publish v0.7.0 on GitHub's site (Releases > Draft a new release > tag v0.7.0 on commit 275b381 - the one F-Droid's yml names; Target > Recent Commits > Publish) - it has
+- [ ] Publish v0.7.0 on GitHub's site (Releases > Draft a new release > tag v0.7.0 on commit 96c8105 - the one F-Droid's yml names; Target > Recent Commits > Publish) - it has
       everything of 0.1.5 - 0.6.0, so those needn't be published.
 - [ ] 0.7.0 on the Tab S8+: a tablet now - sideways the column out (map at the top, the party under it, the
       controls), the column's width with the controls away; the chooser's toggle and Display › Game Chooser; the
