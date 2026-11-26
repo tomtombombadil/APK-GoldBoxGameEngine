@@ -1,0 +1,1 @@
+Engine fixes: Quick Actions choose weapons by expected damage, throw oil and use holy water only where it hurts. Treasures' overland clock as the original. Death Knights' scripted steps fixed. The Dark Queen: maps read correctly, journal entries offered, imported characters' saves, battlefields on large maps. A fight's end marks "fled" only when the party fled.

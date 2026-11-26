@@ -3,6 +3,20 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.8.1] - 2026-11-26
+
+Built on PM-GoldBoxGameEngine 0.19.2 and the CYD engine 0.219.1.
+
+- **Quick Actions** pick each member's weapon by the damage it can be expected to do, throw flasks of oil, use
+  holy water only on foes it hurts, and ready the weapon and shield again after a Quick fight.
+- **Treasures of the Savage Frontier**: a step on the overland no longer takes ten minutes of the game's clock by
+  itself (as the original).
+- **Death Knights of Krynn**: a script's "step ahead" and "3D view again" work.
+- **The Dark Queen of Krynn**: its maps read the right way round; "This is recorded as journal entry n." offers
+  the entry; saves with imported characters load in the original too; indoor fights past a map's 16th column or
+  row get their battlefield; its fights set their end flags.
+- **A fight's end** marks "fled" only when the party fled (Treasures, Darkness).
+
 ## [0.8.0] - 2026-11-25
 
 Built on PM-GoldBoxGameEngine 0.19.0 and the CYD engine 0.217.0. Tom's notes from the S8+, the Pixel 10a and the S2.
