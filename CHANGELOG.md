@@ -3,6 +3,22 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.8.2] - 2026-11-26
+
+Built on PM-GoldBoxGameEngine 0.19.7 and the CYD engine 0.221.3.
+
+- **Picture journal entries show again**: since 0.8.0 every picture entry (maps and the like - Treasures' entry 1)
+  came up empty; the picture was being saved where the app can't write.
+- **The Steam journals' text reads cleanly**: Treasures' entries had words broken apart ("th e pa rt"), and
+  Champions' and Death Knights' had words run together ("ofthe"). Every game's journal is made again once, at the
+  first start. Misreadings that are in the Steam PDFs themselves ("~i INTRODUCTION ~", "part}'1") remain.
+- **Treasures**: a new character starts with the original's 22,600 experience (it got 1,500,001).
+- **Game Fixes' Poison Save Bonus**: the Constitution bonus lowers the poison number, as AD&D has it.
+- **Curse**: a new Game Fix, **Imported Hit Points** (on by default) - a character brought over from Pool of
+  Radiance keeps its hit points when the Girdle of the Dwarves is readied (the original drops them).
+- **Spell names shown whole** in Treasures, Darkness and the Krynn games (long names were cut off).
+- **Secret's demo** draws the party with its pictures (they were black figures).
+
 ## [0.8.1] - 2026-11-26
 
 Built on PM-GoldBoxGameEngine 0.19.3 and the CYD engine 0.219.2.
