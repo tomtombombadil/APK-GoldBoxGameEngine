@@ -5,7 +5,7 @@ part of this file.
 
 ## [0.8.1] - 2026-11-26
 
-Built on PM-GoldBoxGameEngine 0.19.2 and the CYD engine 0.219.1.
+Built on PM-GoldBoxGameEngine 0.19.3 and the CYD engine 0.219.2.
 
 - **Quick Actions** pick each member's weapon by the damage it can be expected to do, throw flasks of oil, use
   holy water only on foes it hurts, and ready the weapon and shield again after a Quick fight.
@@ -14,8 +14,10 @@ Built on PM-GoldBoxGameEngine 0.19.2 and the CYD engine 0.219.1.
 - **Death Knights of Krynn**: a script's "step ahead" and "3D view again" work.
 - **The Dark Queen of Krynn**: its maps read the right way round; "This is recorded as journal entry n." offers
   the entry; saves with imported characters load in the original too; indoor fights past a map's 16th column or
-  row get their battlefield; its fights set their end flags.
-- **A fight's end** marks "fled" only when the party fled (Treasures, Darkness).
+  row get their battlefield; its fights set their end flags; a script moving the party keeps its place whole on
+  the big maps.
+- **A won fight is no flight** when one member ran (Treasures, Darkness): the party was put back a square after a
+  win when an NPC's morale had broken - the originals count a flight only when nobody is left standing.
 
 ## [0.8.0] - 2026-11-25
 
