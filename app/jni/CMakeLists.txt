@@ -21,6 +21,7 @@ set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${APP_ROOT}/vers
 file(STRINGS "${APP_ROOT}/version.properties" PM_VERSION REGEX "^versionName=")
 string(REPLACE "versionName=" "" PM_VERSION "${PM_VERSION}")
 file(STRINGS "${PM_ROOT}/cyd/VERSION" CYD_VERSION LIMIT_COUNT 1)
+file(STRINGS "${PM_ROOT}/VERSION" PM_FRONT_VERSION LIMIT_COUNT 1)        # (the front end's own: About)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -51,6 +52,7 @@ add_library(main SHARED
     ${FRONT}/main.cpp ${FRONT}/video.cpp ${FRONT}/library.cpp ${FRONT}/settings.cpp
     ${FRONT}/platform_sdl.cpp ${FRONT}/audio_sdl.cpp ${FRONT}/task.cpp ${FRONT}/art.cpp
     ${FRONT}/panel.cpp ${FRONT}/jour.cpp ${FRONT}/touchpad.cpp ${FRONT}/shell.cpp)
-target_compile_definitions(main PRIVATE PM_VERSION="${PM_VERSION}" CYD_VERSION="${CYD_VERSION}")
+target_compile_definitions(main PRIVATE PM_VERSION="${PM_VERSION}" CYD_VERSION="${CYD_VERSION}"
+    PM_FRONT_VERSION="${PM_FRONT_VERSION}")
 target_compile_options(main PRIVATE -O2 -Wall)
 target_link_libraries(main PRIVATE gbengine SDL2::SDL2 log android)

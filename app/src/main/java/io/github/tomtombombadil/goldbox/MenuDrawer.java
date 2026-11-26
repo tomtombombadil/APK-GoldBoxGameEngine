@@ -264,6 +264,9 @@ final class MenuDrawer extends FrameLayout {
                 line.addView(name, new LinearLayout.LayoutParams(px(118), ViewGroup.LayoutParams.WRAP_CONTENT));
                 r.value = text(c, 14, CREAM, false);
                 r.value.setText(it.value);
+                // (About's repo addresses: links, opened in the browser)
+                if (android.text.util.Linkify.addLinks(r.value, android.text.util.Linkify.WEB_URLS))
+                    r.value.setLinkTextColor(GOLD);
                 line.addView(r.value, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
                 line.setGravity(Gravity.TOP);
                 r.box.setMinimumHeight(px(36));

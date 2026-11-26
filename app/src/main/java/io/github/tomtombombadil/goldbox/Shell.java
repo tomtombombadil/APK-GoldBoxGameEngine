@@ -56,6 +56,7 @@ final class Shell {
     private final CompView comp;
     private final Handle hMenu, hComp, hPad;
     private final MenuDrawer drawer;
+    private final JournalView journal;
     private final ChooserView chooser;
     private final Screens.ScanView scan;
     private final Screens.NoticeView notice;
@@ -65,6 +66,10 @@ final class Shell {
     private String key = "";
     private boolean compOut, padOut, compPin, padPin;
     private float padScale = 1f;            // Controls - Button Size (the front end's setting)
+    private CompLayout.Result lay;          // the Companion's layout, as relayout last chose it
+    private final CompLayout.Content content = new CompLayout.Content();   // what its pictures hold (channel 4)
+    private boolean compChecked;            // (its first-time default for this shape: put away when too small)
+    private int[] sentPics = new int[0];
     private int compView = 1;               // 1: the map (a fight: the battlefield), 2: the party
     private final int[] sent = new int[9];
     private boolean sentAny = false;
@@ -91,6 +96,9 @@ final class Shell {
         scan = new Screens.ScanView(a);
         root.addView(scan, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
+        journal = new JournalView(a);
+        root.addView(journal, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
         drawer = new MenuDrawer(a);
         root.addView(drawer, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
@@ -115,9 +123,30 @@ final class Shell {
             case 1: notice.update(t); break;
             case 2: chooser.update(t); relayout(false); break;
             case 3: scan.update(t); relayout(false); break;
+            case 4: companion(new String(t, java.nio.charset.StandardCharsets.UTF_8)); break;
+            case 5: journal.update(t); break;
             default: break;
         }
     }
+
+    /** What the Companion's pictures hold ("comp\t<map rows>\t<members>\t<pitch>\t<fight>"): their rows in use. */
+    private void companion(String s) {
+        final String[] f = s.split("\t");
+        if (f.length < 5 || !f[0].equals("comp")) return;
+        try {
+            final int mapRows = Integer.parseInt(f[1]), n = Integer.parseInt(f[2]), pitch = Integer.parseInt(f[3]);
+            if (mapRows == content.mapRows && n == content.members && pitch == content.pitch) return;
+            content.mapRows = Math.max(1, Math.min(CompLayout.SH, mapRows));
+            content.members = Math.max(0, n);
+            content.pitch = Math.max(1, pitch);
+            relayout(false);
+        } catch (NumberFormatException ignored) {
+            // (not ours)
+        }
+    }
+
+    /** A journal entry is up (Android's own viewer): its keys are its own. */
+    JournalView journal() { return journal; }
 
     /** Android's Back here leaves the app (Tom, 2026-11-24): the chooser up, nothing over it. */
     boolean backLeaves() { return chooser.isUp() && !scan.isUp() && !drawer.isOpen() && !notice.isUp(); }
@@ -142,6 +171,7 @@ final class Shell {
 
     /** A controller's button or stick (true) / a touch (false). */
     void controller(boolean on) {
+        journal.controller(on);
         if (controller == on) return;
         controller = on;
         relayout(false);
@@ -155,6 +185,7 @@ final class Shell {
         compPin = prefs.getBoolean("pin_comp_" + k, d);
         padPin = prefs.getBoolean("pin_pad_" + k, d);
         compOut = compPin && prefs.getBoolean("comp_" + k, d);
+        compChecked = false;
         padOut = padPin && prefs.getBoolean("pad_" + k, d);
     }
 
@@ -236,8 +267,6 @@ final class Shell {
      */
     static boolean tablet(Context c) { return c.getResources().getConfiguration().smallestScreenWidthDp >= 600; }
 
-    // The Companion's pictures: 208 x 200 at rows 1.2 tall (video.h kSideW, kSideH) - height / width
-    private static int picH(int w) { return w * 200 * 6 / (208 * 5); }
 
     /** Lays everything out for the screen as it is now; tells the front end. */
     void relayout(boolean force) {
@@ -245,6 +274,7 @@ final class Shell {
         if (W <= 0 || H <= 0) return;
         final int[] ins = act.cutoutInsets();
         final Rect area = new Rect(ins[0], ins[1], W - ins[2], H - ins[3]);
+        journal.setPadding(ins[0], ins[1], ins[2], ins[3]);     // (a journal entry clear of the cutout too)
         final boolean land = W >= H;
         final boolean phone = !tablet(act);
         // (a tablet near 4:3 sideways: the game maximised, the rest on demand; a wider one - 16:10 - has room
@@ -262,12 +292,8 @@ final class Shell {
         int btn = Math.round(Math.max(46 * dp, Math.min(68 * dp, Math.min(W, H) * 0.14f)) * padScale);
         final int gap = Math.round(6 * dp), sideW = Math.round(52 * dp), m = Math.round(8 * dp);
         int padW = 3 * btn + 2 * gap + sideW + 3 * m, padH = 3 * btn + 2 * gap + 2 * m;
-        // The Companion's own strip at its outer edge: its pin, the swap arrow, the menu (and on a phone held
-        // sideways the map / party words, turned)
-        final int stripW = Math.round(36 * dp), band = Math.round(24 * dp);
 
         final Rect game = new Rect(area), cr = new Rect(), pr = new Rect();
-        boolean stripLeft = false;      // (the Companion's strip at its left edge)
         if (state == PAGES) {
             // (the front end's own pages: the whole screen)
         } else if (land) {
@@ -292,7 +318,6 @@ final class Shell {
                 }
                 if (showPad) pr.set(c0, area.bottom - padH, c1, area.bottom);
                 if (showComp) cr.set(c0, area.top, c1, showPad ? pr.top - m : area.bottom);
-                stripLeft = left;
             } else {
                 fit43(game, area.left, area.top, area.width(), area.height(), true);
             }
@@ -317,51 +342,54 @@ final class Shell {
                     else cr.set(area.left, game.bottom + m, pr.left - m, area.bottom - m);
                 }
             }
-            stripLeft = !phone && showPad ? !left : left;
             if (!showComp && !showPad) fit43(game, area.left, area.top, area.width(), area.height(), true);
         }
         if (cr.height() < 64 * dp || cr.width() < 64 * dp) cr.setEmpty();
 
-        // The Companion (Tom, 2026-11-25: "smart"). Sideways, in the column: the map as wide as the column, at its
-        // top; the party under it, as wide as the map, when its members' rows fit (six take about four fifths of
-        // its picture; the front end cuts the empty rows below them) - else one of them, a tap flipping them. The map is never made smaller for the party. Upright: both, the front
-        // end setting them side by side or stacked, whichever shows them larger.
-        int view = 0;
-        final Rect pic = new Rect(cr);
+        // The Companion: its rooms (the screen less the game and the pad) to CompLayout, which picks by rule - never by
+        // device (Tom, 2026-11-25 evening) - the pictures' places and its strip's
+        lay = null;
         if (!cr.isEmpty()) {
-            if (stripLeft) pic.left += stripW;
-            else pic.right -= stripW;
+            final java.util.List<CompLayout.Room> rooms = new java.util.ArrayList<>();
+            CompLayout.Room outside = null;
             if (land) {
-                final int mh = picH(pic.width()), g = mh / 40;
-                final int ph = Math.min(mh, pic.height() - mh - g);
-                if (mh <= pic.height() && ph >= mh * 3 / 4) {
-                    view = 3;
-                    pic.bottom = pic.top + mh + g + ph;
-                } else {
-                    view = compView;
-                    if (!phone) pic.top += band;        // (a tablet: the map / party words above the picture)
-                    pic.bottom = Math.min(cr.bottom, pic.top + mh);
-                }
+                rooms.add(room("column", cr));
+                if (game.top - area.top >= 40 * dp) outside = new CompLayout.Room("outside", game.left, area.top, game.right, game.top);
+            } else if (!phone && showPad) {
+                rooms.add(new CompLayout.Room("band", area.left, game.bottom + m, area.right, pr.top - m));
+                rooms.add(room("beside", cr));
+                rooms.add(new CompLayout.Room("over", pr.left, game.bottom + m, pr.right, pr.top - m));
+            } else {
+                rooms.add(room("band", cr));
             }
+            content.lead = cr.top <= area.top + 1 ? Math.max(10 * dp, cornerPad()) : 10 * dp;
+            lay = CompLayout.choose(rooms.toArray(new CompLayout.Room[0]), outside, dp, content, left, !left, land,
+                    land ? new String[] {"top", "bottom"} : new String[] {"bottom"}, land && phone, compView == 2 ? 1 : 0,
+                    prefs.getBoolean("pic_swap", false));
+            // (a room too small for a picture worth seeing: the Companion starts put away there - once, its own default)
+            if (lay != null && lay.scale * CompLayout.SW < 150 * dp && !prefs.contains("comp_" + key) && !compChecked) {
+                compChecked = true;
+                compOut = false;
+                relayout(force);
+                return;
+            }
+            compChecked = true;
+            if (lay == null) cr.setEmpty();
         }
-        final boolean single = view == 1 || view == 2;
-        comp.single = single;
-        comp.stripLeft = stripLeft;
-        comp.stripW = stripW;
-        comp.band = single && !phone ? band : 0;
-        comp.turnedHint = single && phone;
-        comp.topPad = cr.top <= area.top + 1 ? cornerPad() : Math.round(6 * dp);
-        // (the menu's button in the strip, under the swap arrow - unless a phone's turned words then won't fit
+        final Rect box = new Rect();
+        if (lay != null) box.set((int) Math.floor(lay.x0), (int) Math.floor(lay.y0), (int) Math.ceil(lay.x1), (int) Math.ceil(lay.y1));
+        comp.lay = lay;
+        // (the menu's button in the strip - unless, a phone sideways with one picture, the turned words then won't fit
         // along it: then in the pad's column)
         boolean menuInStrip = true;
-        if (comp.turnedHint && showPad) {
+        if (lay != null && lay.single && lay.stripVertical && land && phone && showPad) {
             final Paint t = paint(MUTED);
             t.setTextSize(11 * dp);
-            final float need = comp.topPad + 3 * (26 * dp + 12 * dp) + t.measureText("tap for the party") + 8 * dp;
+            final float need = 10 * dp + 3 * (26 * dp + 12 * dp) + t.measureText("tap for the party") + 8 * dp;
             menuInStrip = cr.height() >= need;
         }
         comp.menuHere = menuInStrip;
-        pad.menuHere = !cr.isEmpty() && !menuInStrip;
+        pad.menuHere = lay != null && !menuInStrip;
         pad.btn = btn;
         pad.tray = !land;
         // (its small buttons: sideways at the screen's edge, the keys toward the game; upright the keys at the
@@ -369,7 +397,7 @@ final class Shell {
         pad.sideLeft = land ? left : !left;
         pad.keysLeft = !pad.sideLeft;
         pad.swapHere = cr.isEmpty();
-        place(comp, cr.left, cr.top, cr.width(), cr.height());
+        place(comp, box.left, box.top, box.width(), box.height());
         place(pad, pr.left, pr.top, pr.width(), pr.height());
         comp.invalidate();
         pad.invalidate();
@@ -405,16 +433,33 @@ final class Shell {
             place(hPad, 0, 0, 0, 0);
         }
 
-        final boolean noComp = cr.isEmpty() || pic.width() <= 0 || pic.height() <= 0;
+        // The front end: the game's place, the Companion's box (view 4: each picture where the app put it)
+        final int[] pics = new int[lay == null ? 0 : lay.pics.length * 7];
+        for (int i = 0; lay != null && i < lay.pics.length; ++i) {
+            final CompLayout.Pic q = lay.pics[i];
+            final int px0 = Math.round(q.x), py0 = Math.round(q.y);
+            pics[i * 7] = q.which;
+            pics[i * 7 + 1] = px0;
+            pics[i * 7 + 2] = py0;
+            pics[i * 7 + 3] = Math.round(q.x + q.w) - px0;
+            pics[i * 7 + 4] = Math.round(q.y + q.h) - py0;
+            pics[i * 7 + 5] = q.top;
+            pics[i * 7 + 6] = q.rows;
+        }
+        final boolean noComp = lay == null;
         final int[] v = {game.left, game.top, game.width(), game.height(),
-                noComp ? 0 : pic.left, noComp ? 0 : pic.top, noComp ? 0 : pic.width(), noComp ? 0 : pic.height(), view};
-        boolean same = sentAny;
+                noComp ? 0 : box.left, noComp ? 0 : box.top, noComp ? 0 : box.width(), noComp ? 0 : box.height(), 4};
+        boolean same = sentAny && java.util.Arrays.equals(pics, sentPics);
         for (int i = 0; i < 9 && same; ++i) same = v[i] == sent[i];
         if (same && !force) return;
         System.arraycopy(v, 0, sent, 0, 9);
+        sentPics = pics;
         sentAny = true;
+        GoldBoxActivity.nativePictures(pics);
         GoldBoxActivity.nativeLayout(v[0], v[1], v[2], v[3], v[4], v[5], v[6], v[7], v[8]);
     }
+
+    private static CompLayout.Room room(String name, Rect r) { return new CompLayout.Room(name, r.left, r.top, r.right, r.bottom); }
 
     /** The largest 4:3 in w x h at (x, y): at the left and middle, or centred. */
     private static void fit43(Rect r, int x, int y, int w, int h, boolean centre) {
@@ -489,6 +534,23 @@ final class Shell {
             p.moveTo(cx - 3.5f * u, cy);
             p.lineTo(cx - 6 * u, cy + 2.5f * u);
             p.lineTo(cx - 3.5f * u, cy + 5 * u);
+        } else if (kind == 3) {
+            // (swap the map and the party: two boxes, an arrow each way between them)
+            final Paint box = paint(CREAM);
+            box.setStyle(Paint.Style.STROKE);
+            box.setStrokeWidth(1.4f * dp);
+            c.drawRect(cx - 6.5f * u, cy - 5.5f * u, cx - 1.5f * u, cy - 0.5f * u, box);
+            c.drawRect(cx + 1.5f * u, cy + 0.5f * u, cx + 6.5f * u, cy + 5.5f * u, box);
+            p.moveTo(cx + 1.5f * u, cy - 4 * u);
+            p.quadTo(cx + 4 * u, cy - 4 * u, cx + 4 * u, cy - 1.5f * u);
+            p.moveTo(cx + 2.5f * u, cy - 2.8f * u);
+            p.lineTo(cx + 4 * u, cy - 1.5f * u);
+            p.lineTo(cx + 5.5f * u, cy - 2.8f * u);
+            p.moveTo(cx - 1.5f * u, cy + 4 * u);
+            p.quadTo(cx - 4 * u, cy + 4 * u, cx - 4 * u, cy + 1.5f * u);
+            p.moveTo(cx - 2.5f * u, cy + 2.8f * u);
+            p.lineTo(cx - 4 * u, cy + 1.5f * u);
+            p.lineTo(cx - 5.5f * u, cy + 2.8f * u);
         } else if (kind == 2) {
             // (the menu: three lines)
             for (int i = -1; i <= 1; ++i) {
@@ -629,45 +691,62 @@ final class Shell {
      * the party (one shown); a sideways swipe puts it away (unpinned).
      */
     final class CompView extends View {
-        boolean single, stripLeft, turnedHint, menuHere = true;
-        int stripW, band, topPad;
+        CompLayout.Result lay;
+        boolean menuHere = true;
         float downX, downY;
         boolean moved;
 
         CompView(Context c) {
             super(c);
-            setContentDescription("Companion: tap to switch between the map and the party");
+            setContentDescription("Companion: the map and the party");
         }
 
         private float r() { return 13 * dp; }
-        private float sx() { return stripLeft ? stripW / 2f : getWidth() - stripW / 2f; }
-        private float pinY() { return topPad + r(); }
-        private float swapY() { return pinY() + 2 * r() + 12 * dp; }
-        private float menuY() { return swapY() + 2 * r() + 12 * dp; }
+
+        /** The strip's buttons as shown: the pin, swap sides, swap the pictures (both shown), the menu. */
+        private int[] kinds() {
+            final java.util.List<Integer> k = new java.util.ArrayList<>();
+            k.add(-1);
+            k.add(0);
+            if (lay != null && !lay.single) k.add(3);
+            if (menuHere) k.add(2);
+            final int[] out = new int[k.size()];
+            for (int i = 0; i < out.length; ++i) out[i] = k.get(i);
+            return out;
+        }
+
+        // (in the view's own coordinates: the layout's are the screen's)
+        private float bx(int i) { return lay.bx[i] - getLeft(); }
+        private float by(int i) { return lay.by[i] - getTop(); }
 
         @Override
         protected void onDraw(Canvas c) {
-            drawPin(c, sx(), pinY(), r(), compPin);
-            drawRound(c, sx(), swapY(), r(), 0, false);
-            if (menuHere) drawRound(c, sx(), menuY(), r(), 2, false);
-            if (!single) return;
+            if (lay == null) return;
+            final int[] k = kinds();
+            for (int i = 0; i < k.length; ++i) {
+                if (k[i] < 0) drawPin(c, bx(i), by(i), r(), compPin);
+                else drawRound(c, bx(i), by(i), r(), k[i], false);
+            }
+            if (!lay.single) return;
+            // (one picture: the words for the tap, on past the strip's last button - turned along a strip down the side)
             final Paint t = paint(MUTED);
             t.setTextSize(11 * dp);
-            t.setTextAlign(Paint.Align.CENTER);
             final String words = compView == 1 ? "tap for the party" : "tap for the map";
-            if (turnedHint) {
-                // (turned along the strip, under the pin and the arrow)
-                final float y = (menuHere ? menuY() : swapY()) + r() + 12 * dp + t.measureText(words) / 2;
-                if (y + t.measureText(words) / 2 > getHeight()) return;
-                c.save();
-                c.translate(sx() + 4 * dp * (stripLeft ? -1 : 1), y);
-                c.rotate(stripLeft ? -90 : 90);
-                c.drawText(words, 0, 0, t);
-                c.restore();
-            } else if (band > 0) {
-                final float x0 = stripLeft ? stripW : 0, w = getWidth() - stripW;
-                c.drawText(words, x0 + w / 2, band - 7 * dp, t);
-            }
+            final float tw = t.measureText(words), last = k.length - 1;
+            final float step = (float) Math.hypot(lay.stepX, lay.stepY);
+            if (step <= 0) return;
+            final float ux = lay.stepX / step, uy = lay.stepY / step;
+            final float d = r() + 12 * dp + tw / 2;
+            final float cx = bx((int) last) + ux * d, cy = by((int) last) + uy * d;
+            if (cx - tw / 2 < 0 && !lay.stripVertical || cx + tw / 2 > getWidth() && !lay.stripVertical) return;
+            if (lay.stripVertical && cy + tw / 2 > getHeight()) return;
+            t.setTextAlign(Paint.Align.CENTER);
+            c.save();
+            c.translate(cx, cy);
+            final boolean atLeft = bx(0) < getWidth() / 2f;
+            if (lay.stripVertical) c.rotate(atLeft ? -90 : 90);
+            c.drawText(words, 0, 4 * dp, t);
+            c.restore();
         }
 
         @Override
@@ -686,21 +765,28 @@ final class Shell {
                     }
                     return true;
                 case MotionEvent.ACTION_UP: {
-                    if (moved) return true;
+                    if (moved || lay == null) return true;
                     final float x = e.getX(), y = e.getY(), hit = r() + 8 * dp;
-                    if (Math.hypot(x - sx(), y - pinY()) < hit) {
-                        togglePin(false);
-                    } else if (Math.hypot(x - sx(), y - swapY()) < hit) {
+                    final int[] k = kinds();
+                    for (int i = 0; i < k.length; ++i) {
+                        if (Math.hypot(x - bx(i), y - by(i)) >= hit) continue;
+                        if (k[i] < 0) {
+                            togglePin(false);
+                            return true;
+                        }
                         performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                        swapHands();
-                    } else if (menuHere && Math.hypot(x - sx(), y - menuY()) < hit) {
-                        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                        buttonTap(START);
-                    } else if (single && (stripLeft ? x > stripW : x < getWidth() - stripW)) {
+                        if (k[i] == 0) swapHands();
+                        else if (k[i] == 3) {
+                            prefs.edit().putBoolean("pic_swap", !prefs.getBoolean("pic_swap", false)).apply();
+                            relayout(false);
+                        } else buttonTap(START);
+                        return true;
+                    }
+                    if (lay.single) {
                         compView = compView == 1 ? 2 : 1;
                         performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
-                        invalidate();
                         relayout(false);
+                        invalidate();
                     }
                     return true;
                 }

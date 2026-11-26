@@ -3,6 +3,22 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.8.0] - 2026-11-25
+
+Built on PM-GoldBoxGameEngine 0.19.0 and the CYD engine 0.217.0. Tom's notes from the S8+, the Pixel 10a and the S2.
+
+- **The Companion lays itself out on every screen**: from the room left beside or under the game and the controls,
+  it tries the map and the party stacked, side by side, the party in two columns, or each in a room of its own,
+  with its buttons down the side or across - and keeps whichever shows them largest. The pictures sit next to the
+  game; the buttons at your hand's side, below the pictures when upright, never between them. One picture with the
+  tap to switch only when both won't fit legibly. A new button swaps the map's and the party's places.
+- **Journal entries in Android's own viewer**: a picture opens fitted whole - pinch to zoom, drag to move it,
+  double-tap to zoom in and back; a text entry in a scrolling page in a proper typeface. No more "X Width  B Back"
+  or entry-number lines; with a controller, X and B show as round buttons.
+- **Display › Journal Font**: Journal (Fondamento, like the printed journal's hand), Book (Alegreya), Serif
+  (Liberation Serif) or Plain (Roboto).
+- **Menu › System › About**: the versions, the three GitHub repos, the licence and credits.
+
 ## [0.7.0] - 2026-11-25
 
 Built on PM-GoldBoxGameEngine 0.18.1 and the CYD engine 0.217.0. Tom's notes from his Galaxy Tab S8+.

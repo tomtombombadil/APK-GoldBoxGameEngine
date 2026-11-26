@@ -121,9 +121,13 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
     **A fourth strip button swaps the map's and the party's places** (when both are shown). Simulated per device
     before building (Pixel 10a, S8+, S2, both ways round).
   - **Journal fonts** (Display › Journal Font): Journal - Fondamento Italic (default, the printed journal's
-    chancery hand), Book - Alegreya Italic, Serif - Tinos (Times New Roman's shape), Plain - Roboto. Bundled under
+    chancery hand), Book - Alegreya Italic, Serif - Liberation Serif (Times New Roman's shape; Tinos not to be had as a file), Plain - Roboto. Bundled under
     their free licences (OFL / Apache 2.0), credited in About.
-  - **About** in the menu: the engine's information, Tom's GitHub repo address (the rest of his list was cut off).
+  - **About** in the menu (System › About): the engine's information, Tom's GitHub repo address (the rest of his
+    list was cut off); built: the app's, front end's and engine's versions and repos, MIT, credits.
+  - **Built as** (0.8.0): `CompLayout` (plain Java, the rules above; the front end draws each picture where the app
+    says - view 4, `nativePictures`; channel 4 says what the pictures hold); `JournalView` (channel 5; fonts in
+    `assets/fonts` with their OFL texts). Under 150dp a picture, the Companion starts put away (its own default).
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
@@ -178,7 +182,7 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
 - The redesign's views over SDL's surface (`Shell` lays them out): `Shell` (the pad, the Companion's room, the
   edge handles), `MenuDrawer` (the menu and its pages, Device Info, the Button Guide, the journal list, Quick
   Actions), `Screens` (notices / messages, the scan's page), `ChooserView` (the game chooser). Their words come
-  from the front end as text (`onShellText`, channels 0 - 3; formats in the PM repo's main.cpp `android_*_text`),
+  from the front end as text (`onShellText`, channels 0 - 5 - 4 the Companion's content, 5 the journal; formats in the PM repo's main.cpp `android_*_text`),
   their taps go back as its buttons (`nativeButton`) or ops (`nativeMenu`). **A screen of the port's own is
   never drawn by SDL here** - a new one the front end adds needs its view here in the same version.
   `saveArt` is the scan's step for the chooser's pictures (APPART.IMG).

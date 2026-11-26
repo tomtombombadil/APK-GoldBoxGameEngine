@@ -24,11 +24,17 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
       folder screen counting the nine Steam games; the menu's tab at the hand's side (and after the swap arrow),
       the strip's menu button, the drawer from that side, "Gold Box Game Engine", Rescan / Clean Up under System.
 - [ ] The folder screen's rework: Tom to pick from the suggestions (2026-11-25).
-- [ ] The journal, Android's own (CLAUDE.md "Tom's notes, 2026-11-25 afternoon"): image viewer, text pop-up,
-      font setting, X / B buttons only with a controller.
-- [ ] The Companion's layout, smart on every device and way of holding (same section) - tested on phone, 16:10
-      and 4:3 tablet sizes, both ways round.
-- [ ] Menu › About: the engine's information, the GitHub repo (Tom's full list pending).
+- [ ] 0.8.0 on the Pixel 10a, the S8+ and the S2, both ways round: the Companion's layout (the map and the party
+      as large as they fit, nearest the game; the strip at the hand's side - down the side or across, below the
+      pictures upright; the new button swapping the map's and the party's places; the tap only when one picture
+      shows); a journal entry - a picture (fitted whole, pinch, drag, double-tap), a text one in each Journal Font,
+      a controller's X / B (shown only with one); Menu › System › About (its links open the browser).
+- [x] The journal, Android's own (0.8.0): image viewer, text pop-up, Display › Journal Font, X / B only with a
+      controller.
+- [x] The Companion's layout by rule on every device (0.8.0, `CompLayout`; 31,000 random screens checked - nothing
+      overlapping, nothing off the screen).
+- [x] Menu › System › About (0.8.0): the app's, front end's and engine's versions and repos, licence, credits (Tom's
+      list was cut off - anything else he wants on it to be added).
 - [x] Store screenshots (2026-11-25, Tom approved): 4 phone, 4 tablet, with stand-ins for the game. Retake
       phoneScreenshots/4.png (the folder screen) after its rework.
 - [ ] The scan's chooser pictures: on the emulator 2 of 9 stand-in covers came out empty (APPART.IMG 0 bytes;

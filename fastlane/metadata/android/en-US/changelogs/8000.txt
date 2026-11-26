@@ -1,0 +1,1 @@
+The Companion lays itself out to fit any screen: map and party as large as they fit, next to the game, its buttons at your hand's side, and a new button to swap the map and the party. Journal entries open in Android's own viewer: pictures with pinch, drag and double-tap zoom; text in a readable typeface (Display › Journal Font). About in the menu, under System.

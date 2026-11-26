@@ -34,6 +34,9 @@ public class GoldBoxActivity extends SDLActivity {
     /** The menu drawer's taps (MenuDrawer: CLOSE, CHOOSE, CHANGE, BACK, SET). */
     static native void nativeMenu(int op, int index, int value);
 
+    /** The Companion's pictures as the app placed them (view 4): groups of 7 - which, x, y, w, h, top row, rows. */
+    static native void nativePictures(int[] v);
+
     private Shell shell;
 
     @Override
@@ -120,12 +123,15 @@ public class GoldBoxActivity extends SDLActivity {
         // (a controller in use: no pad - a touch brings it back)
         if (shell != null && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() != KeyEvent.KEYCODE_BACK
                 && fromController(event.getDevice(), event.getSource())) shell.controller(true);
+        // (a journal entry up: Back, B and the rest are its own - not the game's)
+        if (shell != null && shell.journal().key(event)) return true;
         return super.dispatchKeyEvent(event);
     }
 
     @Override
     public boolean dispatchGenericMotionEvent(MotionEvent event) {
         if (shell != null && fromController(event.getDevice(), event.getSource())) shell.controller(true);
+        if (shell != null && fromController(event.getDevice(), event.getSource()) && shell.journal().motion(event)) return true;
         return super.dispatchGenericMotionEvent(event);
     }
 
@@ -147,7 +153,15 @@ public class GoldBoxActivity extends SDLActivity {
             conf = new File(folder, "conf").getAbsolutePath();
             log = new File(folder, "log.txt").getAbsolutePath();
         }
-        return new String[] {"--games", games, "--conf", conf, "--log", log};
+        return new String[] {"--games", games, "--conf", conf, "--log", log, "--app-version", appVersion()};
+    }
+
+    private String appVersion() {
+        try {
+            return getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (Exception e) {
+            return "?";
+        }
     }
 
     /**
