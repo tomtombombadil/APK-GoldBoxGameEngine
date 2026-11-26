@@ -162,11 +162,11 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   lint fails; ScummVM is Emulator, EasyRPG Player Role-Playing Game). Before
   a merge request: `fdroid lint`, `fdroid rewritemeta` (no change) and `fdroid scanner` run here in a venv against
   the fdroiddata fork's config (2026-11-25: all clean).
-- **While F-Droid's merge request is open** (!59131): work on `main` freely; never rewrite history (no force
-  push) or move / delete a `v` tag - F-Droid builds the recipe's commit. **A new release during the review leaves the merge request alone** (Tom,
-  2026-11-25, option 1): it stays on 0.7.0; once merged, F-Droid's update check (`UpdateCheckMode: Tags`) finds
-  the newer `v` tags by itself. The recipe is moved to a newer build only if a reviewer asks or 0.7.0 has a fault
-  they'd reject (then its full hash replaces the old build - only the latest kept).
+- **F-Droid's merge request !59131 was closed** (2026-11-26) by a reviewer: the project is under three months old
+  (the repo dates from 2026-11-23). **Resubmit from 2027-02-23 on** - a new merge request, the recipe on the
+  latest release then (its full hash; only that build). Until then: GitHub releases only. Never move or delete a
+  `v` tag or rewrite history anyway (F-Droid's update check builds the tags once it is in). IzzyOnDroid is no
+  way round it: its policy turns down games and AI-written code.
 - **F-Droid signs its own builds with its own key** (Tom, 2026-11-25): no `Binaries` / `AllowedAPKSigningKeys`
   in the recipe, so no reproducible-build upkeep. The GitHub releases (Tom's key) and F-Droid's are separate
   installs: moving from one to the other needs an uninstall (the GoldBox folder and its saves stay; the private
