@@ -107,4 +107,10 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
   wall / door rules put right from them (every platform gains, no cluebook needed to play); (2) markers at the scan
   from the player's own cluebook: the grid, the numbers on the squares (the text layer, and a digit reader for the
   rest), the legend's words; (3) the Companion: a marker's number on its square, its words on a tap.
+- [ ] The Companion's map: doors, archways and entrances to another map / area each drawn differently (Tom,
+  2026-11-27). Archways: engine 0.222.2 (an opening in the wall line). Entrances: the squares whose step script
+  leaves for another area - to be found (a dry run of the script, as the secret doors').
+- [ ] The cluebook map pictures (an Enhancements toggle, PortMaster and Android): a table per cluebook PDF (Steam,
+  GOG) made by tools/cluebook - each map's page, place and square size - the scan cutting each from the player's
+  PDF; the Companion drawing it with the party's arrow. Area names from the cluebooks.
 
