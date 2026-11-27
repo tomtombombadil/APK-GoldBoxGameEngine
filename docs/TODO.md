@@ -24,7 +24,14 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
       controls), the column's width with the controls away; the chooser's toggle and Display › Game Chooser; the
       folder screen counting the nine Steam games; the menu's tab at the hand's side (and after the swap arrow),
       the strip's menu button, the drawer from that side, "Gold Box Game Engine", Rescan / Clean Up under System.
-- [ ] The folder screen's rework: Tom to pick from the suggestions (2026-11-25).
+- [ ] The folder screen's rework: Tom to pick (the 2026-11-25 list was lost from the record; made again
+      2026-11-26 and kept here): 1. the Material 3 look of the chooser (cards, rounded buttons, the gold
+      accents); 2. the games found listed by name, each with GOG / Steam and whether its journal PDF is there, in
+      place of the bare count; 3. a status line with an icon (ready / needs permission / no games yet); 4. the
+      three folder kinds as choice cards (Default / Your own folder / Private), the one in use ticked, each with
+      its one-line trade-off; 5. "Copying from a Windows PC" as numbered steps that fold open; 6. "Open in Files"
+      (the folder in the phone's file manager) and a copy button for the path; 7. a refresh button (look again
+      without leaving); 8. the free space on the device shown.
 - [ ] 0.8.0 on the Pixel 10a, the S8+ and the S2, both ways round: the Companion's layout (the map and the party
       as large as they fit, nearest the game; the strip at the hand's side - down the side or across, below the
       pictures upright; the new button swapping the map's and the party's places; the tap only when one picture
