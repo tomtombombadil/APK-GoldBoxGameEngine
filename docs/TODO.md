@@ -95,10 +95,16 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [x] A scan's first page that is the cover front and back as one spread: detected, put right. (0.9.3)
 - [x] The chooser's tiles sooner after the app opens. (0.9.3)
 - [ ] The Companion's maps from the Cluebooks' maps, with their legends' markers (engine: CYD, PortMaster,
-  Android) - a plan first. Waiting on the cluebook PDFs (Tom to add them to the Project: only the journals are
-  there). Plan: (1) read each cluebook map at scan time from the player's own PDF (as the journals - nothing of
-  SSI's in our repos): the grid found on the page, each square's walls / doors / secret doors and its printed
-  number; (2) the engine's map checked against it - where they differ, the engine's rules for secret doors put
-  right (they guess today: plain_walls / play::map_secret); (3) the markers: the legend's numbers on the squares,
-  their words from the legend's text layer, shown in the Companion (a number on the square, the words on a tap).
+  Android). Tom added the Steam PDFs 2026-11-27 (GOG to follow). First look (Curse, Yulash - cluebook PDF page 12):
+  the map is a clean 16 x 16 grid, 300 dpi, found exactly by the ink (cell 60.2 px); walls read from it; it picks
+  the game's own map by itself (GEO3 block 16: 93% of sides agree, the next best 65%). Where they differ: every
+  side with door code 2 (wall types 3, 5, 10, 12 - 90 of them here) is an ordinary door in the cluebook, and the
+  Companion draws them all red "Locked"; of the engine's three secret doors, two are on the map's outer edge and
+  one is a wall in the cluebook (the key has wall / door / archway only - no secret doors, no locked doors). The
+  text layer has the axis numbers and about 60% of the room numbers with their places; the legend's text is there,
+  OCR-noisy. Proposed: (1) a checking tool (engine repo, Python, reads the player's cluebooks, ships nothing of
+  SSI's) - every cluebook map matched to its game map, the differences listed per game, Steam and GOG; the engine's
+  wall / door rules put right from them (every platform gains, no cluebook needed to play); (2) markers at the scan
+  from the player's own cluebook: the grid, the numbers on the squares (the text layer, and a digit reader for the
+  rest), the legend's words; (3) the Companion: a marker's number on its square, its words on a tap.
 
