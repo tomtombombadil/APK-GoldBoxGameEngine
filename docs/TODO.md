@@ -27,10 +27,10 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [ ] 0.9.0 on your devices: hold a game in the chooser - Add to Home Screen - the shortcut opens the game; Back
       at the chooser on the Pixel / S8+ (Android 13+: the home screen's preview as you swipe); the folder screen
       under the status bar; a Steam journal entry or two (Treasures' Introduction, a Death Knights entry).
-- [ ] The Dark Queen's Introduction (the General's letter): its scan's text is unreadable - Tom to choose: shown as
-      a picture of the page, or left out.
-- [ ] The adaptive icon: proposals shown 2026-11-26 - A the chest refined (suggested), B a gilt frame round "GB",
-  C a gold d20, D a map square with the party's arrow; each with a monochrome layer (themed icons). Tom to choose.
+- [ ] The Dark Queen's Introduction (the General's letter): shown as a picture of its page, as the GOG journals'
+  (Tom, 2026-11-26).
+- [ ] The adaptive icon: the treasure chest kept, in metallic gold, more of a treasure chest - options to Tom
+  first (Tom, 2026-11-26).
 - [ ] Foldables / split screen: mock-ups shown 2026-11-26 - closed: the phone's rules; open: a tablet upright; split
   screen: the window's own size; new only tabletop (half open: the game above the hinge, the Companion and pad
   below - Jetpack WindowManager's fold posture). Tom to look.

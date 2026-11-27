@@ -143,6 +143,9 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
     with nothing over it - there Android's own gesture closes it); SetupActivity edge to edge; backup rules
     (`res/xml`: cloud - the preferences and the private folder's conf; device transfer - the private folder whole).
     Saves in Internal storage › GoldBox are beyond any app's backup (Android's rule for shared storage).
+- **Tom, 2026-11-26 night**: the Dark Queen's Steam Introduction (the General's letter - its text layer
+  unreadable) is **a picture of the page, as the GOG journals' pages are**. **The icon stays the treasure chest**,
+  made to look like **real metallic gold** and more like a treasure chest - options shown to Tom first.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
