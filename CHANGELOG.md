@@ -3,6 +3,13 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.9.5] - 2026-11-27
+
+Built on PM-GoldBoxGameEngine 0.19.23 and the CYD engine 0.222.2.
+
+- **Archways on the Companion's map**: drawn as an opening in the wall, no longer as a door - the engine tells them
+  by the wall's own picture (see-through in the middle).
+
 ## [0.9.4] - 2026-11-27
 
 Built on PM-GoldBoxGameEngine 0.19.22 and the CYD engine 0.221.20.

@@ -1,0 +1,1 @@
+Archways on the Companion's map are drawn as openings in the wall, no longer as doors - told apart by the game's own wall pictures.
