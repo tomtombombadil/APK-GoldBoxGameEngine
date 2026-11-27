@@ -95,5 +95,10 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [x] A scan's first page that is the cover front and back as one spread: detected, put right. (0.9.3)
 - [x] The chooser's tiles sooner after the app opens. (0.9.3)
 - [ ] The Companion's maps from the Cluebooks' maps, with their legends' markers (engine: CYD, PortMaster,
-  Android) - a plan first.
+  Android) - a plan first. Waiting on the cluebook PDFs (Tom to add them to the Project: only the journals are
+  there). Plan: (1) read each cluebook map at scan time from the player's own PDF (as the journals - nothing of
+  SSI's in our repos): the grid found on the page, each square's walls / doors / secret doors and its printed
+  number; (2) the engine's map checked against it - where they differ, the engine's rules for secret doors put
+  right (they guess today: plain_walls / play::map_secret); (3) the markers: the legend's numbers on the squares,
+  their words from the legend's text layer, shown in the Companion (a number on the square, the words on a tap).
 
