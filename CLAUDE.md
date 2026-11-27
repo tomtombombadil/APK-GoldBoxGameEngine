@@ -185,6 +185,11 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   map. **PortMaster and Android only** (the CYD's resolution can't). Archways drawn as archways, not doors (he knew;
   "you can pass through unhindered" either way, but shown properly is better). **17:44: doors, archways and
   entrances to another map / area each drawn differently** on the Companion's map.
+- **Tom, 2026-11-27 (17:54)** - the cluebooks' symbols: **a secret door is a wall line with an S laid over it** (the
+  S's upper half one side of the line, its lower half the other) - not a hook or an arch; **an archway is a U turned
+  across the wall, bisecting the line** (which way the U opens means nothing - a convention, the same through a
+  map). **One-way doors are "concealed doors"**: they open from one side only, are often seen only from that side,
+  and once through there is no way back - to be shown as such.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
