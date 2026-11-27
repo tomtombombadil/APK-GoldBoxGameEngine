@@ -3,6 +3,15 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.9.1] - 2026-11-27
+
+Built on PM-GoldBoxGameEngine 0.19.11 and the CYD engine 0.221.9.
+
+- **The Dark Queen's Steam journal: the Introduction is the letter itself** - the General's letter, as a picture of
+  its page (as the GOG journals' entries are), in place of the two broken lines the PDF's text had for it. Pinch to
+  zoom as any picture entry. Journals are made again at the first start.
+- The engine's Dark Queen fixes since 0.221.6 (its treasures: script rewards and the treasure menu).
+
 ## [0.9.0] - 2026-11-26
 
 Built on PM-GoldBoxGameEngine 0.19.10 and the CYD engine 0.221.6.
