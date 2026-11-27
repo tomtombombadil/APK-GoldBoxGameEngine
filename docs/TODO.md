@@ -29,9 +29,9 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
       under the status bar; a Steam journal entry or two (Treasures' Introduction, a Death Knights entry).
 - [x] The Dark Queen's Introduction (the General's letter): shown as a picture of its page, as the GOG journals'
   (Tom, 2026-11-26) - 0.9.1 (engine 0.221.9 `fix_picture`).
-- [ ] The adaptive icon: the treasure chest kept, in metallic gold, more of a treasure chest - options to Tom
-  first (Tom, 2026-11-26) - shown: A solid gold, B oak with gold fittings, C open with treasure, D oak gold-edged
-  with coins (metallic gradients; all Android vector drawables, no PNGs). Tom to choose.
+- [ ] The adaptive icon: A (metallic gold chest, centred) - Tom, 2026-11-27.
+- [ ] Journal text entries: paragraphs indented, space between (Tom, 2026-11-27).
+- [ ] Journal menu: view the journal PDF a page at a time, and the game's other PDFs (Tom, 2026-11-27).
 - [ ] Foldables / split screen: mock-ups shown 2026-11-26 - closed: the phone's rules; open: a tablet upright; split
   screen: the window's own size; new only tabletop (half open: the game above the hinge, the Companion and pad
   below - Jetpack WindowManager's fold posture). Tom to look.

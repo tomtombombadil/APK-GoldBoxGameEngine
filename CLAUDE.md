@@ -146,6 +146,10 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
 - **Tom, 2026-11-26 night**: the Dark Queen's Steam Introduction (the General's letter - its text layer
   unreadable) is **a picture of the page, as the GOG journals' pages are**. **The icon stays the treasure chest**,
   made to look like **real metallic gold** and more like a treasure chest - options shown to Tom first.
+- **Tom, 2026-11-27**: **the icon is A** - the chest in metallic gold, centred (the old one sat a little low).
+  **Steam journal text entries: paragraphs indented, a little space between them** (they ran together). **The
+  Journal menu: the journal PDF itself, a page at a time** (a book spread split into its two pages, never the
+  double layout), **and the game's other PDFs** (manual, rules, cluebook ...) - all in the Journal menu.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
