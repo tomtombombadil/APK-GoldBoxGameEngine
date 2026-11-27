@@ -169,6 +169,12 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   ahead; Back and B close it on the key's release (its down had closed it and its release reached the game). The
   start: PM 0.19.21's platform layer lists a folder without opening its entries, remembers found folders and keeps a
   listing 3 s (forgotten on any write) - the engine's scan (game_find.h, the boards' way) re-lists folders.
+- **Tom, 2026-11-27 (15:04)**: **no scanning when the app opens** - "the whole purpose of the 'Scan the SD Card'
+  phase ... is to be run ONCE and not needed again unless the user adds or deletes a game's files ... It should all
+  already be prepared and waiting for the app." The games found (each folder's game and where its files are) are
+  kept from the scan and read back at a start (PM repo). He has added the Steam PDFs (cluebooks, manuals, quick
+  start guides) to the Project - Curse's in two zips, Secret's cluebook compressed; the GOG ones to follow, to
+  compare: both kinds must work.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
