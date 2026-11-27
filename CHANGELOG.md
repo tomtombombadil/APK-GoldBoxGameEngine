@@ -3,6 +3,14 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.9.4] - 2026-11-27
+
+Built on PM-GoldBoxGameEngine 0.19.22 and the CYD engine 0.221.20.
+
+- **No scanning when the app opens**: what the scan found - each game folder's game and where its files are - is
+  kept and read back at a start. A start only notices a game folder added or taken away (the names of the games
+  folder's own folders) or a game's files gone, and looks again then; Rescan looks afresh as ever.
+
 ## [0.9.3] - 2026-11-27
 
 Built on PM-GoldBoxGameEngine 0.19.21 and the CYD engine 0.221.20.

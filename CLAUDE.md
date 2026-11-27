@@ -174,7 +174,9 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   already be prepared and waiting for the app." The games found (each folder's game and where its files are) are
   kept from the scan and read back at a start (PM repo). He has added the Steam PDFs (cluebooks, manuals, quick
   start guides) to the Project - Curse's in two zips, Secret's cluebook compressed; the GOG ones to follow, to
-  compare: both kinds must work.
+  compare: both kinds must work. **Built** (0.9.4, PM 0.19.22): `library::scan_kept` - a scan writes
+  games/_CYD/GAMES.TXT (the top folders it saw, each game: folder, data_dir, game, hlib, files); a start reads it
+  when the top folders' names are the same and each data_dir exists, else scans.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.

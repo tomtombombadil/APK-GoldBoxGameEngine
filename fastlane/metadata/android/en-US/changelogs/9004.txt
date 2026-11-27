@@ -1,0 +1,1 @@
+No scanning when the app opens: the games the scan found are kept and read back at a start, so the game chooser comes up sooner. A game folder added or removed is still noticed, and Rescan looks afresh.
