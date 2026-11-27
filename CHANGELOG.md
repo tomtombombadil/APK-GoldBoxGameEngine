@@ -3,6 +3,21 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.9.3] - 2026-11-27
+
+Built on PM-GoldBoxGameEngine 0.19.21 and the CYD engine 0.221.20.
+
+- **The PDFs read as books**: sideways two pages side by side, as an open book (the cover alone, then the pages
+  paired as the book's); upright one page. **A scan whose first page is the cover front and back** (the Krynn
+  journals) **opens on the front cover**, the back cover last.
+- **Page turns without the wait**: pages are rendered once and kept in memory, the next ones rendered ahead while
+  you read.
+- **Back from a PDF returns to the Journal list** (it had gone on to the main menu).
+- **Document names in title case** ("Codewheel Pictures").
+- **A much quicker start to the game chooser**: listing a folder no longer opens every file in it - each open a
+  slow step through Android's shared storage, and the games' scan lists folders again and again. On the emulator
+  the scan's part of the start went from 20 s to under 5 s; the start's times are now in the log.
+
 ## [0.9.2] - 2026-11-27
 
 Built on PM-GoldBoxGameEngine 0.19.12 and the CYD engine 0.221.9.

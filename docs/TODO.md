@@ -88,12 +88,12 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
       the repo.
 
 ## Tom, 2026-11-27 afternoon
-- [ ] Back from a PDF: the Journal list, not the main menu.
-- [ ] Document names in title case ("Codewheel Pictures").
-- [ ] PDF page turns without the wait (render ahead / held in memory).
-- [ ] Sideways: two pages side by side (an open book), the cover alone; upright one page.
-- [ ] A scan's first page that is the cover front and back as one spread: detected, put right.
-- [ ] The chooser's tiles sooner after the app opens.
+- [x] Back from a PDF: the Journal list, not the main menu. (0.9.3)
+- [x] Document names in title case ("Codewheel Pictures"). (0.9.3)
+- [x] PDF page turns without the wait (render ahead / held in memory). (0.9.3)
+- [x] Sideways: two pages side by side (an open book), the cover alone; upright one page. (0.9.3)
+- [x] A scan's first page that is the cover front and back as one spread: detected, put right. (0.9.3)
+- [x] The chooser's tiles sooner after the app opens. (0.9.3)
 - [ ] The Companion's maps from the Cluebooks' maps, with their legends' markers (engine: CYD, PortMaster,
   Android) - a plan first.
 

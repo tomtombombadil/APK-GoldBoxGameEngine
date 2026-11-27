@@ -1,0 +1,1 @@
+PDFs read as books: two pages side by side when the device is sideways (the cover alone), one page upright; a scan with the cover front and back as one page opens on the front cover. Pages turn without the wait (kept in memory, rendered ahead). Back from a PDF returns to the Journal list. Document names in title case. A much quicker start to the game chooser.

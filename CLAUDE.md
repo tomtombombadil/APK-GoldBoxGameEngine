@@ -163,6 +163,12 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   (the back cover shown first): detected and put right. **The chooser's tiles appear sooner** after the app opens.
   **The Companion's maps from the Cluebooks' maps** - accurate, with their legends' markers (special events, items,
   places); an engine change (CYD, PortMaster, Android). Its flaws seen: secret doors that aren't.
+  **Built** (0.9.3): `PdfView.makeBook` (a first page that is a spread: its right half first, its left last) and
+  `makeScreens` (sideways two book pages a screen, the cover / a wide page alone); pages rendered whole once into an
+  LruCache (Android 8+: half the heap's size or 256 MB of bitmaps), the next two screens and the one before rendered
+  ahead; Back and B close it on the key's release (its down had closed it and its release reached the game). The
+  start: PM 0.19.21's platform layer lists a folder without opening its entries, remembers found folders and keeps a
+  listing 3 s (forgotten on any write) - the engine's scan (game_find.h, the boards' way) re-lists folders.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
