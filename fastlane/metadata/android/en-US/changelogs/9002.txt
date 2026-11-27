@@ -1,0 +1,1 @@
+A new icon: the treasure chest in metallic gold. Journal text is set as a book's - paragraphs indented, a little space between them. The Journal menu lists the game's PDFs - the journal, manual, rules, cluebook - and opens them a page at a time (a two-page spread shown as its two pages), pinch to zoom, swipe to turn, each where you left it.

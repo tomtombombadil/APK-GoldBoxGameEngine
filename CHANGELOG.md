@@ -3,6 +3,18 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.9.2] - 2026-11-27
+
+Built on PM-GoldBoxGameEngine 0.19.12 and the CYD engine 0.221.9.
+
+- **The icon: the treasure chest in metallic gold**, centred in its space (the old one sat a little low); a
+  monochrome layer for Android 13's themed icons.
+- **Journal text set as a book's**: each paragraph's first line indented, a little space between paragraphs,
+  headings centred; a sentence the Steam PDFs' scan broke over two lines is one paragraph again.
+- **The game's PDFs in the Journal menu**: under the entries, Documents - the journal PDF first, then the manual,
+  rules, cluebook and the rest found in the game's folder. They open a page at a time - a scanned book's two-page
+  spread shown as its two pages - pinch to zoom, swipe or the arrows to turn, and each opens where you left it.
+
 ## [0.9.1] - 2026-11-27
 
 Built on PM-GoldBoxGameEngine 0.19.11 and the CYD engine 0.221.9.

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Themed icons (Android 13+): the chest's shape, its keyhole and lid line cut out -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:aapt="http://schemas.android.com/aapt" android:width="108dp" android:height="108dp" android:viewportWidth="108" android:viewportHeight="108">
+<group android:pivotX="54" android:pivotY="58" android:scaleX="0.8" android:scaleY="0.8" android:translateY="-3">
+<path android:fillType="evenOdd" android:fillColor="#FF000000" android:pathData="M26,53 L26,45 Q26,35 54,33 Q82,35 82,45 L82,53 Z M27.5,57 H80.5 Q82,57 82,58.5 V81.5 Q82,83 80.5,83 H27.5 Q26,83 26,81.5 V58.5 Q26,57 27.5,57 Z M51.4,57.5 A2.6,2.6 0 1,0 56.6,57.5 A2.6,2.6 0 1,0 51.4,57.5 Z M52.6,58.5 L55.4,58.5 L56,63.5 L52,63.5 Z"/>
+</group>
+</vector>

@@ -207,7 +207,7 @@ final class JournalView extends FrameLayout {
             for (String[] f : parts) {
                 if (f[0].equals("T")) {
                     final TextView tv = new TextView(getContext());
-                    tv.setText(f[1].replace('\u001f', '\n').trim());
+                    tv.setText(paragraphs(f[1].replace('\u001f', '\n').trim(), px(28)));
                     tv.setTextColor(INK);
                     tv.setTypeface(face);
                     tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, font == 0 ? 19 : 18);
@@ -242,6 +242,67 @@ final class JournalView extends FrameLayout {
         setVisibility(VISIBLE);
         bringToFront();
         showHints();
+    }
+
+    /**
+     * A text piece as a book sets it (Tom, 2026-11-27: "indent the paragraphs and put a slight space between
+     * paragraphs"): a line a paragraph, its first line indented, half a line between paragraphs; a line of
+     * capitals (the entry's title, a heading) centred, not indented. A sentence the scan broke over two lines
+     * (one ending mid-sentence, the next starting in lower case) is one paragraph again.
+     */
+    static CharSequence paragraphs(String text, int indent) {
+        final List<String> paras = new ArrayList<>();
+        for (String line : text.split("\n")) {
+            final String l = line.trim();
+            if (l.isEmpty()) continue;
+            if (!paras.isEmpty()) {
+                final String prev = paras.get(paras.size() - 1);
+                final char last = prev.charAt(prev.length() - 1);
+                final boolean open = Character.isLetter(last) || last == ',' || last == ';' || last == '-';
+                if (open && Character.isLowerCase(l.charAt(0)) && !heading(prev)) {
+                    paras.set(paras.size() - 1, last == '-' ? prev + l : prev + " " + l);
+                    continue;
+                }
+            }
+            paras.add(l);
+        }
+        // (spans set once the text is whole: a paragraph span must end at a line's end)
+        final android.text.SpannableStringBuilder b = new android.text.SpannableStringBuilder();
+        final int[] from = new int[paras.size()], to = new int[paras.size()];
+        for (int i = 0; i < paras.size(); ++i) {
+            from[i] = b.length();
+            b.append(paras.get(i));
+            if (i + 1 < paras.size()) b.append('\n');
+            to[i] = b.length();
+            if (i + 1 < paras.size()) b.append('\n');      // (the space between: an empty line, its type small)
+        }
+        for (int i = 0; i < paras.size(); ++i) {
+            final String p = paras.get(i);
+            if (i + 1 < paras.size())
+                b.setSpan(new android.text.style.RelativeSizeSpan(0.45f), to[i], to[i] + 1,
+                        android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (heading(p)) {
+                b.setSpan(new android.text.style.AlignmentSpan.Standard(android.text.Layout.Alignment.ALIGN_CENTER),
+                        from[i], to[i], android.text.Spanned.SPAN_PARAGRAPH);
+            } else if (i > 0 && !heading(paras.get(i - 1))) {
+                // (the first paragraph, and the first after a heading, start flush, as a book's)
+                b.setSpan(new android.text.style.LeadingMarginSpan.Standard(indent, 0), from[i], to[i],
+                        android.text.Spanned.SPAN_PARAGRAPH);
+            }
+        }
+        return b;
+    }
+
+    /** A heading: short, its letters capitals ("INTRODUCTION", "BJORN'S TALE"). */
+    static boolean heading(String p) {
+        if (p.length() > 70) return false;
+        int up = 0, low = 0;
+        for (int i = 0; i < p.length(); ++i) {
+            final char c = p.charAt(i);
+            if (Character.isUpperCase(c)) ++up;
+            else if (Character.isLowerCase(c)) ++low;
+        }
+        return up >= 3 && low * 6 <= up;
     }
 
     private Typeface typeface(int font) {
@@ -385,6 +446,9 @@ final class JournalView extends FrameLayout {
         private float fit = 1, scale = 1;
         private boolean placed;
         private android.animation.ValueAnimator anim;
+        /** A page turner (PdfView): a sideways swipe while fitted whole turns the page. */
+        interface Pager { void turn(int dir); }
+        Pager pager;
 
         ZoomImage(Context c, Bitmap b) {
             super(c);
@@ -407,6 +471,13 @@ final class JournalView extends FrameLayout {
                 @Override
                 public boolean onScroll(MotionEvent a, MotionEvent b, float dx, float dy) {
                     panBy(-dx, -dy);
+                    return true;
+                }
+
+                @Override
+                public boolean onFling(MotionEvent a, MotionEvent b, float vx, float vy) {
+                    if (pager == null || !fitted() || Math.abs(vx) < 2 * Math.abs(vy) || Math.abs(vx) < 600) return false;
+                    pager.turn(vx < 0 ? 1 : -1);
                     return true;
                 }
 

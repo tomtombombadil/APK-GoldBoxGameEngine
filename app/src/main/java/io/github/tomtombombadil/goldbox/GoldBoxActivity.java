@@ -145,6 +145,10 @@ public class GoldBoxActivity extends SDLActivity {
             finish();
             return;
         }
+        if (shell.pdf().isUp()) {
+            shell.pdf().close();
+            return;
+        }
         if (shell.journal().isUp()) {
             shell.journal().back();
             return;
@@ -163,7 +167,8 @@ public class GoldBoxActivity extends SDLActivity {
         // (a controller in use: no pad - a touch brings it back)
         if (shell != null && event.getAction() == KeyEvent.ACTION_DOWN && event.getKeyCode() != KeyEvent.KEYCODE_BACK
                 && fromController(event.getDevice(), event.getSource())) shell.controller(true);
-        // (a journal entry up: Back, B and the rest are its own - not the game's)
+        // (a PDF or a journal entry up: Back, B and the rest are its own - not the game's)
+        if (shell != null && shell.pdf().key(event)) return true;
         if (shell != null && shell.journal().key(event)) return true;
         return super.dispatchKeyEvent(event);
     }
@@ -206,6 +211,11 @@ public class GoldBoxActivity extends SDLActivity {
         } catch (Exception e) {
             return "?";
         }
+    }
+
+    /** The Journal list's Documents: a game's PDF (its device path), a page at a time (the front end calls this). */
+    public void openPdf(String path, String title) {
+        runOnUiThread(() -> { if (shell != null) shell.pdf().open(path, title); });
     }
 
     /**

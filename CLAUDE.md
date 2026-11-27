@@ -150,6 +150,11 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   **Steam journal text entries: paragraphs indented, a little space between them** (they ran together). **The
   Journal menu: the journal PDF itself, a page at a time** (a book spread split into its two pages, never the
   double layout), **and the game's other PDFs** (manual, rules, cluebook ...) - all in the Journal menu.
+  **Built** (0.9.2): the icon (`drawable-v24/ic_launcher_fg/_bg`, gradients - Android 7+; `drawable/ic_launcher`
+  flat for 5 - 6; `ic_launcher_mono` themed); `JournalView.paragraphs` (a line a paragraph, indent, half-line gaps,
+  capitals headings centred, broken sentences joined); `PdfView` (Android's PdfRenderer - nothing added to the
+  build; a page 1.2 - 1.7 times as wide as tall is a spread: two pages; the last page per file kept), opened by the
+  front end's `android_open_pdf` from the Journal list's Documents (PM 0.19.12, `jour::documents`).
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.

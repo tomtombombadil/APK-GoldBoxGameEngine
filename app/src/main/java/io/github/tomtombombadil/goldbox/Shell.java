@@ -57,6 +57,7 @@ final class Shell {
     private final Handle hMenu, hComp, hPad;
     private final MenuDrawer drawer;
     private final JournalView journal;
+    private final PdfView pdf;              // (a game's PDF, from the Journal list's Documents)
     private final ChooserView chooser;
     private final Screens.ScanView scan;
     private final Screens.NoticeView notice;
@@ -97,7 +98,10 @@ final class Shell {
         root.addView(scan, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
         journal = new JournalView(a);
+        pdf = new PdfView(a);
         root.addView(journal, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
+                FrameLayout.LayoutParams.MATCH_PARENT));
+        root.addView(pdf, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
         drawer = new MenuDrawer(a);
         root.addView(drawer, new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,
@@ -148,6 +152,9 @@ final class Shell {
 
     /** A journal entry is up (Android's own viewer): its keys are its own. */
     JournalView journal() { return journal; }
+
+    /** A game's PDF, a page at a time (over the menu: closing it goes back to the Journal list). */
+    PdfView pdf() { return pdf; }
 
     /** Android's Back here leaves the app (Tom, 2026-11-24): the chooser up, nothing over it. */
     boolean backLeaves() { return chooser.isUp() && !scan.isUp() && !drawer.isOpen() && !notice.isUp(); }
@@ -276,6 +283,7 @@ final class Shell {
         final int[] ins = act.cutoutInsets();
         final Rect area = new Rect(ins[0], ins[1], W - ins[2], H - ins[3]);
         journal.setPadding(ins[0], ins[1], ins[2], ins[3]);     // (a journal entry clear of the cutout too)
+        pdf.setPadding(ins[0], ins[1], ins[2], ins[3]);
         final boolean land = W >= H;
         final boolean phone = !tablet(act);
         // (a tablet near 4:3 sideways: the game maximised, the rest on demand; a wider one - 16:10 - has room
