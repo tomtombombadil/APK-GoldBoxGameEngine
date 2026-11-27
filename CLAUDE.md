@@ -177,6 +177,9 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   compare: both kinds must work. **Built** (0.9.4, PM 0.19.22): `library::scan_kept` - a scan writes
   games/_CYD/GAMES.TXT (the top folders it saw, each game: folder, data_dir, game, hlib, files); a start reads it
   when the top folders' names are the same and each data_dir exists, else scans.
+- **Tom, 2026-11-27 (17:00)**: the cluebook work goes on - examine the maps, develop, implement and test. **The
+  cluebooks name the areas**: the Companion's maps get those names (long wanted). **GameBanshee's maps** to compare
+  against, for the markers and symbols. The checker: the engine repo's `tools/cluebook` (its docs/TODO.md).
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
