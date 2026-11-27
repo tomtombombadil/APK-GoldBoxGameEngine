@@ -188,8 +188,16 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
 - **Tom, 2026-11-27 (17:54)** - the cluebooks' symbols: **a secret door is a wall line with an S laid over it** (the
   S's upper half one side of the line, its lower half the other) - not a hook or an arch; **an archway is a U turned
   across the wall, bisecting the line** (which way the U opens means nothing - a convention, the same through a
-  map). **One-way doors are "concealed doors"**: they open from one side only, are often seen only from that side,
-  and once through there is no way back - to be shown as such.
+  map). **One-way doors**: they open from one side only, are often seen only from that side, and once through there
+  is no way back - to be shown as such. (18:05, Tom: **a one-way door is not a concealed door** - he had misspoken;
+  the key says "One-way door". What a concealed door is: asked.)
+- **Tom, 2026-11-27 (17:58)**: **door codes 2 and 3 are not told apart on the map** (one red "Locked"). **A concealed
+  (one-way) door: half a normal door on the side it is entered from, and an arrow pointing away from the wall on
+  the side it comes out** - mocked up for Tom before it is coded. **18:05**: the mock-up good but **on a wall running
+  up and down the S is turned 90 degrees**, and **every door (the concealed one too) leaves a little wall at each
+  end** - else half a door can't be told from a whole one. **18:06**: **an archway's wall ends get a little serif**
+  (a short tick across the line where each piece of wall ends, forming the arch). **18:08**: a little wall **between
+  each serif and the corner** - the opening narrower, so a serif never meets the side wall.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.

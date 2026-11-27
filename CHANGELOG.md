@@ -3,6 +3,15 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.9.6] - 2026-11-27
+
+Built on PM-GoldBoxGameEngine 0.19.24 and the CYD engine 0.222.3.
+
+- **The Companion's map, refined**: doors stop short of the corners so a little wall shows at each end; archways
+  get a serif where each piece of wall ends; the secret door's S is turned on walls running up and down; **one-way
+  doors** are half a door on the side they open from and an arrow pointing out on the other (legend "One-way");
+  the party's arrow sits evenly in its square whichever way it faces.
+
 ## [0.9.5] - 2026-11-27
 
 Built on PM-GoldBoxGameEngine 0.19.23 and the CYD engine 0.222.2.
