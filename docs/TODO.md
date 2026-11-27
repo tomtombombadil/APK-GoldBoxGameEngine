@@ -86,3 +86,14 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
 - [ ] Choose Folder… tried only in code review: the picker on the emulator, a folder made by hand.
 - [ ] Store screenshots: the app's own screens only (never game graphics) - a game-play shot is not allowed in
       the repo.
+
+## Tom, 2026-11-27 afternoon
+- [ ] Back from a PDF: the Journal list, not the main menu.
+- [ ] Document names in title case ("Codewheel Pictures").
+- [ ] PDF page turns without the wait (render ahead / held in memory).
+- [ ] Sideways: two pages side by side (an open book), the cover alone; upright one page.
+- [ ] A scan's first page that is the cover front and back as one spread: detected, put right.
+- [ ] The chooser's tiles sooner after the app opens.
+- [ ] The Companion's maps from the Cluebooks' maps, with their legends' markers (engine: CYD, PortMaster,
+  Android) - a plan first.
+

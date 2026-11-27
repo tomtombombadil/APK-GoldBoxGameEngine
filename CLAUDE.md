@@ -155,6 +155,14 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   capitals headings centred, broken sentences joined); `PdfView` (Android's PdfRenderer - nothing added to the
   build; a page 1.2 - 1.7 times as wide as tall is a spread: two pages; the last page per file kept), opened by the
   front end's `android_open_pdf` from the Journal list's Documents (PM 0.19.12, `jour::documents`).
+- **Tom, 2026-11-27 afternoon** ("The Steam PDFs look great!"): **Back from a PDF returns to the Journal list**
+  (it went to the main menu). Document names in title case ("codewheel-pictures" -> "Codewheel Pictures").
+  **Page turns without the wait**: Android has the memory - pages rendered ahead / the PDF held in memory.
+  **Sideways: two pages side by side as an open book; upright: one page** (as now). The cover alone even sideways,
+  then the pages paired as a book's. **A scan whose first PDF page is the cover front and back as one spread**
+  (the back cover shown first): detected and put right. **The chooser's tiles appear sooner** after the app opens.
+  **The Companion's maps from the Cluebooks' maps** - accurate, with their legends' markers (special events, items,
+  places); an engine change (CYD, PortMaster, Android). Its flaws seen: secret doors that aren't.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
