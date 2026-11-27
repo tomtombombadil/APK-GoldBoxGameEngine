@@ -50,7 +50,7 @@ final class ChooserView extends FrameLayout {
             GOLD = Shell.GOLD, CREAM = Shell.CREAM, MUTED = Shell.MUTED;
 
     static final class Game {
-        String name, shortName, art, release;
+        String name, shortName, art, release, folder = "";
         boolean playable, cont;     // cont: it has a saved game - Continue (the engine's continue_game)
         int kind;           // 2 box art, 1 logo, 0 none
     }
@@ -115,6 +115,7 @@ final class ChooserView extends FrameLayout {
                 // ("Steam Version" / "GOG Version" - Tom: not to read as if the Steam or GOG clients ran it)
                 g.release = f[5].equals("Steam") || f[5].equals("GOG") ? f[5] + " Version" : f[5];
                 g.cont = f.length > 6 && f[6].equals("1");
+                g.folder = f.length > 7 ? f[7] : "";          // (front end 0.19.10: a shortcut's)
                 games.add(g);
             }
             if (sel < 0 || sel >= games.size()) sel = 0;
@@ -289,6 +290,10 @@ final class ChooserView extends FrameLayout {
                 k.setOnClickListener(v -> {
                     if (k.onPill) cont(idx);
                     else play(idx);
+                });
+                k.setOnLongClickListener(v -> {
+                    gameMenu(v, idx);
+                    return true;
                 });
             }
             showSel();
@@ -488,23 +493,41 @@ final class ChooserView extends FrameLayout {
 
         @Override
         public boolean onTouch(View v, MotionEvent e) {
-            if (busy || games.size() < 2) return true;
+            if (busy) return true;
+            if (games.size() < 2) {
+                // (one game: no swiping - a hold still opens its menu)
+                if (e.getActionMasked() == MotionEvent.ACTION_DOWN) holdFor(v);
+                else if (e.getActionMasked() == MotionEvent.ACTION_UP || e.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+                    holdCancel();
+                    held = false;
+                }
+                return true;
+            }
             switch (e.getActionMasked()) {
                 case MotionEvent.ACTION_DOWN:
                     x0 = e.getRawX();
                     dragging = false;
                     vt = android.view.VelocityTracker.obtain();
                     vt.addMovement(e);
+                    holdFor(v);
                     return true;
                 case MotionEvent.ACTION_MOVE: {
                     if (vt != null) vt.addMovement(e);
                     final float dx = e.getRawX() - x0;
-                    if (!dragging && Math.abs(dx) > px(6)) dragging = true;
+                    if (!dragging && Math.abs(dx) > px(6)) {
+                        dragging = true;
+                        holdCancel();
+                    }
                     if (dragging) shift(Math.max(-step, Math.min(step, dx)));
                     return true;
                 }
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL: {
+                    holdCancel();
+                    if (held) {
+                        held = false;
+                        return true;
+                    }
                     final float dx = e.getRawX() - x0;
                     float vx = 0;
                     if (vt != null) {
@@ -544,6 +567,41 @@ final class ChooserView extends FrameLayout {
         }
     }
 
+    // ---- A game's menu: a hold on its picture (Tom, 2026-11-26: "a menu option to add a game to the home screen")
+
+    private boolean held;               // (the hold opened the menu: its finger's lifting is no tap or swipe)
+    private View holdView;
+    private final Runnable hold = () -> {
+        if (holdView == null) return;
+        held = true;
+        holdView.performHapticFeedback(android.view.HapticFeedbackConstants.LONG_PRESS);
+        gameMenu(holdView, sel);
+    };
+
+    private void holdFor(View v) {
+        held = false;
+        holdView = v;
+        ui.removeCallbacks(hold);
+        ui.postDelayed(hold, android.view.ViewConfiguration.getLongPressTimeout());
+    }
+
+    private void holdCancel() { ui.removeCallbacks(hold); }
+
+    /** The game's menu: Add to Home Screen (Android 8 and later, a launcher that takes shortcuts). */
+    private void gameMenu(View anchor, int index) {
+        if (index < 0 || index >= games.size()) return;
+        final Game g = games.get(index);
+        final android.widget.PopupMenu m = new android.widget.PopupMenu(
+            new android.view.ContextThemeWrapper(getContext(), android.R.style.Theme_Material), anchor, Gravity.CENTER);  // (dark, as the app)
+        final boolean can = Shortcuts.can(getContext()) && g.folder != null && !g.folder.isEmpty();
+        m.getMenu().add(0, 1, 0, "Add to Home Screen").setEnabled(can);
+        m.setOnMenuItemClickListener(it -> {
+            if (it.getItemId() == 1) Shortcuts.add(getContext(), g.folder, g.name, g.shortName, pictures.get(g.art));
+            return true;
+        });
+        m.show();
+    }
+
     /** A sideways swipe steps through the games (sideways layout); a tap does nothing. */
     final class Swipe implements OnTouchListener {
         float x0, y0;
@@ -556,14 +614,22 @@ final class ChooserView extends FrameLayout {
                     x0 = e.getRawX();
                     y0 = e.getRawY();
                     moved = false;
+                    holdFor(v);
                     return true;
                 case MotionEvent.ACTION_MOVE:
+                    if (Math.hypot(e.getRawX() - x0, e.getRawY() - y0) > px(10)) holdCancel();
                     if (!moved && Math.abs(e.getRawX() - x0) > px(40) && Math.abs(e.getRawX() - x0) > Math.abs(e.getRawY() - y0)) {
                         moved = true;
                         step(e.getRawX() < x0 ? 1 : -1);
                     }
                     return moved;
                 case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_CANCEL:
+                    holdCancel();
+                    if (held) {
+                        held = false;
+                        return true;
+                    }
                     if (moved) {
                         moved = false;
                         return true;    // (not a tap)

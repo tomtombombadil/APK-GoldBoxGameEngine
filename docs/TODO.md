@@ -24,6 +24,13 @@ Tick off with the version that did it. Never ask Tom the same thing twice.
       controls), the column's width with the controls away; the chooser's toggle and Display › Game Chooser; the
       folder screen counting the nine Steam games; the menu's tab at the hand's side (and after the swap arrow),
       the strip's menu button, the drawer from that side, "Gold Box Game Engine", Rescan / Clean Up under System.
+- [ ] 0.9.0 on your devices: hold a game in the chooser - Add to Home Screen - the shortcut opens the game; Back
+      at the chooser on the Pixel / S8+ (Android 13+: the home screen's preview as you swipe); the folder screen
+      under the status bar; a Steam journal entry or two (Treasures' Introduction, a Death Knights entry).
+- [ ] The Dark Queen's Introduction (the General's letter): its scan's text is unreadable - Tom to choose: shown as
+      a picture of the page, or left out.
+- [ ] The adaptive icon: proposals shown 2026-11-26, Tom to choose.
+- [ ] Foldables / split screen: mock-ups shown 2026-11-26, Tom to look.
 - [ ] The folder screen's rework: **tabled** (Tom, 2026-11-26) - he will find the 2026-11-25 suggestions in the
       chat.
 - [ ] 0.8.0 on the Pixel 10a, the S8+ and the S2, both ways round: the Companion's layout (the map and the party

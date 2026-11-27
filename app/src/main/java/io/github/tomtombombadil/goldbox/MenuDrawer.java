@@ -215,6 +215,7 @@ final class MenuDrawer extends FrameLayout {
     private void slide(boolean in) {
         if (in == shown) return;
         shown = in;
+        if (getContext() instanceof GoldBoxActivity) ((GoldBoxActivity) getContext()).updateBack();
         panel.animate().cancel();
         scrim.animate().cancel();
         if (in) {

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- What Android's backup takes (Android 12 and later). The games and their saves are in the GoldBox folder on
+     the device's storage, which no app's backup reaches; with the App's Private Folder they are in the app's own
+     external folder (games/), too large for the cloud's 25 MB, so the cloud takes the settings only - a move to a
+     new phone (device to device, no size limit) takes the private folder whole, saves and all. -->
+<data-extraction-rules>
+    <cloud-backup>
+        <include domain="sharedpref" path="." />
+        <include domain="external" path="conf/" />
+    </cloud-backup>
+    <device-transfer>
+        <include domain="sharedpref" path="." />
+        <include domain="external" path="." />
+    </device-transfer>
+</data-extraction-rules>

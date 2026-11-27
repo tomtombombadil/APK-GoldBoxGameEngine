@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- What Android's backup takes (Android 6 - 11; data_extraction_rules.xml for 12 and later): the settings - the
+     app's preferences and, with the App's Private Folder, its conf folder. The games and their saves are too
+     large for the backup's 25 MB (and, in the GoldBox folder, out of any app backup's reach). -->
+<full-backup-content>
+    <include domain="sharedpref" path="." />
+    <include domain="external" path="conf/" />
+</full-backup-content>

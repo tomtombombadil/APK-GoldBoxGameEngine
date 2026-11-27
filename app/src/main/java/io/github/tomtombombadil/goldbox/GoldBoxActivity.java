@@ -44,6 +44,7 @@ public class GoldBoxActivity extends SDLActivity {
         super.onCreate(saved);
         if (mBrokenLibraries || mLayout == null) return;
         shell = new Shell(this);
+        updateBack();
         mLayout.addView(shell.root, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
     }
@@ -113,6 +114,45 @@ public class GoldBoxActivity extends SDLActivity {
                 || (s & InputDevice.SOURCE_DPAD) == InputDevice.SOURCE_DPAD && d != null && !d.isVirtual();
     }
 
+    // ---- Predictive Back (Android 13 and later; the manifest's enableOnBackInvokedCallback): at the chooser with
+    // nothing over it Back closes the app - Android's own gesture, its preview of the home screen; anywhere else it
+    // is the game's B (a journal entry's close), so the app takes it
+    private Object backCallback;        // (an OnBackInvokedCallback - kept as Object for Android 12 and older)
+    private boolean backTaken;
+    private long lastBack;
+
+    /** The Back gesture's owner, after anything that changes what Back does (Shell, the drawer). */
+    void updateBack() {
+        if (Build.VERSION.SDK_INT < 33 || shell == null) return;
+        final boolean take = !shell.backLeaves();
+        if (take == backTaken) return;
+        final android.window.OnBackInvokedDispatcher d = getOnBackInvokedDispatcher();
+        if (backCallback == null)
+            backCallback = (android.window.OnBackInvokedCallback) this::back;
+        if (take) d.registerOnBackInvokedCallback(android.window.OnBackInvokedDispatcher.PRIORITY_DEFAULT,
+                (android.window.OnBackInvokedCallback) backCallback);
+        else d.unregisterOnBackInvokedCallback((android.window.OnBackInvokedCallback) backCallback);
+        backTaken = take;
+    }
+
+    /** Back as the app takes it: a journal entry closed, else the game's B (as the Back key's). */
+    private void back() {
+        final long now = android.os.SystemClock.uptimeMillis();
+        if (now - lastBack < 150) return;           // (a Back key and its callback both: once)
+        lastBack = now;
+        if (shell == null) return;
+        if (shell.backLeaves()) {
+            finish();
+            return;
+        }
+        if (shell.journal().isUp()) {
+            shell.journal().back();
+            return;
+        }
+        SDLActivity.onNativeKeyDown(KeyEvent.KEYCODE_BACK);
+        SDLActivity.onNativeKeyUp(KeyEvent.KEYCODE_BACK);
+    }
+
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         // (Back at the game chooser closes the app - Tom, 2026-11-24; elsewhere it is the game's B)
@@ -153,6 +193,10 @@ public class GoldBoxActivity extends SDLActivity {
             conf = new File(folder, "conf").getAbsolutePath();
             log = new File(folder, "log.txt").getAbsolutePath();
         }
+        final String game = i != null ? i.getStringExtra(SetupActivity.EXTRA_GAME) : null;
+        if (game != null && !game.isEmpty())
+            return new String[] {"--games", games, "--conf", conf, "--log", log, "--app-version", appVersion(),
+                    "--game-folder", game};
         return new String[] {"--games", games, "--conf", conf, "--log", log, "--app-version", appVersion()};
     }
 
@@ -199,6 +243,25 @@ public class GoldBoxActivity extends SDLActivity {
             }
         }
         return r;
+    }
+
+    /**
+     * A home-screen shortcut tapped while the app runs (singleInstance: the running one gets it).
+     * At the chooser with nothing over it, nothing is lost: the app starts again on that game
+     * (the folder screen, in its own process, waits for this one to end - SetupActivity.play).
+     * In a game, the game in play comes back as it was - a shortcut never ends a game unsaved.
+     */
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        final String game = intent != null ? intent.getStringExtra(SetupActivity.EXTRA_GAME) : null;
+        if (game == null || game.isEmpty() || shell == null || !shell.backLeaves()) return;
+        final Intent i = new Intent(this, SetupActivity.class);
+        i.putExtra(SetupActivity.EXTRA_GAME, game);
+        i.putExtra(SetupActivity.EXTRA_RESTART, true);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+        finish();
     }
 
     @Override

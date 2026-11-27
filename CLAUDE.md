@@ -136,6 +136,13 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
     itself** - a menu line to add a game to the home screen is fine. **Foldables / split screen**: mock-ups first
     (Tom thinks the layouts by rule already cover them).
   - **The folder screen: tabled** - Tom will find the earlier suggestions in the chat.
+  - **Built** (0.9.0): the engine's `journal_fixes.cpp` (188 fixes, three rules - CYD 0.221.6); the chooser's hold menu
+    **Add to Home Screen** (`Shortcuts`; a pinned shortcut to SetupActivity with the game's folder -> the front
+    end's `--game-folder`; tapped while the app runs: at the chooser it starts again on that game, in a game the
+    game comes back as it was - a shortcut never ends a game unsaved); predictive Back (`GoldBoxActivity.updateBack`: the app takes Back except at the chooser
+    with nothing over it - there Android's own gesture closes it); SetupActivity edge to edge; backup rules
+    (`res/xml`: cloud - the preferences and the private folder's conf; device transfer - the private folder whole).
+    Saves in Internal storage › GoldBox are beyond any app's backup (Android's rule for shared storage).
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.

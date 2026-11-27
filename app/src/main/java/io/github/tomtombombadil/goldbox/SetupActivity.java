@@ -59,6 +59,10 @@ public class SetupActivity extends Activity {
     static final String FOLDER = "folder";      // the chosen folder's path
     static final String EXTRA_CHANGE = "change";
     static final String EXTRA_GAMES = "games", EXTRA_CONF = "conf", EXTRA_LOG = "log";
+    // A home-screen shortcut's game (its folder under games/ - the chooser's Add to Home Screen; Tom, 2026-11-26)
+    static final String EXTRA_GAME = "game_folder";
+    /** The game's process is ending to start again on a shortcut's game: wait for it (GoldBoxActivity.onNewIntent). */
+    static final String EXTRA_RESTART = "restart";
 
     private static final int ASK_ACCESS = 1, ASK_STORAGE = 2, PICK_FOLDER = 3;
     private static final int NAVY = 0xFF101838, GOLD = 0xFFE8B840, CREAM = 0xFFF0E6C8,
@@ -225,6 +229,20 @@ public class SetupActivity extends Activity {
         into.addView(b, lp);
     }
 
+    /** The window under the status and navigation bars, on every Android (15 does it by itself). */
+    @SuppressWarnings("deprecation")
+    private void edgeToEdge() {
+        final android.view.Window w = getWindow();
+        w.setStatusBarColor(android.graphics.Color.TRANSPARENT);
+        w.setNavigationBarColor(android.graphics.Color.TRANSPARENT);
+        if (Build.VERSION.SDK_INT >= 29) w.setNavigationBarContrastEnforced(false);
+        if (Build.VERSION.SDK_INT >= 28) w.getAttributes().layoutInDisplayCutoutMode =
+                android.view.WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+        if (Build.VERSION.SDK_INT >= 30) w.setDecorFitsSystemWindows(false);
+        else w.getDecorView().setSystemUiVisibility(android.view.View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | android.view.View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | android.view.View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+    }
+
     private void build() {
         final ScrollView scroll = new ScrollView(this);
         scroll.setBackgroundColor(NAVY);
@@ -232,6 +250,20 @@ public class SetupActivity extends Activity {
         final LinearLayout col = new LinearLayout(this);
         col.setOrientation(LinearLayout.VERTICAL);
         col.setPadding(dp(24), dp(24), dp(24), dp(24));
+        // Edge to edge (Android 15 draws every app so): the navy under the status and navigation bars, the words
+        // clear of them and of a cutout
+        scroll.setOnApplyWindowInsetsListener((v, in) -> {   // (deprecated getters: the same on Android 5 - 15)
+            int l = in.getSystemWindowInsetLeft(), t = in.getSystemWindowInsetTop(),
+                r = in.getSystemWindowInsetRight(), b = in.getSystemWindowInsetBottom();
+            if (Build.VERSION.SDK_INT >= 28 && in.getDisplayCutout() != null) {
+                l = Math.max(l, in.getDisplayCutout().getSafeInsetLeft());
+                t = Math.max(t, in.getDisplayCutout().getSafeInsetTop());
+                r = Math.max(r, in.getDisplayCutout().getSafeInsetRight());
+                b = Math.max(b, in.getDisplayCutout().getSafeInsetBottom());
+            }
+            col.setPadding(dp(24) + l, dp(24) + t, dp(24) + r, dp(24) + b);
+            return in;
+        });
         col.setGravity(Gravity.CENTER_HORIZONTAL);
         scroll.addView(col);
 
@@ -282,6 +314,7 @@ public class SetupActivity extends Activity {
         text(col, "The App's Private Folder needs no permission, but most phones' file managers can't open it, "
             + "and Android deletes it - saved games too - when the app is uninstalled. On Android 10 and older "
             + "the folder must be on the device's own storage, not an SD card.", MUTED, 13, false, 8);
+        edgeToEdge();
         setContentView(scroll);
     }
 
@@ -305,6 +338,13 @@ public class SetupActivity extends Activity {
 
     /** Straight to the game: the folders made, a README for the player. */
     private void play() {
+        if (getIntent() != null && getIntent().getBooleanExtra(EXTRA_RESTART, false) && gameRunning()) {
+            // the game's process still ending (a fresh one for the shortcut's game): look again shortly
+            if (waited++ < 50) {
+                getWindow().getDecorView().postDelayed(this::play, 100);
+                return;
+            }
+        }
         final File folder = folder(this);
         final File games = games(folder);
         games.mkdirs();
@@ -326,8 +366,21 @@ public class SetupActivity extends Activity {
         i.putExtra(EXTRA_GAMES, games.getAbsolutePath());
         i.putExtra(EXTRA_CONF, new File(folder, "conf").getAbsolutePath());
         i.putExtra(EXTRA_LOG, new File(folder, "log.txt").getAbsolutePath());
+        final String game = getIntent() != null ? getIntent().getStringExtra(EXTRA_GAME) : null;
+        if (game != null && !game.isEmpty()) i.putExtra(EXTRA_GAME, game);
         startActivity(i);
         finish();
+    }
+
+    private int waited;
+
+    /** The game's process (the app's main one; this screen runs in :setup) is alive. */
+    private boolean gameRunning() {
+        final android.app.ActivityManager am = (android.app.ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        if (am == null || am.getRunningAppProcesses() == null) return false;
+        for (android.app.ActivityManager.RunningAppProcessInfo p : am.getRunningAppProcesses())
+            if (getPackageName().equals(p.processName)) return true;
+        return false;
     }
 
     private void withAccess(Runnable then) {

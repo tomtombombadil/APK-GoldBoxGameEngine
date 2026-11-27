@@ -127,6 +127,7 @@ final class Shell {
             case 5: journal.update(t); break;
             default: break;
         }
+        act.updateBack();
     }
 
     /** What the Companion's pictures hold ("comp\t<map rows>\t<members>\t<pitch>\t<fight>"): their rows in use. */

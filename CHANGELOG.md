@@ -3,6 +3,27 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.9.0] - 2026-11-26
+
+Built on PM-GoldBoxGameEngine 0.19.10 and the CYD engine 0.221.6.
+
+- **The Steam journals' text corrected**: 188 fixes across the nine journals - the Gold Box Companion's typing
+  slips ("My names is Jarbarkas", "beleive"), apostrophes that were spaces ("I ll", "didn t"), and the scanning
+  errors in the parts read from the PDFs ("~i INTRODUCTION ~", "part}'1", "Uorkh" for Llorkh). Each checked against
+  the printed page. Every journal is made again once, at the first start. Still wrong: the Dark Queen's
+  Introduction letter (printed over a picture; its scan's text is unreadable).
+- **Add a game to the home screen**: hold a game's picture in the chooser - Add to Home Screen. The shortcut opens
+  that game directly (Android 8 and later). Nothing is added by itself.
+- **Predictive Back** (Android 13 and later): at the chooser, Back shows Android's preview of the home screen and
+  closes the app; elsewhere Back is still the game's B.
+- **The folder screen edge to edge**: its colour under the status and navigation bars, its words clear of them and
+  of a camera cutout.
+- **Android backup**: the settings go to your Google backup; moving to a new phone (device to device) takes the
+  App's Private Folder whole, saves included. Saves in the GoldBox folder on your storage are outside any app's
+  backup (they stay when the app is uninstalled).
+- Engine fixes: a treasure's Take menu (Exit goes back to the treasure's menu), the Dark Queen's doors and
+  menus.
+
 ## [0.8.2] - 2026-11-26
 
 Built on PM-GoldBoxGameEngine 0.19.7 and the CYD engine 0.221.3.
