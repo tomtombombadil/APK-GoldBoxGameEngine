@@ -128,6 +128,14 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   - **Built as** (0.8.0): `CompLayout` (plain Java, the rules above; the front end draws each picture where the app
     says - view 4, `nativePictures`; channel 4 says what the pictures hold); `JournalView` (channel 5; fonts in
     `assets/fonts` with their OFL texts). Under 150dp a picture, the Companion starts put away (its own default).
+- **Tom, 2026-11-26 evening** (what's next):
+  - **The Steam journals' OCR misreadings are corrected** ("That's important!"): the Steam PDFs' own text layers
+    misread the scans ("~i INTRODUCTION ~", "part}'1"); the engine corrects them by a table per journal.
+  - **The polish**: edge-to-edge and predictive Back, Android backup of saves - yes. **No splash screen** ("I've
+    never liked them"). **The adaptive icon**: proposals first. **No home-screen shortcut per game made by
+    itself** - a menu line to add a game to the home screen is fine. **Foldables / split screen**: mock-ups first
+    (Tom thinks the layouts by rule already cover them).
+  - **The folder screen: tabled** - Tom will find the earlier suggestions in the chat.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
