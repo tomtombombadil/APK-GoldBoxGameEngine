@@ -222,6 +222,9 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   `fastlane/metadata/android/en-US/changelogs/<versionCode>.txt` (F-Droid
   shows it; 500 characters at most), then tag `v<versionName>` - CI builds
   and publishes the release.
+- **Claude tags and releases** (Tom, 2026-11-27 18:49: "I grant you permission to tag and release the APK repo"):
+  each new version, once main's CI for its release commit is green - tag `v<versionName>` on that commit, push the
+  tag, check the release and its APK. Never move or delete a tag.
 - F-Droid's yml (`fdroid/`): a build's `commit:` is the release commit's **full hash**, not the tag (Tom,
   2026-11-25, F-Droid's instructions) - so the release commit first, then a commit that writes its hash there.
   It must be the commit the `v` tag is on: F-Droid reads the store page (descriptions, screenshots) at that commit,
