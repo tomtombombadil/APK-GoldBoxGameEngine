@@ -180,6 +180,10 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
 - **Tom, 2026-11-27 (17:00)**: the cluebook work goes on - examine the maps, develop, implement and test. **The
   cluebooks name the areas**: the Companion's maps get those names (long wanted). **GameBanshee's maps** to compare
   against, for the markers and symbols. The checker: the engine repo's `tools/cluebook` (its docs/TODO.md).
+- **Tom, 2026-11-27 (17:39)**: **both map kinds** - a toggle in the Enhancements menu: on, the Companion shows the
+  **cluebook's own map picture** (from the player's PDF) **with the party's arrow placed on it**; off, our own drawn
+  map. **PortMaster and Android only** (the CYD's resolution can't). Archways drawn as archways, not doors (he knew;
+  "you can pass through unhindered" either way, but shown properly is better).
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
