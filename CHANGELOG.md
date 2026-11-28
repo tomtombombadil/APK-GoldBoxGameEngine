@@ -3,6 +3,12 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.10.1] - 2026-11-27
+
+Built on PM-GoldBoxGameEngine 0.20.1 and the CYD engine 0.224.1.
+
+- Cluebook Maps: Secret of the Silver Blades' Steam cluebook too (8 maps, the areas' names).
+
 ## [0.10.0] - 2026-11-27
 
 Built on PM-GoldBoxGameEngine 0.20.0 and the CYD engine 0.223.0.
