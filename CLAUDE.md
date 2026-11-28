@@ -208,6 +208,11 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   the whole key**. **The cluebooks' scans curve near the binding** (pages not pressed flat): the map pictures
   **straightened**, the party's arrow placed by the straightened grid. Picture mode with the cluebook's area name
   (mock-up 1) - no objection.
+- **Tom, 2026-11-28 (00:05 - 00:08)**: **the markers from a matrix of our own in the engine repo** - game, map, area
+  name, square, marker number (facts we derived; "you don't need a better process, just a smarter one"); **no
+  legend text in it** - option 1: the scan reads each numbered entry's words from the player's own cluebook PDF
+  (its text layer, a fix table for misreads), as the area names. Editions with no text layer (GOG Gateway, GOG
+  Secret): our own short wording.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
