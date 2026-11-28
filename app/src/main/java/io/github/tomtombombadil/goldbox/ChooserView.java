@@ -587,7 +587,7 @@ final class ChooserView extends FrameLayout {
 
     private void holdCancel() { ui.removeCallbacks(hold); }
 
-    /** The game's menu: Add to Home Screen (Android 8 and later, a launcher that takes shortcuts). */
+    /** The game's menu: Add to Home Screen (Android 8 and later, a launcher that takes shortcuts), Report a Problem. */
     private void gameMenu(View anchor, int index) {
         if (index < 0 || index >= games.size()) return;
         final Game g = games.get(index);
@@ -595,8 +595,11 @@ final class ChooserView extends FrameLayout {
             new android.view.ContextThemeWrapper(getContext(), android.R.style.Theme_Material), anchor, Gravity.CENTER);  // (dark, as the app)
         final boolean can = Shortcuts.can(getContext()) && g.folder != null && !g.folder.isEmpty();
         m.getMenu().add(0, 1, 0, "Add to Home Screen").setEnabled(can);
+        m.getMenu().add(0, 2, 1, "Report a Problem");
         m.setOnMenuItemClickListener(it -> {
             if (it.getItemId() == 1) Shortcuts.add(getContext(), g.folder, g.name, g.shortName, pictures.get(g.art));
+            // (the front end fills the report in for that game - op 18 - and calls GoldBoxActivity.reportProblem)
+            if (it.getItemId() == 2) GoldBoxActivity.nativeMenu(18, index, 0);
             return true;
         });
         m.show();

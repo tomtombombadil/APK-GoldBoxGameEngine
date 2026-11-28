@@ -10,8 +10,6 @@
     <uses-feature android:name="android.hardware.type.pc" android:required="false" />
 
     <!-- The player's games in GoldBox/games on the device's storage (SetupActivity asks) -->
-    <!-- (Menu › System › Send Logs: the logs to the developer - Tom, 2026-11-28; nothing else uses the network) -->
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
@@ -48,5 +46,12 @@
             android:configChanges="layoutDirection|locale|orientation|uiMode|screenLayout|screenSize|smallestScreenSize|keyboard|keyboardHidden|navigation"
             android:preferMinimalPostProcessing="true"
             android:exported="false" />
+
+        <!-- (Report a Problem's zip, lent to the email app the player picks - nothing else is served) -->
+        <provider
+            android:name=".ReportProvider"
+            android:authorities="${applicationId}.reports"
+            android:exported="false"
+            android:grantUriPermissions="true" />
     </application>
 </manifest>

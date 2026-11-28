@@ -79,10 +79,13 @@ The first start shows the **folder screen**:
   managers can't open it, and Android deletes it - saved games too - when
   the app is uninstalled.
 
-The app's only use of the internet is **Start › System › Send Logs**, when you
-choose it: the app's log, its settings and the engine's notes on your games
-(text only - never game files or saves) go to the developer, with your reply
-address if you gave one. Nothing is sent otherwise.
+The app never uses the internet (it has no Internet permission). **Start ›
+System › Report a Problem** asks what went wrong, then opens your own email app
+with your answers and one zip attached - the app's log, its settings, the
+engine's notes on your games and the device's details (make and model, Android
+version, screen, memory), plus a save of the game as it was if you tick that box.
+No personal information, never your game files. You see the email before it goes,
+and you send it.
 
 Copy each game's **whole folder** into the folder's **`games`** folder, one
 folder a game:

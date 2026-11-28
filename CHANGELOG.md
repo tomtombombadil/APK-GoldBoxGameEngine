@@ -3,6 +3,18 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.12.0] - 2026-11-28
+
+Built on PM-GoldBoxGameEngine 0.22.1 and the CYD engine 0.226.5.
+
+- **Start › System › Report a Problem** (in place of 0.11.1's Send Logs; also on a game's hold menu in the
+  chooser): a form - the game and where in it filled in, what happened, what should have happened, anything else,
+  and a box to include a save of the game as it is right now (made just for the report: no save slot used or
+  changed). **Send via Email** opens your own email app with your answers and one zip: the log, settings, the
+  engine's notes, the device's details. No email app: Android's Share menu; nothing at all: the zip is saved in the
+  GoldBox folder. No personal information is sent.
+- **No Internet permission** any more (0.11.1 had it for Send Logs) and no Reply Address setting.
+
 ## [0.11.1] - 2026-11-28
 
 Built on PM-GoldBoxGameEngine 0.21.1 and the CYD engine 0.226.0.

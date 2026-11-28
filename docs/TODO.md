@@ -3,6 +3,10 @@
 Tick off with the version that did it. Never ask Tom the same thing twice.
 
 ## Tom
+- [ ] **0.12.0's Report a Problem** (not seen on a device yet - the emulator here kept restarting): Start › System ›
+      Report a Problem in a game - the form, the save box ticked, Send via Email - does your email app open with the
+      zip attached and the answers in? On the S2 (no email app?): the Share menu. Also from a game's hold menu in
+      the chooser.
 - [ ] 0.1.0 on your phone: install the APK, the folder screen, Play (All Files Access), a game copied in from
       the PC over USB, the scan, then play by touch alone; then with a Bluetooth controller (the on-screen
       buttons go away; a touch brings them back).

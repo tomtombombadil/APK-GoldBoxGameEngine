@@ -1,0 +1,1 @@
+Start > System > Report a Problem (also on a game's hold menu): a short form - the game and where in it filled in, what happened - and a box to include a save of the game as it is now, made just for the report. Send via Email opens your own email app with your answers and the logs. No personal information is sent. The app no longer has the Internet permission.

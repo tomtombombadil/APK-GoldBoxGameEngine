@@ -235,6 +235,17 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   or **asked in a "Report a Problem" dialog that then makes the email** (Tom leans to the dialog; mock-up first). **Say
   plainly what is sent: no personal information, only troubleshooting info** (make and model, Android version,
   memory ...).
+- **Tom, 2026-11-28 (09:27)**: **the Report a Problem dialog** (mock-up approved) - the gold button **"Send via Email"**.
+  **Title Case always for button text and menu item names** ("Report a Problem", "Send via Email", "Cancel").
+  **A checkbox to include a save of the current game**: made at that moment for the report alone - like the engine's
+  own save, but **never in a save slot, never overwriting anything**. Report a Problem **on the menu, available at any
+  point the app is running** (also the chooser's hold menu). **The handhelds stay as they are** (Send Logs by the
+  relay) - this is the Android app's alone. **Built** (0.12.0, PM 0.22.1, engine 0.226.5): `ReportDialog` (the form),
+  `Report` (the zip - REPORT.TXT, DEVICE.TXT, log.txt, settings.cfg, engine/..., save/... - and the intents: a
+  mailto selector, else the Share menu, else the zip in the GoldBox folder), `ReportProvider` (our own content
+  provider for the zip, the cache's `reports` folder only - no androidx); the front end's `android_report` fills it
+  in and makes the save (`play::snapshot` into games/_CYD/_REPORT/SAVE); the chooser's hold menu: op 18. LogSender,
+  ReplyDialog and the INTERNET permission gone.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.

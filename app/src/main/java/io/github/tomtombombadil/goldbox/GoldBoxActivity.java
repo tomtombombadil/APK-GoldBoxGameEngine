@@ -37,9 +37,6 @@ public class GoldBoxActivity extends SDLActivity {
     /** The Companion's pictures as the app placed them (view 4): groups of 7 - which, x, y, w, h, top row, rows. */
     static native void nativePictures(int[] v);
 
-    /** Words typed in one of the app's boxes (the Reply Address), then the op for the front end's menu. */
-    static native void nativeText(int op, String text);
-
     private Shell shell;
 
     @Override
@@ -216,9 +213,9 @@ public class GoldBoxActivity extends SDLActivity {
         }
     }
 
-    /** Menu › System › Send Logs (the front end calls this; version: the front end's): the logs to the developer's
-     *  relay, on a thread of its own; the answer in conf/sendlogs.result, which the front end shows. */
-    public void sendLogs(String reply, String version) {
+    /** Menu › System › Report a Problem, and the chooser's hold menu (the front end calls this, with what it knows:
+     *  "key\tvalue" lines - the game, where in it, the games found, the snapshot's folder, its versions). */
+    public void reportProblem(String info) {
         final String[] a = getArguments();
         String games = null, conf = null, log = null;
         for (int i = 0; i + 1 < a.length; ++i) {
@@ -226,16 +223,8 @@ public class GoldBoxActivity extends SDLActivity {
             else if (a[i].equals("--conf")) conf = a[i + 1];
             else if (a[i].equals("--log")) log = a[i + 1];
         }
-        final android.util.DisplayMetrics m = getResources().getDisplayMetrics();
-        final String screen = m.widthPixels + "x" + m.heightPixels + " (" + Math.round(m.densityDpi) + " dpi)";
-        final String ver = "app " + appVersion() + " (front end " + version + ")";
-        if (games != null && conf != null && log != null) LogSender.start(games, conf, log, reply, ver, screen);
-        else LogSender.fail(conf, "The app couldn't find its logs.");
-    }
-
-    /** Menu › System › Reply Address, and Send Logs' first time: Android's box and keyboard (the front end calls this). */
-    public void askReply(String now, boolean thenSend) {
-        runOnUiThread(() -> ReplyDialog.show(this, now, thenSend));
+        final Report r = Report.parse(info, games, conf, log, appVersion());
+        runOnUiThread(() -> ReportDialog.show(this, r));
     }
 
     /** The Journal list's Documents: a game's PDF (its device path), a page at a time (the front end calls this). */
