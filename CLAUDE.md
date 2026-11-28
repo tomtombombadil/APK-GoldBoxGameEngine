@@ -190,7 +190,10 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   across the wall, bisecting the line** (which way the U opens means nothing - a convention, the same through a
   map). **One-way doors**: they open from one side only, are often seen only from that side, and once through there
   is no way back - to be shown as such. (18:05, Tom: **a one-way door is not a concealed door** - he had misspoken;
-  the key says "One-way door". What a concealed door is: asked.)
+  the key says "One-way door". **19:46, Tom - AD&D's terms: a concealed door is an ordinary door hidden from view by
+  something (behind a tapestry, a curtain); a secret door is built to blend into the architecture - looked at, never
+  seen as a door.** The Steam cluebooks name no concealed door (their text searched); the map data can't tell one
+  from a secret door.)
 - **Tom, 2026-11-27 (17:58)**: **door codes 2 and 3 are not told apart on the map** (one red "Locked"). **A concealed
   (one-way) door: half a normal door on the side it is entered from, and an arrow pointing away from the wall on
   the side it comes out** - mocked up for Tom before it is coded. **18:05**: the mock-up good but **on a wall running
