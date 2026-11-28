@@ -224,6 +224,17 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   unless Tom has said otherwise.** **Quick Actions: Android's Back returns to the menu**, not the game. **Check an
   upgrade, not only a fresh folder** (Gateway's book was missed on a folder scanned by 0.10: its old "no cluebook"
   note was trusted - lists now carry their maker's version).
+- **Tom, 2026-11-28 (08:59 - 09:15) - logs on Android go by the player's own email, not the relay** (to be built;
+  0.11.1's relay sender and the INTERNET permission come out): "we should have discussed how best to do it" - **ask
+  before choosing a way when Android offers several.** The menu line is **"Report a Problem"** (was Send Logs); **no
+  Reply Address** on Android (the mail is from the player). An email intent (email apps only; none: **Android's Share
+  menu**) to **cyd.classic.games.logs@gmail.com** (Tom may make a repo's own address later), **one zip attached**:
+  the log, settings, the engine's notes **and a text file holding what the handhelds' relay email's body holds**
+  (versions, device, Android, screen, memory ...). The email's body: **the player's answers** - questions such as
+  the problem, which game, what area, what happened, what should have happened - either leading lines in the body
+  or **asked in a "Report a Problem" dialog that then makes the email** (Tom leans to the dialog; mock-up first). **Say
+  plainly what is sent: no personal information, only troubleshooting info** (make and model, Android version,
+  memory ...).
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
