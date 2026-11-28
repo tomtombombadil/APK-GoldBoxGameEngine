@@ -3,6 +3,17 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.10.0] - 2026-11-27
+
+Built on PM-GoldBoxGameEngine 0.20.0 and the CYD engine 0.223.0.
+
+- **Cluebook Maps** (Menu - Game Play - Enhancements, on): when the game's cluebook PDF is in its folder (Steam's
+  Documentation folder, or the game's own), the Companion shows the cluebook's own map - straightened, the scans
+  curve near the binding - with the party's arrow on it and the area's name above; off, or a map the cluebook
+  hasn't, the drawn map with the area's name. Pool of Radiance, Curse, Pools of Darkness, Champions, Death Knights
+  and Treasures so far. Games scanned before get them once at the next start.
+- No legend words under the map any more.
+
 ## [0.9.6] - 2026-11-27
 
 Built on PM-GoldBoxGameEngine 0.19.24 and the CYD engine 0.222.3.

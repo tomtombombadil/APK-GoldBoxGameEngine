@@ -51,7 +51,7 @@ set(FRONT "${PM_ROOT}/src")
 add_library(main SHARED
     ${FRONT}/main.cpp ${FRONT}/video.cpp ${FRONT}/library.cpp ${FRONT}/settings.cpp
     ${FRONT}/platform_sdl.cpp ${FRONT}/audio_sdl.cpp ${FRONT}/task.cpp ${FRONT}/art.cpp
-    ${FRONT}/panel.cpp ${FRONT}/jour.cpp ${FRONT}/touchpad.cpp ${FRONT}/shell.cpp)
+    ${FRONT}/panel.cpp ${FRONT}/jour.cpp ${FRONT}/cluemaps.cpp ${FRONT}/touchpad.cpp ${FRONT}/shell.cpp)
 target_compile_definitions(main PRIVATE PM_VERSION="${PM_VERSION}" CYD_VERSION="${CYD_VERSION}"
     PM_FRONT_VERSION="${PM_FRONT_VERSION}")
 target_compile_options(main PRIVATE -O2 -Wall)
