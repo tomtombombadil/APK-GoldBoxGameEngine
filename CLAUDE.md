@@ -201,6 +201,13 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   end** - else half a door can't be told from a whole one. **18:06**: **an archway's wall ends get a little serif**
   (a short tick across the line where each piece of wall ends, forming the arch). **18:08**: a little wall **between
   each serif and the corner** - the opening narrower, so a serif never meets the side wall.
+- **Tom, 2026-11-27 (20:14)**, from the mock-ups: **no legend under the map** - no Locked / Secret / One-way words (the
+  symbols say it; gold is every door's colour). **An entrance to another area: the square shaded** (option B), its
+  key word **"Exit"**. **The cluebook's markers**: numbers in their squares; the **key a Companion view of its own on
+  a handheld - Map > Key > Party > Map**; on Android **a tap on a marker shows its text, a tap elsewhere on the map
+  the whole key**. **The cluebooks' scans curve near the binding** (pages not pressed flat): the map pictures
+  **straightened**, the party's arrow placed by the straightened grid. Picture mode with the cluebook's area name
+  (mock-up 1) - no objection.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
