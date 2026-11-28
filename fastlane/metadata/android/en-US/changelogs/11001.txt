@@ -1,0 +1,1 @@
+Start > System > Send Logs and Reply Address are in the app (they had been left out); the app now uses the Internet permission for that alone. Gateway's Steam cluebook is now found on a folder scanned by an older version. Quick Actions: Back returns to the menu.

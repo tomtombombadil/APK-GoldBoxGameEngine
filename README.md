@@ -79,6 +79,11 @@ The first start shows the **folder screen**:
   managers can't open it, and Android deletes it - saved games too - when
   the app is uninstalled.
 
+The app's only use of the internet is **Start › System › Send Logs**, when you
+choose it: the app's log, its settings and the engine's notes on your games
+(text only - never game files or saves) go to the developer, with your reply
+address if you gave one. Nothing is sent otherwise.
+
 Copy each game's **whole folder** into the folder's **`games`** folder, one
 folder a game:
 

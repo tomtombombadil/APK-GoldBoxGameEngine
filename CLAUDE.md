@@ -217,6 +217,13 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   white maps stand out) unless the processing can; **the row and column numbers round the maps kept in the picture**
   (the games show the coordinates while walking). Gateway's Steam cluebook not recognised on his S2 (pieced pages -
   known gap). Exits still wanted.
+- **Tom, 2026-11-28 (07:37 - 07:39)**: "somehow the send logs function is missing from the menus! ... Check your
+  work!" - **Send Logs and Reply Address in the app** (they had been left out on Android since PM 0.12.13; built 0.11.1:
+  `LogSender` posts sendlogs.sh's fields to the same relay, `ReplyDialog` - Android's box - for the address; the
+  INTERNET permission, used for nothing else, README says so). **Every menu line the handhelds have, the app has,
+  unless Tom has said otherwise.** **Quick Actions: Android's Back returns to the menu**, not the game. **Check an
+  upgrade, not only a fresh folder** (Gateway's book was missed on a folder scanned by 0.10: its old "no cluebook"
+  note was trusted - lists now carry their maker's version).
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.

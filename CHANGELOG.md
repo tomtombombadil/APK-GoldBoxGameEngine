@@ -3,6 +3,17 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.11.1] - 2026-11-28
+
+Built on PM-GoldBoxGameEngine 0.21.1 and the CYD engine 0.226.0.
+
+- **Start > System > Send Logs and Reply Address** in the app (they had never been in it: the handhelds' way can't
+  run on Android). The app sends the same logs to the same place itself - it now asks for the Internet permission,
+  used for nothing else. The Reply Address is typed in Android's own box.
+- Gateway's Steam cluebook on a folder first scanned by 0.10 or older: the old "no cluebook" note was trusted and the
+  book never looked at again. Each game's list is now made again once when it is older.
+- Quick Actions: Android's Back returns to the menu (it had gone straight to the game).
+
 ## [0.11.0] - 2026-11-28
 
 Built on PM-GoldBoxGameEngine 0.21.0 and the CYD engine 0.226.0.
