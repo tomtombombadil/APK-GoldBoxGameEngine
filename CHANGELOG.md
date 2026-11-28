@@ -3,6 +3,15 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.11.0] - 2026-11-28
+
+Built on PM-GoldBoxGameEngine 0.21.0 and the CYD engine 0.226.0.
+
+- **Display - Cluebook Map Colors: Dark / As Printed** (Dark at first): white-paper cluebook maps shown light on
+  dark, as the game's screens are.
+- The cluebook maps keep their row and column numbers. Maps made before are made again once.
+- Gateway's Steam cluebook is recognised (18 maps) - it wasn't on the Tab S2.
+
 ## [0.10.1] - 2026-11-27
 
 Built on PM-GoldBoxGameEngine 0.20.1 and the CYD engine 0.224.1.
