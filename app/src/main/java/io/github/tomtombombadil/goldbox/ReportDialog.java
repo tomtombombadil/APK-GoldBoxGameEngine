@@ -117,7 +117,8 @@ final class ReportDialog {
         see.setText("See What's Sent");
         see.setPadding(0, Math.round(8 * dp), 0, 0);
         see.setFocusable(true);
-        final TextView list = Screens.text(a, 12, Screens.MUTED, false);
+        final LinearLayout list = new LinearLayout(a);
+        list.setOrientation(LinearLayout.VERTICAL);
         list.setVisibility(View.GONE);
         list.setPadding(0, Math.round(6 * dp), 0, 0);
         see.setOnClickListener(v -> {
@@ -126,11 +127,21 @@ final class ReportDialog {
                 see.setText("See What's Sent");
                 return;
             }
+            // (the form as it is now: REPORT.TXT is the answers so far)
+            r.where = where.getText().toString().trim();
+            r.happened = happened.getText().toString().trim();
+            r.expected = expected.getText().toString().trim();
+            r.other = other.getText().toString().trim();
             r.withSave = save.isChecked();
-            final StringBuilder b = new StringBuilder("REPORT.TXT - your answers\nDEVICE.TXT - the device's details and "
-                    + "the log's last lines\n");
-            for (String[] f : r.files()) b.append(f[1]).append('\n');
-            list.setText(b.toString().trim());
+            list.removeAllViews();
+            list.addView(fileRow(a, "REPORT.TXT", "your answers", () -> r.reportText()));
+            list.addView(fileRow(a, "DEVICE.TXT", "the device's details and the log's last lines", () -> r.deviceText(a)));
+            for (String[] f : r.files()) {
+                final File src = new File(f[0]);
+                final String n = f[1].toLowerCase(java.util.Locale.ROOT);
+                final boolean text = n.endsWith(".txt") || n.endsWith(".cfg");
+                list.addView(fileRow(a, f[1], null, text ? () -> readText(src) : null));
+            }
             list.setVisibility(View.VISIBLE);
             see.setText("Hide the List");
         });
@@ -197,6 +208,80 @@ final class ReportDialog {
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             w.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
                     | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        }
+        d.show();
+    }
+
+    /** A file of the zip in See What's Sent: a text file tappable, showing what it holds (Tom, 2026-11-28). */
+    private static View fileRow(Activity a, String name, String about, java.util.concurrent.Callable<String> text) {
+        final float dp = Screens.dp(a);
+        final TextView t = Screens.text(a, 13, text != null ? Screens.GOLD : Screens.MUTED, false);
+        t.setText(about == null ? name : name + " - " + about);
+        t.setPadding(0, Math.round(5 * dp), 0, Math.round(5 * dp));
+        if (text != null) {
+            t.setPaintFlags(t.getPaintFlags() | android.graphics.Paint.UNDERLINE_TEXT_FLAG);
+            t.setFocusable(true);
+            t.setOnClickListener(v -> {
+                String body;
+                try {
+                    body = text.call();
+                } catch (Exception e) {
+                    body = "(it couldn't be read)";
+                }
+                viewer(a, name, body);
+            });
+        }
+        return t;
+    }
+
+    private static String readText(File f) throws Exception {
+        // (a long log: its last 200 KB - what is sent of it is all of it, up to 2 MB)
+        try (java.io.RandomAccessFile r = new java.io.RandomAccessFile(f, "r")) {
+            final long max = 200 * 1024, from = Math.max(0, r.length() - max);
+            final byte[] b = new byte[(int) (r.length() - from)];
+            r.seek(from);
+            r.readFully(b);
+            final String s = new String(b, java.nio.charset.StandardCharsets.UTF_8);
+            return from > 0 ? "(the last 200 KB of it)\n\n" + s : s;
+        }
+    }
+
+    /** A text file's words, in a box of their own that scrolls. */
+    private static void viewer(Activity a, String name, String body) {
+        final float dp = Screens.dp(a);
+        final Dialog d = new Dialog(a);
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        final LinearLayout card = new LinearLayout(a);
+        card.setOrientation(LinearLayout.VERTICAL);
+        card.setBackground(Screens.round(Screens.PANEL, 28 * dp));
+        final int p = Math.round(20 * dp);
+        card.setPadding(p, p, p, Math.round(12 * dp));
+        final TextView t = Screens.text(a, 18, Screens.CREAM, false);
+        t.setText(name);
+        card.addView(t);
+        final ScrollView sv = new ScrollView(a);
+        final android.widget.HorizontalScrollView hs = new android.widget.HorizontalScrollView(a);
+        final TextView b = Screens.text(a, 12, 0xFFC8D0EA, false);
+        b.setTypeface(android.graphics.Typeface.MONOSPACE);
+        b.setTextIsSelectable(true);
+        b.setText(body);
+        b.setPadding(0, Math.round(10 * dp), Math.round(10 * dp), Math.round(10 * dp));
+        hs.addView(b);
+        sv.addView(hs);
+        final android.util.DisplayMetrics m = a.getResources().getDisplayMetrics();
+        card.addView(sv, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                Math.round(m.heightPixels * 0.6f)));
+        final LinearLayout row = new LinearLayout(a);
+        row.setGravity(Gravity.END);
+        row.addView(Screens.button(a, "Close", true, v -> d.dismiss()));
+        card.addView(row, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT));
+        d.setContentView(card);
+        final Window w = d.getWindow();
+        if (w != null) {
+            w.setBackgroundDrawable(new ColorDrawable(0x00000000));
+            w.setLayout(Math.min(Math.round(640 * dp), m.widthPixels - Math.round(24 * dp)),
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
         }
         d.show();
     }

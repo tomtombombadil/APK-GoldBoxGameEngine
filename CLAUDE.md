@@ -246,6 +246,38 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   provider for the zip, the cache's `reports` folder only - no androidx); the front end's `android_report` fills it
   in and makes the save (`play::snapshot` into games/_CYD/_REPORT/SAVE); the chooser's hold menu: op 18. LogSender,
   ReplyDialog and the INTERNET permission gone.
+- **Tom, 2026-11-28 (10:54)**, from 0.12.0 on his Pixel 10a ("The Report a Problem function works" - in a game and at
+  the chooser):
+  - **Every screen of the app keeps clear of the camera hole / notch** - the scan's page didn't. A new view takes
+    `GoldBoxActivity.cutoutInsets()` (or the window's insets) in the version that adds it; check with the emulator's
+    cutout overlay (above).
+  - The scan's page: **"Processing Game Files"** (not "Looking for Games").
+  - **See What's Sent: each text file tappable**, showing its contents (DEVICE.TXT and the rest).
+  - **Device Info**: each of the nine games **"Steam Version" / "GOG Version" / "Unknown Version" / "Not Present"**;
+    and **what the app can see of the device - the same as a report's DEVICE.TXT**. Its version line with the **v on
+    each version** ("engine v0.226.5").
+  - **The menu's X closes the menu and returns to the game** (never Back - the arrow by the title is Back). **Quick
+    Actions has the back arrow too.**
+  - **Clean Up Game Files closes the menu as it starts** (its lines were hidden); **its Continue returns to the menu**,
+    not the chooser. **Rescan Game Files the same** - it left the menu locked open.
+  - **A menu line with a set of choices** (Game Sound ...): **a drop-down list or radio buttons**, not Left / Right taps.
+    **Tapping a line's name shows its help text**; a switch changes only by its switch side. **Journal Font: each
+    font's name shown in that font.**
+  - **The chooser's bar: the version shown only when it fits** (the Pixel 10a's didn't); **the app's version always at
+    the foot of the main menu**.
+  - **Device Info, each game** (10:56): **the journal** found, recognised and processed; **the cluebook** found,
+    recognised and processed; **the music** (the games that have it) found and processed. **Laid out** (10:57): each
+    game's title across the full width in gold, its lines under it slightly indented, in white.
+  - **About** (10:59): "Gold Box Game Engine" in its name column broke badly - **"Gold Box" / "Game Engine"** on two
+    lines (0x1F in a line's name is the app's line break).
+  - **"Companion" is the Gold Box Companion's name, not ours** - a new name for those features in all three repos;
+    names proposed to Tom first.
+  - **Built** (0.13.0, PM 0.23.0): `Shell.relayout` pads the scan's page and notices by the cutout; MenuDrawer's
+    kinds G (a group's gold title, its T lines indented) and a choice's values (the row's 5th field, 0x1F between ->
+    a PopupMenu with the one set ticked; a pick is op 19 with how many places on; `FaceSpan` for Journal Font), a
+    tap on a choice's / switch's name shows its help, the switch alone flips; the foot's version; ChooserView's version
+    hidden when it doesn't fit; `Report.device` (DEVICE.TXT's and Device Info's device lines -
+    `GoldBoxActivity.deviceInfo` for the front end); ReportDialog's file rows open a viewer.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.

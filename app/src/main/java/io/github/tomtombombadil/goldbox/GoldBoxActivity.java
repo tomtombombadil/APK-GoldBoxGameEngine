@@ -213,6 +213,16 @@ public class GoldBoxActivity extends SDLActivity {
         }
     }
 
+    /** Device Info's lines of the device (the front end calls this): "name\tvalue" lines - Report's, as DEVICE.TXT. */
+    public String deviceInfo() {
+        String games = null;
+        final String[] a = getArguments();
+        for (int i = 0; i + 1 < a.length; ++i) if (a[i].equals("--games")) games = a[i + 1];
+        final StringBuilder b = new StringBuilder();
+        for (String[] f : Report.device(this, games)) b.append(f[0]).append('\t').append(f[1]).append('\n');
+        return b.toString();
+    }
+
     /** Menu › System › Report a Problem, and the chooser's hold menu (the front end calls this, with what it knows:
      *  "key\tvalue" lines - the game, where in it, the games found, the snapshot's folder, its versions). */
     public void reportProblem(String info) {

@@ -284,6 +284,9 @@ final class Shell {
         final Rect area = new Rect(ins[0], ins[1], W - ins[2], H - ins[3]);
         journal.setPadding(ins[0], ins[1], ins[2], ins[3]);     // (a journal entry clear of the cutout too)
         pdf.setPadding(ins[0], ins[1], ins[2], ins[3]);
+        // (every page of the app's clear of the camera hole too - the scan's page wasn't: Tom, 2026-11-28)
+        scan.setPadding(ins[0], ins[1], ins[2], ins[3]);
+        notice.setPadding(ins[0], ins[1], ins[2], ins[3]);
         final boolean land = W >= H;
         final boolean phone = !tablet(act);
         // (a tablet near 4:3 sideways: the game maximised, the rest on demand; a wider one - 16:10 - has room

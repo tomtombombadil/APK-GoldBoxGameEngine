@@ -3,6 +3,23 @@
 Every version of Gold Box Game Engine for Android. A release's notes are its
 part of this file.
 
+## [0.13.0] - 2026-11-28
+
+Built on PM-GoldBoxGameEngine 0.23.0 and the CYD engine 0.226.5. Tom's notes from 0.12.0 on his Pixel 10a.
+
+- The scan's page and every notice keep clear of the camera hole; the scan's page reads **Processing Game Files**.
+- **Device Info**: each game under its own gold heading - Steam / GOG / Unknown Version or Not Present, and whether
+  its journal, cluebook and music were found and processed; what the app sees of the device (as a report sends it);
+  every version with its v.
+- **Menus**: a line with a set of choices opens a list (Journal Font's in their own type); tapping a line's name
+  shows what it does - a switch changes only by its switch; the X closes the menu from every page; Quick Actions has
+  its back arrow; the app's version at the main menu's foot; About's "Gold Box Game Engine" on two lines.
+- **Rescan / Clean Up Game Files**: the menu gets out of the way (Rescan had left it locked open) and Continue
+  returns to the menu.
+- **Report a Problem**: in See What's Sent each text file opens to show what it holds; the report names the front
+  end's own version.
+- The chooser's bar shows the version only where it fits.
+
 ## [0.12.0] - 2026-11-28
 
 Built on PM-GoldBoxGameEngine 0.22.1 and the CYD engine 0.226.5.

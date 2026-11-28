@@ -129,30 +129,7 @@ final class Report {
         b.append("App: ").append(app).append('\n');
         b.append("Front end (PM-GoldBoxGameEngine): ").append(front).append('\n');
         b.append("Engine (CYD-GoldBoxGameEngine): ").append(engine).append('\n');
-        b.append("Device: ").append(Build.MANUFACTURER).append(' ').append(Build.MODEL)
-                .append(" (").append(Build.DEVICE).append(")\n");
-        b.append("Android: ").append(Build.VERSION.RELEASE).append(" (API ").append(Build.VERSION.SDK_INT).append(")\n");
-        b.append("Processor: ").append(Build.SUPPORTED_ABIS.length > 0 ? Build.SUPPORTED_ABIS[0] : "?").append('\n');
-        final DisplayMetrics m = c.getResources().getDisplayMetrics();
-        b.append("Screen: ").append(m.widthPixels).append(" x ").append(m.heightPixels).append(" pixels, ")
-                .append(m.densityDpi).append(" dpi, smallest width ")
-                .append(c.getResources().getConfiguration().smallestScreenWidthDp).append(" dp\n");
-        final ActivityManager am = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
-        if (am != null) {
-            final ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
-            am.getMemoryInfo(mi);
-            b.append("Memory: ").append(mi.totalMem >> 20).append(" MB, ").append(mi.availMem >> 20)
-                    .append(" MB free").append(mi.lowMemory ? " (low)" : "").append('\n');
-        }
-        b.append("App memory limit: ").append(Runtime.getRuntime().maxMemory() >> 20).append(" MB\n");
-        if (gamesDir != null) {
-            try {
-                final StatFs st = new StatFs(gamesDir);
-                b.append("Storage free (games folder): ").append(st.getAvailableBytes() >> 20).append(" MB\n");
-            } catch (Exception ignored) {
-            }
-            b.append("Games folder: ").append(folderKind(c)).append('\n');
-        }
+        for (String[] f : device(c, gamesDir)) b.append(f[0]).append(": ").append(f[1]).append('\n');
         b.append("Games found: ").append(games.length == 0 ? "none" : android.text.TextUtils.join(", ", games)).append('\n');
         b.append("Game: ").append(game.isEmpty() ? "none" : game).append('\n');
         if (!area.isEmpty() || !square.isEmpty()) b.append("Where (the app's): ").append(whereGuess()).append('\n');
@@ -163,8 +140,38 @@ final class Report {
         return b.toString();
     }
 
+    /**
+     * What the app can see of the device - DEVICE.TXT's lines and Device Info's (Tom, 2026-11-28: "the same info that
+     * would be sent with a Report a Problem send"). No personal information: no accounts, numbers or names.
+     */
+    static List<String[]> device(Context c, String gamesDir) {
+        final List<String[]> o = new ArrayList<>();
+        o.add(new String[] {"Device", Build.MANUFACTURER + " " + Build.MODEL + " (" + Build.DEVICE + ")"});
+        o.add(new String[] {"Android", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ")"});
+        o.add(new String[] {"Processor", Build.SUPPORTED_ABIS.length > 0 ? Build.SUPPORTED_ABIS[0] : "?"});
+        final DisplayMetrics m = c.getResources().getDisplayMetrics();
+        o.add(new String[] {"Screen", m.widthPixels + " x " + m.heightPixels + " pixels, " + m.densityDpi
+                + " dpi, smallest width " + c.getResources().getConfiguration().smallestScreenWidthDp + " dp"});
+        final ActivityManager am = (ActivityManager) c.getSystemService(Context.ACTIVITY_SERVICE);
+        if (am != null) {
+            final ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+            am.getMemoryInfo(mi);
+            o.add(new String[] {"Memory", (mi.totalMem >> 20) + " MB, " + (mi.availMem >> 20) + " MB free"
+                    + (mi.lowMemory ? " (low)" : "")});
+        }
+        o.add(new String[] {"App memory limit", (Runtime.getRuntime().maxMemory() >> 20) + " MB"});
+        if (gamesDir != null) {
+            try {
+                o.add(new String[] {"Storage free", (new StatFs(gamesDir).getAvailableBytes() >> 20) + " MB (the games folder's)"});
+            } catch (Exception ignored) {
+            }
+            o.add(new String[] {"Games folder", folderKind(c, gamesDir)});
+        }
+        return o;
+    }
+
     /** The games folder named as the player sees it - no user names (Android has none in these paths anyway). */
-    private String folderKind(Context c) {
+    private static String folderKind(Context c, String gamesDir) {
         final File priv = c.getExternalFilesDir(null);
         if (priv != null && gamesDir.startsWith(priv.getPath())) return "the app's private folder";
         final String root = android.os.Environment.getExternalStorageDirectory().getPath();

@@ -183,6 +183,13 @@ final class ChooserView extends FrameLayout {
         bar.addView(t);
         final TextView v = Screens.text(c, 13, MUTED, false);
         v.setText("  v" + version());
+        v.setSingleLine(true);
+        // (the version only where it fits whole - the Pixel 10a's bar had no room: Tom, 2026-11-28; the menu's foot
+        // always has it)
+        v.addOnLayoutChangeListener((x, l, tp, r, b, ol, ot, or, ob) -> {
+            final boolean fits = v.getPaint().measureText(v.getText().toString()) <= v.getWidth();
+            if ((v.getAlpha() > 0) != fits) v.setAlpha(fits ? 1f : 0f);
+        });
         bar.addView(v, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         // (tiles <-> cards: the icon shows the other way - Tom, 2026-11-25; the games folder is the menu's,
         // System › Games Folder)

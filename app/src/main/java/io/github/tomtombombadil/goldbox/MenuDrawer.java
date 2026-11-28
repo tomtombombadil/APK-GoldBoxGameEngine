@@ -47,7 +47,7 @@ final class MenuDrawer extends FrameLayout {
     private final View scrim;
     private final LinearLayout panel, list;
     private final ScrollView scroll;
-    private final TextView title;
+    private final TextView title, foot;
     private final Icon back;
 
     private boolean shown = false;
@@ -60,6 +60,7 @@ final class MenuDrawer extends FrameLayout {
     static final class Item {
         char kind;
         String name, value, help;
+        String[] opts = new String[0];    // (a choice line's values, in order - the front end's menu_choices)
     }
 
     final class Row {
@@ -117,6 +118,17 @@ final class MenuDrawer extends FrameLayout {
         list.setOrientation(LinearLayout.VERTICAL);
         scroll.addView(list, new ScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         panel.addView(scroll, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0, 1));
+        foot = text(c, 12, MUTED, false);
+        foot.setGravity(Gravity.CENTER);
+        foot.setPadding(0, px(8), 0, px(2));
+        String ver = "?";
+        try {
+            ver = c.getPackageManager().getPackageInfo(c.getPackageName(), 0).versionName;
+        } catch (Exception ignored) {
+        }
+        foot.setText("Gold Box Game Engine v" + ver);
+        foot.setVisibility(GONE);
+        panel.addView(foot, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
     }
 
     private int px(float d) { return Math.round(d * dp); }
@@ -190,11 +202,14 @@ final class MenuDrawer extends FrameLayout {
             it.name = f.length > 1 ? f[1] : "";
             it.value = f.length > 2 ? f[2] : "";
             it.help = f.length > 3 ? f[3] : "";
+            if (f.length > 4 && !f[4].isEmpty()) it.opts = f[4].split("\u001f", -1);
             items.add(it);
-            sh.append('\n').append(it.kind).append(it.name);
+            sh.append('\n').append(it.kind).append(it.name).append('|').append(TextUtils.join("|", it.opts));
         }
         // (the app's name in full on its top page, as the chooser's bar - Tom, 2026-11-25)
         title.setText(pageTitle.equals("Menu") ? "Gold Box Game Engine" : pageTitle);
+        // (the app's version at the main menu's foot - Tom, 2026-11-28)
+        foot.setVisibility(pageTitle.equals("Menu") ? VISIBLE : GONE);
         back.setVisibility(above ? VISIBLE : INVISIBLE);
         final boolean rebuild = !sh.toString().equals(shape);
         shape = sh.toString();
@@ -241,6 +256,7 @@ final class MenuDrawer extends FrameLayout {
         scroll.scrollTo(0, 0);
         sel = -1;
         final Context c = getContext();
+        boolean grouped = false;
         for (int i = 0; i < items.size(); ++i) {
             final Item it = items.get(i);
             if (it.kind == 'X') continue;
@@ -257,8 +273,28 @@ final class MenuDrawer extends FrameLayout {
             line.setOrientation(LinearLayout.HORIZONTAL);
             line.setGravity(Gravity.CENTER_VERTICAL);
             final TextView name = text(c, 15, CREAM, false);
-            name.setText(it.name);
-            if (it.kind == 'T') {
+            name.setText(it.name.replace('\u001f', '\n'));     // (0x1F: a line break the front end asks for)
+            if (it.kind == 'G') {
+                // (a group's title - Device Info's games: across the drawer in gold, its lines indented under it)
+                name.setTextColor(GOLD);
+                name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+                name.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                line.addView(name, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+                r.box.setMinimumHeight(px(36));
+                r.box.setPadding(px(14), px(16), px(10), px(4));
+                grouped = true;
+            } else if (it.kind == 'T' && grouped) {
+                // (a group's line: indented, white - its name and its words)
+                name.setTextColor(0xFFB8C0DC);
+                name.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+                line.addView(name, new LinearLayout.LayoutParams(px(84), ViewGroup.LayoutParams.WRAP_CONTENT));
+                r.value = text(c, 14, CREAM, false);
+                r.value.setText(it.value);
+                line.addView(r.value, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+                line.setGravity(Gravity.TOP);
+                r.box.setMinimumHeight(px(28));
+                r.box.setPadding(px(30), px(3), px(10), px(3));
+            } else if (it.kind == 'T') {
                 // (a line of text: the name - a button, a device's detail - and its words beside it)
                 name.setTextColor(GOLD);
                 name.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
@@ -291,25 +327,25 @@ final class MenuDrawer extends FrameLayout {
                     break;
                 }
                 case 'S': {
+                    // (the switch alone changes it; the name shows its words - Tom, 2026-11-28)
                     r.toggle = new Toggle(c);
                     r.toggle.on = it.value.equals("On");
-                    line.addView(r.toggle, new LinearLayout.LayoutParams(px(44), px(26)));
+                    final FrameLayout hit = new FrameLayout(c);
+                    hit.setPadding(px(12), px(10), px(4), px(10));
+                    hit.addView(r.toggle, new FrameLayout.LayoutParams(px(44), px(26)));
+                    hit.setOnClickListener(v -> tap(v, CHOOSE, idx, 0));
+                    hit.setContentDescription(it.name + ": " + it.value);
+                    line.addView(hit, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
                     break;
                 }
                 case 'C': {
-                    final Icon prev = new Icon(c, Icon.PREV);
-                    prev.setContentDescription(it.name + ": the one before");
-                    prev.setOnClickListener(v -> tap(v, CHANGE, idx, -1));
-                    r.value = text(c, 13, GOLD, true);
-                    r.value.setGravity(Gravity.CENTER);
-                    r.value.setMinWidth(px(64));
-                    r.value.setText(it.value);
-                    final Icon next = new Icon(c, Icon.NEXT);
-                    next.setContentDescription(it.name + ": the next");
-                    next.setOnClickListener(v -> tap(v, CHANGE, idx, 1));
-                    line.addView(prev, new LinearLayout.LayoutParams(px(36), px(36)));
+                    // (a drop-down of its values, the one set marked; the name shows its words - Tom, 2026-11-28)
+                    r.value = text(c, 14, GOLD, true);
+                    r.value.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
+                    r.value.setPadding(px(12), px(8), px(4), px(8));
+                    showValue(r, it);
+                    r.value.setOnClickListener(v -> choices(v, r));
                     line.addView(r.value, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-                    line.addView(next, new LinearLayout.LayoutParams(px(36), px(36)));
                     break;
                 }
                 case 'L': {
@@ -381,8 +417,9 @@ final class MenuDrawer extends FrameLayout {
             r.help.setVisibility(GONE);
             r.box.addView(r.help);
 
-            if (it.kind == 'C') r.box.setOnClickListener(v -> tap(v, CHANGE, idx, 1));
-            else if (it.kind != 'L' && it.kind != 'T' && it.kind != 'H') r.box.setOnClickListener(v -> tap(v, CHOOSE, idx, 0));
+            if (it.kind == 'C' || it.kind == 'S') r.box.setOnClickListener(v -> helpFor(r));
+            else if (it.kind != 'L' && it.kind != 'T' && it.kind != 'H' && it.kind != 'G')
+                r.box.setOnClickListener(v -> tap(v, CHOOSE, idx, 0));
             r.box.setContentDescription(it.name + (it.value.isEmpty() ? "" : ": " + it.value));
             list.addView(r.box, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             rows.add(r);
@@ -412,6 +449,7 @@ final class MenuDrawer extends FrameLayout {
                 r.toggle.invalidate();
             }
             if (it.kind == 'L') setLevel(r);
+            else if (it.kind == 'C') showValue(r, it);
             else if (r.value != null) r.value.setText(it.value);
             r.help.setText(it.help);
             r.box.setContentDescription(it.name + (it.value.isEmpty() ? "" : ": " + it.value));
@@ -444,6 +482,76 @@ final class MenuDrawer extends FrameLayout {
                 else if (bottom > y + h) scroll.smoothScrollTo(0, bottom - h);
             });
         }
+    }
+
+    /** A line's words shown (or hidden again) under it - a tap on its name; the others' put away. */
+    private void helpFor(Row r) {
+        if (r.help.getText().toString().isEmpty()) return;
+        final boolean show = r.help.getVisibility() != VISIBLE;
+        for (Row o : rows) if (o != r && o.item.kind != 'L') o.help.setVisibility(GONE);
+        r.help.setVisibility(show ? VISIBLE : GONE);
+        r.box.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+    }
+
+    /** Journal Font's values in their own type (Tom, 2026-11-28: "a visual of what they're choosing"). */
+    private Typeface faceFor(Row r, String v) {
+        if (!r.item.name.equals("Journal Font")) return null;
+        final String f = v.equals("Journal") ? "fonts/Fondamento-Italic.ttf" : v.equals("Book") ? "fonts/Alegreya-Italic.ttf"
+                : v.equals("Serif") ? "fonts/LiberationSerif-Regular.ttf" : null;
+        try {
+            return f == null ? Typeface.create("sans-serif", Typeface.NORMAL) : Typeface.createFromAsset(getContext().getAssets(), f);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private void showValue(Row r, Item it) {
+        r.value.setText(it.value + "  \u25BE");
+        final Typeface t = faceFor(r, it.value);
+        r.value.setTypeface(t != null ? t : Typeface.create("sans-serif-medium", Typeface.NORMAL));
+        r.value.setTextSize(TypedValue.COMPLEX_UNIT_SP, t != null ? 17 : 14);
+        r.value.setContentDescription(it.name + ": " + it.value + ". Choose another");
+    }
+
+    /** A choice line's list: its values, the one set ticked; a pick tells the front end how far on it is (op 19). */
+    private void choices(View anchor, Row r) {
+        final Item it = r.item;
+        if (it.opts.length == 0) {
+            tap(anchor, CHANGE, r.index, 1);
+            return;
+        }
+        int now = 0;
+        for (int i = 0; i < it.opts.length; ++i) if (it.opts[i].equals(it.value)) now = i;
+        final int cur = now, n = it.opts.length;
+        final android.widget.PopupMenu m = new android.widget.PopupMenu(
+                new android.view.ContextThemeWrapper(getContext(), android.R.style.Theme_Material), anchor, Gravity.END);
+        for (int i = 0; i < n; ++i) {
+            CharSequence label = it.opts[i];
+            final Typeface t = faceFor(r, it.opts[i]);
+            if (t != null) {
+                final android.text.SpannableString sp = new android.text.SpannableString(it.opts[i]);
+                sp.setSpan(new FaceSpan(t), 0, sp.length(), 0);
+                sp.setSpan(new android.text.style.RelativeSizeSpan(1.2f), 0, sp.length(), 0);
+                label = sp;
+            }
+            m.getMenu().add(1, i, i, label).setCheckable(true).setChecked(i == cur);
+        }
+        m.getMenu().setGroupCheckable(1, true, true);
+        m.setOnMenuItemClickListener(mi -> {
+            final int k = (mi.getItemId() - cur + n) % n;
+            if (k != 0) tap(anchor, 19, r.index, k);
+            return true;
+        });
+        anchor.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY);
+        m.show();
+    }
+
+    /** A typeface for a span (TypefaceSpan takes a Typeface only from Android 9). */
+    static final class FaceSpan extends android.text.style.MetricAffectingSpan {
+        private final Typeface face;
+        FaceSpan(Typeface f) { face = f; }
+        @Override public void updateDrawState(android.text.TextPaint p) { p.setTypeface(face); }
+        @Override public void updateMeasureState(android.text.TextPaint p) { p.setTypeface(face); }
     }
 
     private void tap(View v, int op, int index, int value) {

@@ -1,0 +1,1 @@
+Device Info shows each game's version and whether its journal, cluebook and music were processed, plus the device's details. Menu choices open a list (fonts shown in their own type); tapping a line's name explains it. The X closes the menu; Rescan and Clean Up return to the menu. The scan's page keeps clear of the camera hole. Report a Problem's file list opens each text file.
