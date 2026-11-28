@@ -213,6 +213,10 @@ https://claude.ai/artifact/RRdN3okeHz21B9hQMBorqB. Tom accepted every suggestion
   legend text in it** - option 1: the scan reads each numbered entry's words from the player's own cluebook PDF
   (its text layer, a fix table for misreads), as the area names. Editions with no text layer (GOG Gateway, GOG
   Secret): our own short wording.
+- **Tom, 2026-11-28 (00:17)**: **the cluebook maps dark** - a display option to invert them (the game is black, the
+  white maps stand out) unless the processing can; **the row and column numbers round the maps kept in the picture**
+  (the games show the coordinates while walking). Gateway's Steam cluebook not recognised on his S2 (pieced pages -
+  known gap). Exits still wanted.
 - Also accepted: edge-to-edge and immersive, predictive Back, haptics on the pad, Continue (the last save)
   first, a home-screen shortcut per game, layouts by window size (foldables, split screen), a splash screen
   and adaptive icon, Android backup of saves, a controller hides the pad.
